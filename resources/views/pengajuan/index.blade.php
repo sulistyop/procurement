@@ -8,11 +8,12 @@ Pengajuan
     <div class="container">
         <h1>Daftar Pengajuan</h1>
         <a href="{{ route('pengajuan.create') }}" class="btn btn-primary">Tambah Pengajuan</a>
-        <table class="table mt-3 dataTable">
+        <table class="table mt-3" id="table">
             <thead>
             <tr>
                 <th>No</th>
                 <th>Prodi</th>
+                <th>ISBN</th>
                 <th>Judul</th>
                 <th>Penerbit</th>
                 <th>Tahun</th>
@@ -24,6 +25,14 @@ Pengajuan
                 <tr>
                     <td>{{ $loop->iteration }}</td>
                     <td>{{ $item->prodi }}</td>
+                    <td>
+                        {{--data ini pernah diajukan di tahun --}}
+                        @if($item->is_diajukan)
+                            {{ $item->isbn }} <span class="badge badge-info">Pernah diajukan tahun  {{ \Illuminate\Support\Carbon::parse($item->date_pernah_diajukan)->format('Y')  }}</span>
+                        @else
+                            {{ $item->isbn }}
+                        @endif
+                    </td>
                     <td>{{ $item->judul }}</td>
                     <td>{{ $item->penerbit }}</td>
                     <td>{{ $item->tahun }}</td>
@@ -41,4 +50,17 @@ Pengajuan
             </tbody>
         </table>
     </div>
+    <script type="text/javascript">
+        $(document).ready(function() {
+            $('#example').DataTable({
+                // Aktifkan fitur sorting, search, pagination, dan length
+                "paging": true,         // Aktifkan pagination
+                "lengthChange": true,   // Tampilkan dropdown untuk panjang data
+                "searching": true,      // Aktifkan kolom pencarian
+                "ordering": true,       // Aktifkan sorting kolom
+                "info": true,           // Tampilkan informasi jumlah data
+                "autoWidth": false,     // Nonaktifkan lebar otomatis
+            });
+        });
+    </script>
 @endsection

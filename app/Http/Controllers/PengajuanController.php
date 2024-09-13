@@ -11,6 +11,18 @@ class PengajuanController extends Controller
     {
         // Menampilkan semua data pengajuan
         $pengajuan = Pengajuan::all();
+        $pengajuan = $pengajuan->map(function ($item) {
+            // jika isbn pernah diajukan sebelum tahun sekarang berdasarkan created_at, jika diajukan lagi berikan mark bahwa buku tersebut pernah diajukan
+            $item->is_diajukan = Pengajuan::where('isbn', $item->isbn)
+                ->whereYear('created_at', '<', date('Y'))
+                ->exists();
+            $item->date_pernah_diajukan = Pengajuan::where('isbn', $item->isbn)
+                ->whereYear('created_at', '<', date('Y'))
+                ->first()
+                ->created_at ?? null;
+            return $item;
+        });
+
         return view('pengajuan.index', compact('pengajuan'));
     }
 
@@ -27,7 +39,7 @@ class PengajuanController extends Controller
             'prodi' => 'required|max:100',
             'judul' => 'required|max:255',
             'edisi' => 'nullable|max:50',
-            'isbn' => 'required|max:20|unique:pengajuan',
+            'isbn' => 'required|max:20',
             'penerbit' => 'required|max:100',
             'author' => 'required|max:100',
             'tahun' => 'required|integer|min:1900|max:' . date('Y'),

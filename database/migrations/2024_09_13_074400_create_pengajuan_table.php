@@ -16,7 +16,7 @@ return new class extends Migration
             $table->string('prodi', 100);
             $table->string('judul', 255);
             $table->string('edisi', 50)->nullable();
-            $table->string('isbn', 20)->unique();
+            $table->string('isbn', 20);
             $table->string('penerbit', 100);
             $table->string('author', 100);
             $table->year('tahun');

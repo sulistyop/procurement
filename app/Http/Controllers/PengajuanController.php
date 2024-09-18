@@ -14,10 +14,9 @@ class PengajuanController extends Controller
         $pengajuan = $pengajuan->map(function ($item) {
             // jika isbn pernah diajukan sebelum tahun sekarang berdasarkan created_at, jika diajukan lagi berikan mark bahwa buku tersebut pernah diajukan
             $item->is_diajukan = Pengajuan::where('isbn', $item->isbn)
-                // ->whereYear('created_at', '<', date('Y'))
                 ->exists();
             $item->date_pernah_diajukan = Pengajuan::where('isbn', $item->isbn)
-                // ->whereYear('created_at', '<', date('Y'))
+                ->orderBy('created_at','desc')
                 ->first()
                 ->created_at ?? null;
             return $item;

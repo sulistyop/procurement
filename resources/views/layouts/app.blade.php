@@ -48,16 +48,16 @@
 </head>
 <body>
     <div id="app">
-        <nav class="navbar navbar-expand-md navbar-light bg-white shadow-sm">
+        <nav class="navbar navbar-expand-md navbar-light shadow-sm" style="background-color: #0e2742;">
             <div class="container">
-                <a class="navbar-brand" href="{{ url('/') }}">
+                <a class="navbar-brand" href="{{ url('/') }}" style="color: #f2f4f7;">
                     {{ config('app.name', 'Laravel') }}
                 </a>
-                <a class="navbar-brand" href="{{ url('pengajuan/create') }}">
-                    {{ config('app.name', 'Tambah Pengajuan') }}
+                <a class="navbar-brand" href="{{ url('pengajuan/create') }}" style="color: #f2f4f7;">
+                    Tambah Pengajuan
                 </a>
-                <a class="navbar-brand" href="{{ url('/pengajuan') }}">
-                    {{ config('app.name', 'Data Pengajuan') }}
+                <a class="navbar-brand" href="{{ url('/pengajuan') }}" style="color: #f2f4f7;">
+                    Data Pengajuan
                 </a>
                 <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="{{ __('Toggle navigation') }}">
                     <span class="navbar-toggler-icon"></span>
@@ -75,7 +75,7 @@
                         @guest
                             @if (Route::has('login'))
                                 <li class="nav-item">
-                                    <a class="nav-link" href="{{ route('login') }}">{{ __('Login') }}</a>
+                                    <a class="nav-link" href="{{ route('login') }}" >{{ __('Login') }}</a>
                                 </li>
                             @endif
 
@@ -86,7 +86,7 @@
                             @endif
                         @else
                             <li class="nav-item dropdown">
-                                <a id="navbarDropdown" class="nav-link dropdown-toggle" href="#" role="button" data-bs-toggle="dropdown" aria-haspopup="true" aria-expanded="false" v-pre>
+                                <a id="navbarDropdown" class="nav-link dropdown-toggle" href="#" role="button" data-bs-toggle="dropdown" aria-haspopup="true" aria-expanded="false" v-pre style="color: #f2f4f7;">
                                     {{ Auth::user()->name }}
                                 </a>
 

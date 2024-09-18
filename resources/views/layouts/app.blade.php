@@ -1,5 +1,6 @@
 <!doctype html>
 <html lang="{{ str_replace('_', '-', app()->getLocale()) }}">
+    
 <head>
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1">
@@ -17,8 +18,33 @@
 
     <!-- DataTables CSS -->
     <link href="https://cdn.datatables.net/1.10.21/css/dataTables.bootstrap4.min.css" rel="stylesheet">
+   <style>
+        #customers {
+          font-family: Arial, Helvetica, sans-serif;
+          border-collapse: collapse;
+          width: 100%;
+        }
+        
+        #customers td, #customers th {
+          border: 1px solid #ddd;
+          padding: 8px;
+        }
+        
+        #customers tr:nth-child(even){background-color: #f2f2f2;}
+        
+        #customers tr:hover {background-color: #ddd;}
+        
+        #customers th {
+          padding-top: 12px;
+          padding-bottom: 12px;
+          text-align: left;
+          background-color: #2f9cbd;
+          color: white;
+        }
+    </style>
     <!-- Scripts -->
     @vite(['resources/sass/app.scss', 'resources/js/app.js'])
+    
 </head>
 <body>
     <div id="app">
@@ -26,6 +52,12 @@
             <div class="container">
                 <a class="navbar-brand" href="{{ url('/') }}">
                     {{ config('app.name', 'Laravel') }}
+                </a>
+                <a class="navbar-brand" href="{{ url('pengajuan/create') }}">
+                    {{ config('app.name', 'Tambah Pengajuan') }}
+                </a>
+                <a class="navbar-brand" href="{{ url('/pengajuan') }}">
+                    {{ config('app.name', 'Data Pengajuan') }}
                 </a>
                 <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="{{ __('Toggle navigation') }}">
                     <span class="navbar-toggler-icon"></span>

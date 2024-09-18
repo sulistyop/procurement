@@ -1,13 +1,11 @@
 @extends('layouts.app')
 
-@section('title')
+{{-- @section('title')
 Pengajuan
-@endsection
+@endsection --}}
 
 @section('content')
     <div class="container">
-        <h1>Daftar Pengajuan</h1>
-        <a href="{{ route('pengajuan.create') }}" class="btn btn-primary">Tambah Pengajuan</a>
         <table class="table mt-3" id="customers">
             <thead>
             <tr>
@@ -16,7 +14,10 @@ Pengajuan
                 <th>ISBN</th>
                 <th>Judul</th>
                 <th>Penerbit</th>
-                <th>Tahun</th>
+                <th>Tahun Terbit</th>
+                <th>Approve</th>
+                <th>Admin</th>
+                <th>Tanggal Approve</th>
                 <th>Action</th>
             </tr>
             </thead>
@@ -25,17 +26,13 @@ Pengajuan
                 <tr>
                     <td>{{ $loop->iteration }}</td>
                     <td>{{ $item->prodi }}</td>
-                    <td>
-                        {{--data ini pernah diajukan di tahun --}}
-                        @if($item->is_diajukan)
-                            {{ $item->isbn }} <span class="badge badge-info">Pernah diajukan tahun  {{ \Illuminate\Support\Carbon::parse($item->date_pernah_diajukan)->format('Y')  }}</span>
-                        @else
-                            {{ $item->isbn }}
-                        @endif
-                    </td>
                     <td>{{ $item->judul }}</td>
+                    <td>{{ $item->isbn }}</td>
                     <td>{{ $item->penerbit }}</td>
                     <td>{{ $item->tahun }}</td>
+                    <td>{{ $item->is_approve }}</td>
+                    <td>{{ $item->approved_by}}</td>
+                    <td>{{ $item->approved_at }}</td>
                     <td>
                         <a href="{{ route('pengajuan.show', $item->id) }}" class="btn btn-info btn-sm">View</a>
                         <a href="{{ route('pengajuan.edit', $item->id) }}" class="btn btn-warning btn-sm">Edit</a>

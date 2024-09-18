@@ -14,10 +14,10 @@ class PengajuanController extends Controller
         $pengajuan = $pengajuan->map(function ($item) {
             // jika isbn pernah diajukan sebelum tahun sekarang berdasarkan created_at, jika diajukan lagi berikan mark bahwa buku tersebut pernah diajukan
             $item->is_diajukan = Pengajuan::where('isbn', $item->isbn)
-                ->whereYear('created_at', '<', date('Y'))
+                // ->whereYear('created_at', '<', date('Y'))
                 ->exists();
             $item->date_pernah_diajukan = Pengajuan::where('isbn', $item->isbn)
-                ->whereYear('created_at', '<', date('Y'))
+                // ->whereYear('created_at', '<', date('Y'))
                 ->first()
                 ->created_at ?? null;
             return $item;
@@ -44,6 +44,7 @@ class PengajuanController extends Controller
             'author' => 'required|max:100',
             'tahun' => 'required|integer|min:1900|max:' . date('Y'),
             'eksemplar' => 'required|integer',
+
         ]);
 
         // Simpan data pengajuan
@@ -89,5 +90,26 @@ class PengajuanController extends Controller
         // Hapus data pengajuan
         $pengajuan->delete();
         return redirect()->route('pengajuan.index')->with('success', 'Pengajuan berhasil dihapus.');
+    }
+    public function approve($id)
+    {
+        $pengajuan = Pengajuan::findOrFail($id);
+        return view('pengajuan.approve', compact('pengajuan'));
+    }
+
+    public function storeApproval(Request $request, $id)
+    {
+        $request->validate([
+            'is_approve' => 'required|boolean',
+            'approved_by' => 'nullable|exists:users,id', // Pastikan ada tabel users
+        ]);
+
+        $pengajuan = Pengajuan::findOrFail($id);
+        $pengajuan->is_approve = $request->is_approve;
+        $pengajuan->approved_at = now();
+        $pengajuan->approved_by = auth()->user()->id; // Sesuaikan dengan id pengguna yang menyetujui
+        $pengajuan->save();
+
+        return redirect()->route('pengajuan.index')->with('success', 'Pengajuan berhasil disetujui!');
     }
 }

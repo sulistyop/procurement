@@ -33,7 +33,7 @@
         </div>
 
         <!-- Chart Section -->
-        {{--<div class="row mt-4">
+        <div class="row mt-4">
             <div class="col-md-12">
                 <div class="card">
                     <div class="card-header">Statistik Buku</div>
@@ -42,7 +42,7 @@
                     </div>
                 </div>
             </div>
-        </div>--}}
+        </div>
     </div>
 @endsection
 

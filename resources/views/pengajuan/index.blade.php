@@ -39,7 +39,8 @@ Pengajuan
                 <th>Penerbit</th>
                 <th>Tahun</th>
                 <th>Jumlah</th>
-                <th>Action</th>
+                <th>Status</th>
+                <th>Aksi</th>
             </tr>
             </thead>
             <tbody>
@@ -60,19 +61,29 @@ Pengajuan
                     <td>{{ $item->tahun }}</td>
                     <td>{{ $item->eksemplar }}</td>
                     <td>
-                        <a href="{{ route('pengajuan.show', $item->id) }}" class="btn btn-info btn-sm">View</a>
+                        @if($item->is_approve)
+                            <span class="badge badge-success">Disetujui</span>
+                        @else
+                            <span class="badge badge-warning">Pending</span>
+                        @endif
+                    <td>
+                        <a href="{{ route('pengajuan.show', $item->id) }}" class="btn btn-info btn-sm" data-toggle="tooltip" data-placement="top" title="View">
+                            <i class="fas fa-binoculars"></i>
+                        </a>
                         @if(!$item->is_approve)
-                            <a href="#" class="btn btn-warning btn-sm" data-toggle="modal" data-target="#editPengajuanModal" data-id="{{ $item->id }}" data-prodi="{{ $item->prodi }}" data-judul="{{ $item->judul }}" data-edisi="{{ $item->edisi }}" data-isbn="{{ $item->isbn }}" data-penerbit="{{ $item->penerbit }}" data-author="{{ $item->author }}" data-tahun="{{ $item->tahun }}" data-eksemplar="{{ $item->eksemplar }}">Edit</a>
+                            <a href="#" class="btn btn-warning btn-sm" data-toggle="modal" data-target="#editPengajuanModal" data-id="{{ $item->id }}" data-prodi="{{ $item->prodi }}" data-judul="{{ $item->judul }}" data-edisi="{{ $item->edisi }}" data-isbn="{{ $item->isbn }}" data-penerbit="{{ $item->penerbit }}" data-author="{{ $item->author }}" data-tahun="{{ $item->tahun }}" data-eksemplar="{{ $item->eksemplar }}" data-toggle="tooltip" data-placement="top" title="Edit">
+                                <i class="fas fa-edit"></i>
+                            </a>
                             <form action="{{ route('pengajuan.destroy', $item->id) }}" method="POST" style="display:inline;">
                                 @csrf
                                 @method('DELETE')
-                                <button type="submit" class="btn btn-danger btn-sm" onclick="return confirm('Yakin ingin menghapus?')">Delete</button>
+                                <button type="submit" class="btn btn-danger btn-sm" onclick="return confirm('Yakin ingin menghapus?')" data-toggle="tooltip" data-placement="top" title="Delete">
+                                    <i class="fas fa-trash-alt"></i>
+                                </button>
                             </form>
-                            <button type="button" class="btn btn-success btn-sm" data-toggle="modal" data-target="#approveModal" data-all="{{ $item }}" data-id="{{ $item->id }}" data-jumlah="{{ $item->eksemplar }}">
-                                Approve
+                            <button type="button" class="btn btn-success btn-sm" data-toggle="modal" data-target="#approveModal" data-all="{{ $item }}" data-id="{{ $item->id }}" data-jumlah="{{ $item->eksemplar }}" data-toggle="tooltip" data-placement="top" title="Approve">
+                                <i class="fas fa-check"></i>
                             </button>
-                        @else
-                            <span class="badge badge-success">Data Sudah diapprove</span>
                         @endif
                     </td>
                 </tr>
@@ -86,31 +97,8 @@ Pengajuan
         @include('component.tambah-pengajuan-modal')
         <!-- Single Approve Modal -->
         @include('component.approve-modal')
-
         <!-- Upload Modal -->
-        <div class="modal fade" id="uploadModal" tabindex="-1" role="dialog" aria-labelledby="uploadModalLabel" aria-hidden="true">
-            <div class="modal-dialog" role="document">
-                <div class="modal-content">
-                    <div class="modal-header">
-                        <h5 class="modal-title" id="uploadModalLabel">Upload Excel File</h5>
-                        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
-                            <span aria-hidden="true">&times;</span>
-                        </button>
-                    </div>
-                    <div class="modal-body">
-
-                        <form id="uploadForm" action="{{ route('pengajuan.import') }}" method="POST" enctype="multipart/form-data">
-                            @csrf
-                            <div class="form-group">
-                                <label for="file">Choose Excel file</label>
-                                <input type="file" class="form-control" id="file" name="file" required>
-                            </div>
-                            <button type="submit" class="btn btn-primary">Upload</button>
-                        </form>
-                    </div>
-                </div>
-            </div>
-        </div>
+        @include('component.upload-modal')
     </div>
 @endsection
 

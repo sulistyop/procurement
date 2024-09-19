@@ -15,14 +15,20 @@ Pengajuan
 @section('content')
     <div class="container">
         <h1>Daftar Pengajuan</h1>
-        <a class="btn btn-outline-primary mb-2" href="#" data-toggle="modal" data-target="#tambahPengajuanModal">
-            Tambah Pengajuan
-            <i class="fas fa-plus"></i>
-        </a>
-        <a type="button" class="btn btn-outline-success mb-2" data-toggle="modal" data-target="#uploadModal">
-            Upload Excel
-            <i class="fa fa-upload"></i>
-        </a>
+        <div class="mb-2">
+            <a class="btn btn-outline-primary" href="#" data-toggle="modal" data-target="#tambahPengajuanModal">
+                Tambah Pengajuan
+                <i class="fas fa-plus"></i>
+            </a>
+            <a type="button" class="btn btn-outline-success" data-toggle="modal" data-target="#uploadModal">
+                Upload Excel
+                <i class="fa fa-upload"></i>
+            </a>
+            <a type="button" class="btn btn-outline-info" href="{{ route('pengajuan.index').'?export=true' }}">
+                Export Excel
+                <i class="fa fa-download"></i>
+            </a>
+        </div>
         <table class="table mt-4" id="customers">
             <thead>
             <tr>
@@ -78,7 +84,6 @@ Pengajuan
         @include('component.edit-modal')
         <!-- Include the Modal Component -->
         @include('component.tambah-pengajuan-modal')
-
         <!-- Single Approve Modal -->
         @include('component.approve-modal')
 
@@ -93,6 +98,7 @@ Pengajuan
                         </button>
                     </div>
                     <div class="modal-body">
+
                         <form id="uploadForm" action="{{ route('pengajuan.import') }}" method="POST" enctype="multipart/form-data">
                             @csrf
                             <div class="form-group">

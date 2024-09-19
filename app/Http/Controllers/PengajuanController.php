@@ -2,12 +2,13 @@
 
 namespace App\Http\Controllers;
 
+use App\Exports\PengajuanExport;
 use App\Import\PengajuanImport;
 use App\Models\Pengajuan;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Log;
-use Maatwebsite\Excel\Excel;
+use Maatwebsite\Excel\Facades\Excel;
 
 class PengajuanController extends Controller
 {
@@ -28,6 +29,11 @@ class PengajuanController extends Controller
             }
             return $item;
         });
+		
+		if(request()->has('export')) {
+			$excelReport = new PengajuanExport($pengajuan);
+			return Excel::download($excelReport, 'pengajuan.xlsx');
+		}
 
         return view('pengajuan.index', compact('pengajuan'));
     }
@@ -131,8 +137,15 @@ class PengajuanController extends Controller
 			'file' => 'required|mimes:xlsx,xls,csv',
 		]);
 		
-		Excel::import(new PengajuanImport, $request->file('file'));
+		$import = new PengajuanImport;
+		Excel::import($import, $request->file('file'));
+		
+		if ($import->failures()->isNotEmpty()) {
+			return redirect()->route('pengajuan.importForm')
+				->with('failures', $import->failures());
+		}
 		
 		return redirect()->route('pengajuan.index')->with('success', 'Pengajuan berhasil diimport.');
 	}
+	
 }

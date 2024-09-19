@@ -34,6 +34,6 @@ Route::middleware('auth')->group(function () {
     Route::delete('/pengajuan/{pengajuan}', [PengajuanController::class, 'destroy'])->name('pengajuan.destroy');
     
     // Approval routes
-    Route::get('/pengajuan/{id}/approve', [PengajuanController::class, 'approve'])->name('pengajuan.approve');
-    Route::post('/pengajuan/{id}/approve', [PengajuanController::class, 'storeApproval'])->name('pengajuan.storeApproval');
+    Route::get('/pengajuan/{pengajuan}/approve', [PengajuanController::class, 'approve'])->name('pengajuan.approve');
+    Route::post('/pengajuan/{pengajuan}/approve', [PengajuanController::class, 'storeApproval'])->name('pengajuan.storeApproval');
 });

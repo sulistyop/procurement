@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use App\Models\Pengajuan;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Auth;
 
 class PengajuanController extends Controller
 {
@@ -14,11 +15,13 @@ class PengajuanController extends Controller
         $pengajuan = $pengajuan->map(function ($item) {
             // jika isbn pernah diajukan sebelum tahun sekarang berdasarkan created_at, jika diajukan lagi berikan mark bahwa buku tersebut pernah diajukan
             $item->is_diajukan = Pengajuan::where('isbn', $item->isbn)
-                ->exists();
-            $item->date_pernah_diajukan = Pengajuan::where('isbn', $item->isbn)
-                ->orderBy('created_at','desc')
-                ->first()
-                ->created_at ?? null;
+                ->count() > 1;
+            if($item->is_diajukan){
+	            $item->date_pernah_diajukan = Pengajuan::where('isbn', $item->isbn)
+		            ->orderBy('created_at','desc')
+		            ->first()
+		            ->created_at ?? null;
+            }
             return $item;
         });
 
@@ -92,22 +95,22 @@ class PengajuanController extends Controller
     }
     public function approve($id)
     {
+		dd($id);
         $pengajuan = Pengajuan::findOrFail($id);
         return view('pengajuan.approve', compact('pengajuan'));
     }
 
-    public function storeApproval(Request $request, $id)
+    public function storeApproval(Request $request, Pengajuan $pengajuan)
     {
         $request->validate([
-            'is_approve' => 'required|boolean',
-            'approved_by' => 'nullable|exists:users,id', // Pastikan ada tabel users
+            'eksemplar' => 'required|integer|min:1',
         ]);
 
-        $pengajuan = Pengajuan::findOrFail($id);
-        $pengajuan->is_approve = $request->is_approve;
-        $pengajuan->approved_at = now();
-        $pengajuan->approved_by = auth()->user()->id; // Sesuaikan dengan id pengguna yang menyetujui
-        $pengajuan->save();
+		$store = $pengajuan->update([
+			'is_approve' => true,
+			'approved_at' => now(),
+			'approved_by' => Auth::user() ? Auth::user()->id : 0, // Sesuaikan dengan id pengguna yang menyetujui
+		]);
 
         return redirect()->route('pengajuan.index')->with('success', 'Pengajuan berhasil disetujui!');
     }

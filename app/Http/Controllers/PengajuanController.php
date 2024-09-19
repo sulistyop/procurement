@@ -95,7 +95,6 @@ class PengajuanController extends Controller
     }
     public function approve($id)
     {
-		dd($id);
         $pengajuan = Pengajuan::findOrFail($id);
         return view('pengajuan.approve', compact('pengajuan'));
     }
@@ -109,6 +108,7 @@ class PengajuanController extends Controller
 		$store = $pengajuan->update([
 			'is_approve' => true,
 			'approved_at' => now(),
+			'exemplar' => $request->eksemplar,
 			'approved_by' => Auth::user() ? Auth::user()->id : 0, // Sesuaikan dengan id pengguna yang menyetujui
 		]);
 

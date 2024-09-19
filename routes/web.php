@@ -14,15 +14,18 @@ use App\Http\Controllers\PengajuanController;
 |
 */
 
-Route::get('/', function () {
-    return view('/auth/login');
-});
+
 
 Auth::routes();
 
 Route::get('/home', [App\Http\Controllers\HomeController::class, 'index'])->name('home');
 
 Route::middleware('auth')->group(function () {
+	
+	// dashboard
+	Route::get('/', [\App\Http\Controllers\DashboardController::class, 'index'])->name('dashboard');
+	
+	
     Route::get('/pengajuan', [PengajuanController::class, 'index'])->name('pengajuan.index');
     Route::get('/pengajuan/create', [PengajuanController::class, 'create'])->name('pengajuan.create');
     
@@ -36,4 +39,9 @@ Route::middleware('auth')->group(function () {
     // Approval routes
     Route::get('/pengajuan/{pengajuan}/approve', [PengajuanController::class, 'approve'])->name('pengajuan.approve');
     Route::post('/pengajuan/{pengajuan}/approve', [PengajuanController::class, 'storeApproval'])->name('pengajuan.storeApproval');
+	
+	
+	// Rekap Pengajuan
+	Route::get('/rekap-pengajuan', [App\Http\Controllers\RekapPengajuanController::class, 'index'])->name('rekap-pengajuan.index');
+	
 });

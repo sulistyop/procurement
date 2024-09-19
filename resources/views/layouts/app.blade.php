@@ -60,6 +60,9 @@
             <a class="navbar-brand" href="{{ url('/pengajuan') }}" style="color: #f2f4f7;">
                 Data Pengajuan
             </a>
+            <a class="navbar-brand" href="{{ route('rekap-pengajuan.index') }}" style="color: #f2f4f7;">
+                Rekap Pengajuan
+            </a>
             <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="{{ __('Toggle navigation') }}">
                 <span class="navbar-toggler-icon"></span>
             </button>

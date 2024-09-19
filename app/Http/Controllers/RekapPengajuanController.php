@@ -2,8 +2,10 @@
 
 namespace App\Http\Controllers;
 
+use App\Exports\PengajuanExport;
 use App\Models\Pengajuan;
 use Illuminate\Http\Request;
+use Maatwebsite\Excel\Facades\Excel;
 
 class RekapPengajuanController extends Controller
 {
@@ -32,6 +34,12 @@ class RekapPengajuanController extends Controller
 			$latestEntry->eksemplar = $summary;
 			return $latestEntry;
 		});
+		
+		if(request()->has('export')) {
+			$excelReport = new PengajuanExport($pengajuan);
+			$fileName = 'rekap_pengajuan_' . date('Y-m-d_H-i-s') . '.xlsx';
+			return Excel::download($excelReport, $fileName);
+		}
 		
 		return view('rekapPengajuan.index', compact('pengajuan'));
 	}

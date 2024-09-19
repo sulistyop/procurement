@@ -32,7 +32,8 @@ class PengajuanController extends Controller
 		
 		if(request()->has('export')) {
 			$excelReport = new PengajuanExport($pengajuan);
-			return Excel::download($excelReport, 'pengajuan.xlsx');
+			$fileName = 'daftar_pengajuan_' . date('Y-m-d_H-i-s') . '.xlsx';
+			return Excel::download($excelReport, $fileName);
 		}
 
         return view('pengajuan.index', compact('pengajuan'));

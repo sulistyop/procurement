@@ -15,6 +15,12 @@ Pengajuan
 @section('content')
     <div class="container">
         <h1>Rekap Pengajuan</h1>
+        <div class="mb-2">
+            <a type="button" class="btn btn-outline-info" href="{{ route('rekap-pengajuan.index').'?export=true' }}">
+                Export Excel
+                <i class="fa fa-download"></i>
+            </a>
+        </div>
         <table class="table mt-4" id="customers">
             <thead>
             <tr>

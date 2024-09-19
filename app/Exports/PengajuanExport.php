@@ -3,6 +3,7 @@
 namespace App\Exports;
 
 use App\Models\Pengajuan;
+use Illuminate\Database\Eloquent\Collection;
 use Maatwebsite\Excel\Concerns\FromCollection;
 use Maatwebsite\Excel\Concerns\WithColumnFormatting;
 use Maatwebsite\Excel\Concerns\WithEvents;
@@ -13,10 +14,15 @@ use PhpOffice\PhpSpreadsheet\Worksheet\Worksheet;
 
 class PengajuanExport implements FromCollection, WithHeadings, WithStyles, WithEvents, WithColumnFormatting
 {
+	protected $pengajuan;
+	public function __construct(Collection $pengajuan)
+	{
+		$this->pengajuan = $pengajuan;
+	}
+	
 	public function collection()
 	{
-		$pengajuan = Pengajuan::all();
-		return $pengajuan->map(function ($item, $key) {
+		return $this->pengajuan->map(function ($item, $key) {
 			return [
 				'No' => $key + 1,
 				'Prodi' => $item->prodi,

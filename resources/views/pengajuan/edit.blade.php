@@ -8,6 +8,7 @@
             @method('PUT')
             <div class="form-group">
                 <label for="prodi">Prodi</label>
+                @dd($pengajuan->prodi)
                 <select class="form-control" id="prodi" name="prodi" value="{{ old('prodi', $pengajuan->prodi) }}" required>
                     <option value="bsa">Bahasa dan Sastra Arab S1</option>
                     <option value="Bahasa dan Sastra Arab S1">Bahasa dan Sastra Arab S1</option>

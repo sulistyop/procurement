@@ -18,6 +18,9 @@
     <!-- DataTables CSS -->
     <link href="https://cdn.datatables.net/1.10.21/css/dataTables.bootstrap4.min.css" rel="stylesheet">
 
+    {{--cdn fa--}}
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.1/css/all.min.css">
+
     <style>
         #customers {
             font-family: Arial, Helvetica, sans-serif;
@@ -41,6 +44,14 @@
             background-color: #2f9cbd;
             color: white;
         }
+
+        .active-v2 {
+            font-weight: bold;
+            color: #ffffff !important;
+            background-color: #007bff; /* Professional blue background color */
+            padding: 5px 10px;
+            border-radius: 5px;
+        }
     </style>
     @stack('style-page')
 
@@ -51,16 +62,13 @@
 <div id="app">
     <nav class="navbar navbar-expand-md navbar-light shadow-sm" style="background-color: #0e2742;">
         <div class="container">
-            <a class="navbar-brand" href="{{ url('/') }}" style="color: #f2f4f7;">
+            <a class="navbar-brand {{ Request::is('/') ? 'active-v2' : '' }}" href="{{ url('/') }}" style="color: #f2f4f7;">
                 {{ config('app.name', 'Laravel') }}
             </a>
-            <a class="navbar-brand" href="{{ url('pengajuan/create') }}" style="color: #f2f4f7;">
-                Tambah Pengajuan
-            </a>
-            <a class="navbar-brand" href="{{ url('/pengajuan') }}" style="color: #f2f4f7;">
+            <a class="navbar-brand {{ Request::is('pengajuan') ? 'active-v2' : '' }}" href="{{ url('/pengajuan') }}" style="color: #f2f4f7;">
                 Data Pengajuan
             </a>
-            <a class="navbar-brand" href="{{ route('rekap-pengajuan.index') }}" style="color: #f2f4f7;">
+            <a class="navbar-brand {{ Request::is('rekap-pengajuan') ? 'active-v2' : '' }}" href="{{ route('rekap-pengajuan.index') }}" style="color: #f2f4f7;">
                 Rekap Pengajuan
             </a>
             <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="{{ __('Toggle navigation') }}">

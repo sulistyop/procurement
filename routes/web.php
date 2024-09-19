@@ -44,4 +44,7 @@ Route::middleware('auth')->group(function () {
 	// Rekap Pengajuan
 	Route::get('/rekap-pengajuan', [App\Http\Controllers\RekapPengajuanController::class, 'index'])->name('rekap-pengajuan.index');
 	
+	Route::get('pengajuan/import', [PengajuanController::class, 'importForm'])->name('pengajuan.importForm');
+	Route::post('pengajuan/import', [PengajuanController::class, 'import'])->name('pengajuan.import');
+	
 });

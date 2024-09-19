@@ -15,7 +15,14 @@ Pengajuan
 @section('content')
     <div class="container">
         <h1>Daftar Pengajuan</h1>
-        <a href="{{ route('pengajuan.create') }}" class="btn btn-primary mb-2">Tambah Pengajuan</a>
+        <a class="btn btn-outline-primary mb-2" href="#" data-toggle="modal" data-target="#tambahPengajuanModal">
+            Tambah Pengajuan
+            <i class="fas fa-plus"></i>
+        </a>
+        <a type="button" class="btn btn-outline-success mb-2" data-toggle="modal" data-target="#uploadModal">
+            Upload Excel
+            <i class="fa fa-upload"></i>
+        </a>
         <table class="table mt-4" id="customers">
             <thead>
             <tr>
@@ -49,7 +56,7 @@ Pengajuan
                     <td>
                         <a href="{{ route('pengajuan.show', $item->id) }}" class="btn btn-info btn-sm">View</a>
                         @if(!$item->is_approve)
-                            <a href="{{ route('pengajuan.edit', $item->id) }}" class="btn btn-warning btn-sm">Edit</a>
+                            <a href="#" class="btn btn-warning btn-sm" data-toggle="modal" data-target="#editPengajuanModal" data-id="{{ $item->id }}" data-prodi="{{ $item->prodi }}" data-judul="{{ $item->judul }}" data-edisi="{{ $item->edisi }}" data-isbn="{{ $item->isbn }}" data-penerbit="{{ $item->penerbit }}" data-author="{{ $item->author }}" data-tahun="{{ $item->tahun }}" data-eksemplar="{{ $item->eksemplar }}">Edit</a>
                             <form action="{{ route('pengajuan.destroy', $item->id) }}" method="POST" style="display:inline;">
                                 @csrf
                                 @method('DELETE')
@@ -67,49 +74,34 @@ Pengajuan
             @endforeach
             </tbody>
         </table>
+
+        @include('component.edit-modal')
+        <!-- Include the Modal Component -->
+        @include('component.tambah-pengajuan-modal')
+
         <!-- Single Approve Modal -->
-        <div class="modal fade" id="approveModal" tabindex="-1" role="dialog" aria-labelledby="approveModalLabel" aria-hidden="true">
+        @include('component.approve-modal')
+
+        <!-- Upload Modal -->
+        <div class="modal fade" id="uploadModal" tabindex="-1" role="dialog" aria-labelledby="uploadModalLabel" aria-hidden="true">
             <div class="modal-dialog" role="document">
                 <div class="modal-content">
                     <div class="modal-header">
-                        <h5 class="modal-title" id="approveModalLabel">Approve Pengajuan</h5>
+                        <h5 class="modal-title" id="uploadModalLabel">Upload Excel File</h5>
                         <button type="button" class="close" data-dismiss="modal" aria-label="Close">
                             <span aria-hidden="true">&times;</span>
                         </button>
                     </div>
-                    <form id="approveForm" method="POST">
-                        @csrf
-                        <div class="modal-body">
+                    <div class="modal-body">
+                        <form id="uploadForm" action="{{ route('pengajuan.import') }}" method="POST" enctype="multipart/form-data">
+                            @csrf
                             <div class="form-group">
-                                <label for="prodi">Prodi</label>
-                                <input type="text" name="prodi" id="prodi" class="form-control" readonly>
+                                <label for="file">Choose Excel file</label>
+                                <input type="file" class="form-control" id="file" name="file" required>
                             </div>
-                            <div class="form-group">
-                                <label for="isbn">ISBN</label>
-                                <input type="text" name="isbn" id="isbn" class="form-control" readonly>
-                            </div>
-                            <div class="form-group">
-                                <label for="judul">Judul</label>
-                                <input type="text" name="judul" id="judul" class="form-control" readonly>
-                            </div>
-                            <div class="form-group">
-                                <label for="penerbit">Penerbit</label>
-                                <input type="text" name="penerbit" id="penerbit" class="form-control" readonly>
-                            </div>
-                            <div class="form-group">
-                                <label for="tahun">Tahun</label>
-                                <input type="text" name="tahun" id="tahun" class="form-control" readonly>
-                            </div>
-                            <div class="form-group">
-                                <label for="eksemplar">Jumlah</label>
-                                <input type="text" name="eksemplar" id="eksemplar" class="form-control">
-                            </div>
-                        </div>
-                        <div class="modal-footer">
-                            <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
-                            <button type="submit" class="btn btn-primary">Save changes</button>
-                        </div>
-                    </form>
+                            <button type="submit" class="btn btn-primary">Upload</button>
+                        </form>
+                    </div>
                 </div>
             </div>
         </div>
@@ -172,6 +164,31 @@ Pengajuan
                     alert('An error occurred while approving the pengajuan.');
                 }
             });
+        });
+
+        $('#editPengajuanModal').on('show.bs.modal', function (event) {
+            var button = $(event.relatedTarget);
+            var id = button.data('id');
+            var prodi = button.data('prodi');
+            var judul = button.data('judul');
+            var edisi = button.data('edisi');
+            var isbn = button.data('isbn');
+            var penerbit = button.data('penerbit');
+            var author = button.data('author');
+            var tahun = button.data('tahun');
+            var eksemplar = button.data('eksemplar');
+            var modal = $(this);
+            var form = modal.find('#editPengajuanForm');
+            var actionUrl = '{{ route('pengajuan.update', ':id') }}'.replace(':id', id);
+            form.attr('action', actionUrl);
+            modal.find('.modal-body #prodi').val(prodi);
+            modal.find('.modal-body #judul').val(judul);
+            modal.find('.modal-body #edisi').val(edisi);
+            modal.find('.modal-body #isbn').val(isbn);
+            modal.find('.modal-body #penerbit').val(penerbit);
+            modal.find('.modal-body #author').val(author);
+            modal.find('.modal-body #tahun').val(tahun);
+            modal.find('.modal-body #eksemplar').val(eksemplar);
         });
     </script>
 @endpush

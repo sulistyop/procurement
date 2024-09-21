@@ -1,0 +1,88 @@
+        #customers {
+            font-family: Arial, Helvetica, sans-serif;
+            border-collapse: collapse;
+            width: 100%;
+        }
+
+        #customers td, #customers th {
+            border: 1px solid #ddd;
+            padding: 8px;
+        }
+
+        #customers tr:nth-child(even){background-color: #f2f2f2;}
+
+        #customers tr:hover {background-color: #ddd;}
+
+        #customers th {
+            padding-top: 12px;
+            padding-bottom: 12px;
+            text-align: left;
+            background-color: #2f9cbd;
+            color: white;
+        }
+        .navbar {
+            background-color: #0e2742;
+            padding: 1px 0;
+            margin: 0;
+            background-size: contain; /* atau cover */
+            background-repeat: no-repeat;
+            height: 30px; /* Atur tinggi sesuai kebutuhan */
+        }
+        .navbar .navbar-brand {
+            font-size: 15px;
+            color: #f2f4f7;
+        }
+
+        .active-v2 {
+            font-weight: bold;
+            color: #ffffff !important;
+            background-color: #007bff; /* Professional blue background color */
+            padding: 1px 5px;
+            border-radius: 5px;
+            height: 25px;
+            display: flex; /* Gunakan Flexbox */
+            align-items: center; /* Vertically center */
+            justify-content: center; /* Horizontally center */
+        }
+        .main-header {
+            background-color: #011427; /* Warna latar belakang */
+            color: #ffffff; /* Warna teks */
+            text-align: left; /* Menyusun konten ke tengah */
+            padding: 1px 0; /* Padding untuk ruang di dalam header */
+        }
+
+        .logo-container {
+            margin-top: 10px;
+            margin-bottom: 10px; /* Spasi antara logo dan navbar */
+        }
+
+        .logo-img {
+            max-width: 150px; /* Ukuran maksimum logo */
+            height: auto; /* Menjaga rasio aspek */
+        }
+
+        .logo-text {
+            font-size: 24px; /* Ukuran font logo */
+            font-weight: bold; /* Menebalkan teks */
+            display: block; /* Menampilkan teks di bawah logo */
+        }
+
+        
+        .navbar a:hover {
+            background-color: #495057; /* Warna latar belakang saat hover */
+            border-radius: 5px; /* Sudut membulat saat hover */
+        }
+        
+        @media (max-width: 768px) {
+            .main-header {
+                padding: 10px 0; /* Mengurangi padding di perangkat kecil */
+            }
+
+            .logo-img {
+                max-width: 80px; /* Ukuran logo lebih kecil di perangkat kecil */
+            }
+
+            .logo-text {
+                font-size: 20px; /* Ukuran font lebih kecil di perangkat kecil */
+            }
+        }

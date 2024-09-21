@@ -20,8 +20,6 @@
 
     {{--cdn fa--}}
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.1/css/all.min.css">
-    <link rel="stylesheet" href="{{ asset('css/style.css') }}">
-
     @stack('style-page')
 
     <!-- Scripts -->
@@ -29,24 +27,8 @@
 </head>
 <body>
 <div id="app">
-    <header class="main-header">
-        <div class="logo-container">
-            <a href="#" class="logo">
-                <img src="{{ asset('image/perpus2.png') }}" alt="Logo" class="logo-img">
-            </a>
-        </div>
-    </header>
-    <nav class="navbar navbar-expand-md navbar-light shadow-sm">
+    <nav class="navbar navbar-expand-md navbar-light shadow-sm" style="background-color: #0e2742;">
         <div class="container">
-            <a class="navbar-brand {{ Request::is('/') ? 'active-v2' : '' }}" href="{{ url('/') }}">
-                {{ config('app.name', 'Dashboard') }}
-            </a>
-            <a class="navbar-brand {{ Request::is('pengajuan') ? 'active-v2' : '' }}" href="{{ url('/pengajuan') }}">
-                Data Pengajuan
-            </a>
-            <a class="navbar-brand {{ Request::is('rekap-pengajuan') ? 'active-v2' : '' }}" href="{{ route('rekap-pengajuan.index') }}">
-                Rekap Pengajuan
-            </a>
             <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="{{ __('Toggle navigation') }}">
                 <span class="navbar-toggler-icon"></span>
             </button>
@@ -60,16 +42,12 @@
                 <!-- Right Side Of Navbar -->
                 <ul class="navbar-nav ms-auto">
                     <!-- Authentication Links -->
-                    <li class="nav-item">
-                        <a class="nav-link" href="{{ route('register') }}" style="color: #f2f4f7;" >{{ __('Register') }}</a>
-                    </li>
                     @guest
                         @if (Route::has('login'))
                             <li class="nav-item">
                                 <a class="nav-link" href="{{ route('login') }}" style="color: #f2f4f7;" >{{ __('Login') }}</a>
                             </li>
                         @endif
-                        
                     @else
                         <li class="nav-item dropdown">
                             <a id="navbarDropdown" class="nav-link dropdown-toggle" href="#" role="button" data-bs-toggle="dropdown" aria-haspopup="true" aria-expanded="false" v-pre style="color: #f2f4f7;">

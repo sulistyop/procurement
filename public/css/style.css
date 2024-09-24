@@ -1,88 +1,145 @@
-        #customers {
-            font-family: Arial, Helvetica, sans-serif;
-            border-collapse: collapse;
-            width: 100%;
-        }
+#customers {
+  font-family: Arial, Helvetica, sans-serif;
+  border-collapse: collapse;
+  width: 100%;
+}
 
-        #customers td, #customers th {
-            border: 1px solid #ddd;
-            padding: 8px;
-        }
+#customers td,
+#customers th {
+  border: 1px solid #ddd;
+  padding: 8px;
+}
 
-        #customers tr:nth-child(even){background-color: #f2f2f2;}
+#customers tr:nth-child(even) {
+  background-color: #f2f2f2;
+}
 
-        #customers tr:hover {background-color: #ddd;}
+#customers tr:hover {
+  background-color: #ddd;
+}
 
-        #customers th {
-            padding-top: 12px;
-            padding-bottom: 12px;
-            text-align: left;
-            background-color: #2f9cbd;
-            color: white;
-        }
-        .navbar {
-            background-color: #0e2742;
-            padding: 1px 0;
-            margin: 0;
-            background-size: contain; /* atau cover */
-            background-repeat: no-repeat;
-            height: 30px; /* Atur tinggi sesuai kebutuhan */
-        }
-        .navbar .navbar-brand {
-            font-size: 15px;
-            color: #f2f4f7;
-        }
+#customers th {
+  padding-top: 12px;
+  padding-bottom: 12px;
+  text-align: left;
+  background-color: #2f9cbd;
+  color: white;
+}
 
-        .active-v2 {
-            font-weight: bold;
-            color: #ffffff !important;
-            background-color: #007bff; /* Professional blue background color */
-            padding: 1px 5px;
-            border-radius: 5px;
-            height: 25px;
-            display: flex; /* Gunakan Flexbox */
-            align-items: center; /* Vertically center */
-            justify-content: center; /* Horizontally center */
-        }
-        .main-header {
-            background-color: #011427; /* Warna latar belakang */
-            color: #ffffff; /* Warna teks */
-            text-align: left; /* Menyusun konten ke tengah */
-            padding: 1px 0; /* Padding untuk ruang di dalam header */
-        }
+#app {
+  display: flex;
+  transition: margin-left 0.3s; /* Animasi saat sidebar dibuka/tutup */
+}
 
-        .logo-container {
-            margin-top: 10px;
-            margin-bottom: 10px; /* Spasi antara logo dan navbar */
-        }
+body {
+  margin: 0;
+}
 
-        .logo-img {
-            max-width: 150px; /* Ukuran maksimum logo */
-            height: auto; /* Menjaga rasio aspek */
-        }
+.sidebar {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 250px; /* Lebar sidebar */
+  height: 100%; /* Tinggi penuh */
+  background-color: #343a40; /* Warna latar belakang */
+  padding-top: 20px;
+  z-index: 1000; /* Agar sidebar di atas konten lain */
+  transition: transform 0.3s ease;
+}
 
-        .logo-text {
-            font-size: 24px; /* Ukuran font logo */
-            font-weight: bold; /* Menebalkan teks */
-            display: block; /* Menampilkan teks di bawah logo */
-        }
+.sidebar.active {
+  transform: translateX(-250px); /* Sidebar tertutup */
+}
 
-        
-        .navbar a:hover {
-            background-color: #495057; /* Warna latar belakang saat hover */
-            border-radius: 5px; /* Sudut membulat saat hover */
-        }
-        
-        @media (max-width: 768px) {
-            .main-header {
-                padding: 10px 0; /* Mengurangi padding di perangkat kecil */
-            }
+#sidebarToggle {
+  display: block; /* Pastikan tombol ini muncul di layar kecil */
+}
 
-            .logo-img {
-                max-width: 80px; /* Ukuran logo lebih kecil di perangkat kecil */
-            }
+#sidebarClose {
+  display: none;
+}
 
-            .logo-text {
-                font-size: 20px; /* Ukuran font lebih kecil di perangkat kecil */
-            }
-        }
+.sidebar.active + .content {
+  margin-left: 0; /* Konten tanpa margin saat sidebar tertutup */
+}
+
+.content {
+  margin-left: 250px; /* Jarak default untuk konten saat sidebar terbuka */
+  transition: margin-left 0.3s ease; 
+}
+
+.content.active {
+  margin-left: 0; /* Konten tanpa margin saat sidebar tertutup */
+}
+
+.main-header {
+  height: 60px; /* Tinggi header */
+  background-color: #fff; /* Warna latar belakang */
+}
+
+.navbar {
+  display: flex; /* Menggunakan Flexbox */
+    justify-content: space-between; /* Menjaga elemen di ujung */
+  background-color: #0e2742;
+  background-size: contain; /* atau cover */
+  background-repeat: no-repeat;
+}
+
+.navbar .navbar-brand {
+  font-size: 15px;
+  color: #f2f4f7;
+}
+
+.active-v2 {
+  font-weight: bold;
+  color: #ffffff !important;
+  background-color: #007bff; /* Professional blue background color */
+  padding: 1px 5px;
+  border-radius: 5px;
+  height: 25px;
+  display: flex; /* Gunakan Flexbox */
+  align-items: center; /* Vertically center */
+  justify-content: center; /* Horizontally center */
+}
+
+.main-header {
+  background-color: #011427; /* Warna latar belakang */
+  color: #ffffff; /* Warna teks */
+  text-align: left; /* Menyusun konten ke tengah */
+  padding: 1px 0; /* Padding untuk ruang di dalam header */
+}
+
+.logo-container {
+  margin-top: 10px;
+  margin-bottom: 10px; /* Spasi antara logo dan navbar */
+}
+
+.logo-img {
+  max-width: 150px; /* Ukuran maksimum logo */
+  height: auto; /* Menjaga rasio aspek */
+}
+
+.logo-text {
+  font-size: 24px; /* Ukuran font logo */
+  font-weight: bold; /* Menebalkan teks */
+  display: block; /* Menampilkan teks di bawah logo */
+}
+
+.navbar a:hover {
+  background-color: #495057; /* Warna latar belakang saat hover */
+  border-radius: 5px; /* Sudut membulat saat hover */
+}
+
+@media (max-width: 768px) {
+  .sidebar {
+      width: 200px; /* Lebar sidebar lebih kecil di perangkat kecil */
+  }
+  
+  .content {
+      margin-left: 200px; /* Konten memiliki margin saat sidebar terbuka */
+  }
+
+  .sidebar.active + .content {
+      margin-left: 0; /* Konten tanpa margin saat sidebar tertutup */
+  }
+}

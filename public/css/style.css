@@ -41,7 +41,7 @@ body {
   left: 0;
   width: 250px; /* Lebar sidebar */
   height: 100%; /* Tinggi penuh */
-  background-color: #343a40; /* Warna latar belakang */
+  background-color: #021325; /* Warna latar belakang */
   padding-top: 20px;
   z-index: 1000; /* Agar sidebar di atas konten lain */
   transition: transform 0.3s ease;

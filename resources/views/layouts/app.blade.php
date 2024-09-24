@@ -23,9 +23,37 @@
     <link rel="stylesheet" href="{{ asset('css/style.css') }}">
 
     @stack('style-page')
+    <style>
+        /* Tambahkan CSS ini ke style.css atau dalam tag <style> di file blade Anda */
+        #sidebar {
+            width: 250px;
+            transition: margin-left 0.3s ease;
+        }
+
+        #sidebar.active {
+            margin-left: -220px; /* Menyisakan ruang untuk ikon */
+        }
+
+        #sidebar .nav-link {
+            display: flex;
+            align-items: center;
+        }
+
+        #sidebar .nav-link .fas {
+            margin-right: 10px;
+        }
+
+        #sidebar.active .nav-link span {
+            display: none; /* Sembunyikan teks saat sidebar disembunyikan */
+        }
+
+        #app {
+            transition: margin-left 0.3s ease;
+        }
+    </style>
 
     <!-- Scripts -->
-    @vite(['resources/sass/app.scss', 'resources/js/app.js', 'resources/js/sidebar.js'])
+    @vite(['resources/sass/app.scss', 'resources/js/app.js'])
 </head>
 <body>
     <div id="app" class="d-flex">
@@ -64,7 +92,7 @@
                     </li>
                 </ul>
             </div>
-        </div>
+
 
         <!-- Main content -->
         <div class="content flex-grow-1" id="main-content">
@@ -131,11 +159,19 @@
 
             toggleButton.addEventListener('click', function() {
                 sidebar.classList.toggle('active');
-                app.style.marginLeft = sidebar.classList.contains('active') ? '0' : '250px'; // Mengubah margin konten
+
+                // Mengubah margin konten berdasarkan status sidebar
+                if (sidebar.classList.contains('active')) {
+                    app.style.marginLeft = '-50px'; // Konten tanpa margin saat sidebar tertutup
+                } else {
+                    app.style.marginLeft = '0px'; // Mengembalikan margin saat sidebar terbuka
+                }
             });
         });
 
+
     </script>
     @stack('script-page')
+
 </body>
 </html>

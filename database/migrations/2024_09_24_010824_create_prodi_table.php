@@ -13,8 +13,8 @@ return new class extends Migration
     {
         Schema::create('prodi', function (Blueprint $table) {
             $table->id();
-            $table->nama();
-            $table->deskripsi()
+            $table->string('nama');
+            $table->text('deskripsi');
             $table->timestamps();
         });
     }

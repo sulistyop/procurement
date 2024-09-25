@@ -58,7 +58,7 @@
 <body>
     <div id="app" class="d-flex">
         <!-- Sidebar -->
-        <div class="bg-dark text-white sidebar p-3" id="sidebar">
+        <div class="text-white sidebar p-3" id="sidebar">
                 <div class="logo-container">
                     <a href="#" class="logo">
                         <img src="{{ asset('image/perpus2.png') }}" alt="Logo" class="logo-img">

@@ -3,6 +3,8 @@
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\PengajuanController;
 use App\Http\Controllers\Auth\RegisterController;
+use App\Http\Controllers\RoleController;
+use App\Http\Controllers\UserController;
 
 /*
 |--------------------------------------------------------------------------
@@ -23,6 +25,9 @@ Route::get('/home', [App\Http\Controllers\HomeController::class, 'index'])->name
 
 Route::middleware('auth')->group(function () {
 	
+    Route::post('/roles', [RoleController::class, 'createRole']);
+    Route::post('/user/{userId}/assign-role', [UserController::class, 'assignRole']);
+
 	// dashboard
 	Route::get('/', [\App\Http\Controllers\DashboardController::class, 'index'])->name('dashboard');
 	

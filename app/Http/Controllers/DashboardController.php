@@ -12,7 +12,7 @@ class DashboardController extends Controller
 		$totalBooks = Pengajuan::where('is_approve', 1)
 			->distinct('isbn')
 			->distinct('judul')
-			->distinct('prodi')
+			->distinct('prodi_id')
 			->count();
 		$pendingBooks = Pengajuan::where('is_approve', 0)->count();
 		

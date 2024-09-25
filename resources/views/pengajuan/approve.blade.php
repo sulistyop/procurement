@@ -25,7 +25,7 @@ Pengajuan
             @foreach($pengajuan as $item)
                 <tr>
                     <td>{{ $loop->iteration }}</td>
-                    <td>{{ $item->prodi }}</td>
+                    <td>{{ $item->prodi->nama }}</td>
                     <td>{{ $item->judul }}</td>
                     <td>{{ $item->isbn }}</td>
                     <td>{{ $item->penerbit }}</td>

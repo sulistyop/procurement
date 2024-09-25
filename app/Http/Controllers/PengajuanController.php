@@ -28,6 +28,8 @@ class PengajuanController extends Controller
 		            ->first()
 		            ->created_at ?? null;
             }
+			$item->nama_prodi = $item->prodi->nama;
+			$item->prodi_id = $item->prodi->id;
             return $item;
         });
 		
@@ -93,7 +95,7 @@ class PengajuanController extends Controller
     {
         // Validasi input
         $request->validate([
-            'prodi' => 'required|max:100',
+            'prodi_id' => 'required|max:100',
             'judul' => 'required|max:255',
             'edisi' => 'nullable|max:50',
             'penerbit' => 'required|max:100',

@@ -12,7 +12,7 @@
                 <div class="modal-body">
                     <div class="form-group">
                         <label for="prodi">Prodi</label>
-                        <input type="text" name="prodi" id="prodi" class="form-control" readonly>
+                        <input type="text" name="nama_prodi" id="nama_prodi" class="form-control" readonly>
                     </div>
                     <div class="form-group">
                         <label for="isbn">ISBN</label>

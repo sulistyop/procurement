@@ -71,7 +71,7 @@ Pengajuan
                             <i class="fas fa-binoculars"></i>
                         </a>
                         @if(!$item->is_approve)
-                            <a href="#" class="btn btn-warning btn-sm" data-toggle="modal" data-target="#editPengajuanModal" data-id="{{ $item->id }}" data-prodi="{{ $item->prodi }}" data-judul="{{ $item->judul }}" data-edisi="{{ $item->edisi }}" data-isbn="{{ $item->isbn }}" data-penerbit="{{ $item->penerbit }}" data-author="{{ $item->author }}" data-tahun="{{ $item->tahun }}" data-eksemplar="{{ $item->eksemplar }}" data-toggle="tooltip" data-placement="top" title="Edit">
+                            <a href="#" class="btn btn-warning btn-sm" data-toggle="modal" data-target="#editPengajuanModal" data-id="{{ $item->id }}" data-prodi="{{ $item->prodi_id }}" data-judul="{{ $item->judul }}" data-edisi="{{ $item->edisi }}" data-isbn="{{ $item->isbn }}" data-penerbit="{{ $item->penerbit }}" data-author="{{ $item->author }}" data-tahun="{{ $item->tahun }}" data-eksemplar="{{ $item->eksemplar }}" data-toggle="tooltip" data-placement="top" title="Edit">
                                 <i class="fas fa-edit"></i>
                             </a>
                             <form action="{{ route('pengajuan.destroy', $item->id) }}" method="POST" style="display:inline;">
@@ -128,7 +128,7 @@ Pengajuan
             form.attr('action', actionUrl); // Set the form action dynamically
 
             // Populate the modal fields
-            modal.find('.modal-body #prodi').val(allData.prodi);
+            modal.find('.modal-body #nama_prodi').val(allData.nama_prodi);
             modal.find('.modal-body #isbn').val(allData.isbn);
             modal.find('.modal-body #judul').val(allData.judul);
             modal.find('.modal-body #penerbit').val(allData.penerbit);

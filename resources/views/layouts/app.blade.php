@@ -59,39 +59,49 @@
     <div id="app" class="d-flex">
         <!-- Sidebar -->
         <div class="text-white sidebar p-3" id="sidebar">
-                <div class="logo-container">
-                    <a href="#" class="logo">
-                        <img src="{{ asset('image/perpus2.png') }}" alt="Logo" class="logo-img">
+            <div class="logo-container">
+                <a href="#" class="logo">
+                    <img src="{{ asset('image/perpus2.png') }}" alt="Logo" class="logo-img">
+                </a>
+            </div>
+            <ul class="nav flex-column">
+                <li class="nav-item">
+                    <a class="nav-link text-white {{ Request::is('/') ? 'active' : '' }}" href="{{ url('/') }}">
+                        <i class="fas fa-home"></i> Dashboard
                     </a>
-                </div>
-                <ul class="nav flex-column">
-                    <li class="nav-item">
-                        <a class="nav-link text-white {{ Request::is('/') ? 'active' : '' }}" href="{{ url('/') }}">
-                            <i class="fas fa-home"></i> Dashboard
-                        </a>
-                    </li>
+                </li>
+                @can('manage pengajuan')
                     <li class="nav-item">
                         <a class="nav-link text-white {{ Request::is('pengajuan') ? 'active' : '' }}" href="{{ url('/pengajuan') }}">
                             <i class="fas fa-file-alt"></i> Data Pengajuan
                         </a>
                     </li>
+                @endcan
+                @can('manage rekap pengajuan')
                     <li class="nav-item">
                         <a class="nav-link text-white {{ Request::is('rekap-pengajuan') ? 'active' : '' }}" href="{{ route('rekap-pengajuan.index') }}">
                             <i class="fas fa-table"></i> Rekap Pengajuan
                         </a>
                     </li>
+                @endcan
+                @can('manage users')
                     <li class="nav-item">
-                        <a class="nav-link text-white" href="{{ route('register') }}">
+                        <a class="nav-link text-white {{ Request::is('user*') ? 'active' : '' }}" href="#userMenu" data-toggle="collapse" aria-expanded="false" aria-controls="userMenu">
                             <i class="fas fa-user"></i> Pengguna
                         </a>
+                        <div class="collapse {{ Request::is('user*') ? 'show' : '' }}" id="userMenu">
+                            <a class="nav-link text-white pl-4 {{ Request::is('user') ? 'active' : '' }}" href="{{ route('user.index') }}">List Pengguna</a>
+                            <a class="nav-link text-white pl-4 {{ Request::is('roles-permissions*') ? 'active' : '' }}" href="{{ route('roles-permissions.edit') }}">Izin</a>
+                        </div>
                     </li>
-                    <li class="nav-item">
-                        <a class="nav-link text-white" href="#">
-                            <i class="fas fa-cog"></i> Settings
-                        </a>
-                    </li>
-                </ul>
-            </div>
+                @endcan
+                <li class="nav-item">
+                    <a class="nav-link text-white {{ Request::is('settings') ? 'active' : '' }}" href="#">
+                        <i class="fas fa-cog"></i> Settings
+                    </a>
+                </li>
+            </ul>
+        </div>
 
 
         <!-- Main content -->
@@ -115,12 +125,17 @@
                                     </a>
 
                                     <div class="dropdown-menu dropdown-menu-end" aria-labelledby="navbarDropdown">
+                                        <div class="dropdown-item-text">
+                                            <strong>Name:</strong> {{ Auth::user()->name }}<br>
+                                            <strong>Email:</strong> {{ Auth::user()->email }}<br>
+                                            <strong>Role:</strong> {{ Auth::user()->roles->pluck('name')->first() }}
+                                        </div>
+                                        <div class="dropdown-divider"></div>
                                         <a class="dropdown-item" href="{{ route('logout') }}"
-                                            onclick="event.preventDefault();
-                                                            document.getElementById('logout-form').submit();">
+                                           onclick="event.preventDefault();
+                                             document.getElementById('logout-form').submit();">
                                             {{ __('Logout') }}
                                         </a>
-
                                         <form id="logout-form" action="{{ route('logout') }}" method="POST" class="d-none">
                                             @csrf
                                         </form>

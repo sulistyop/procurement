@@ -12,9 +12,9 @@ class RoleController extends Controller
         'name' => 'required|string|unique:roles,name|max:255',
     ]);
 
-    // Membuat role baru
+    // Membuat role-permission baru
     $role = Role::create(['name' => $request->name]);
 
     // Mengembalikan respons JSON
-    return response()->json(['role' => $role], 201);
+    return response()->json(['role-permission' => $role], 201);
 }

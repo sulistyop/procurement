@@ -5,6 +5,9 @@ use App\Http\Controllers\PengajuanController;
 use App\Http\Controllers\Auth\RegisterController;
 use App\Http\Controllers\RoleController;
 use App\Http\Controllers\UserController;
+use App\Http\Controllers\PenggunaController;
+use App\Http\Controllers\RolePermissionController;
+use App\Http\Controllers\AssignRoleController;
 
 /*
 |--------------------------------------------------------------------------
@@ -26,7 +29,7 @@ Route::get('/home', [App\Http\Controllers\HomeController::class, 'index'])->name
 Route::middleware('auth')->group(function () {
 	
     Route::post('/roles', [RoleController::class, 'createRole']);
-    Route::post('/user/{userId}/assign-role', [UserController::class, 'assignRole']);
+    Route::post('/user/{userId}/assign-role-permission', [UserController::class, 'assignRole']);
 
 	// dashboard
 	Route::get('/', [\App\Http\Controllers\DashboardController::class, 'index'])->name('dashboard');
@@ -56,4 +59,12 @@ Route::middleware('auth')->group(function () {
     Route::get('/register', [RegisterController::class, 'create'])->name('register');
     Route::post('/register', [RegisterController::class, 'store']);
 	
+});
+
+Route::middleware(['auth', 'admin'])->group(function () {
+	Route::resource('user',  UserController::class);
+	
+	Route::get('/roles-permissions/edit', [RolePermissionController::class, 'edit'])->name('roles-permissions.edit');
+	Route::post('/roles-permissions/update', [RolePermissionController::class, 'update'])->name('roles-permissions.update');
+
 });

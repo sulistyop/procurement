@@ -7,6 +7,7 @@ use App\Models\User;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Hash;
 use Illuminate\Support\Facades\Validator;
+use Spatie\Permission\Models\Role;
 
 class RegisterController extends Controller
 {
@@ -24,7 +25,7 @@ class RegisterController extends Controller
             'name' => 'required|string|max:255',
             'email' => 'required|string|email|max:255|unique:users',
             'password' => 'required|string|confirmed|min:8',
-            'role' => 'required|string|in:user,admin', // Validasi role
+            'role-permission' => 'required|string|in:user,admin', // Validasi role-permission
         ]);
 
         if ($validator->fails()) {
@@ -36,9 +37,11 @@ class RegisterController extends Controller
             'email' => $request->email,
             'password' => Hash::make($request->password),
         ]);
-        // Menambahkan role dari input form
-        // $user->assignRole($request->role); // Menggunakan role yang dipilih dari form
-        $user->syncRoles([$request->role]);
+		
+		$role = Role::firstOrCreate(['name' => $request->role]); // Membuat role-permission jika belum ada
+	 
+		$user->assignRole($request->role); // Menggunakan role-permission yang dipilih dari form
+   
         // Login pengguna setelah registrasi
         auth()->login($user);
 

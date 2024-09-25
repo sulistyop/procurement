@@ -17,3 +17,8 @@ use Illuminate\Support\Facades\Route;
 Route::middleware('auth:sanctum')->get('/user', function (Request $request) {
     return $request->user();
 });
+
+// routes/api.php
+
+
+Route::get('/roles/{role}/permissions', [\App\Http\Controllers\Api\RolePermissionController::class, 'getPermissions']);

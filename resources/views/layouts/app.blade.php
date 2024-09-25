@@ -50,6 +50,11 @@
         #app {
             transition: margin-left 0.3s ease;
         }
+
+        .nav-link.active {
+            background-color: #007bff; /* Change this to your desired active background color */
+            color: white; /* Ensure the text color is readable */
+        }
     </style>
 
     <!-- Scripts -->
@@ -85,15 +90,14 @@
                     </li>
                 @endcan
                 @can('manage users')
-                    <li class="nav-item">
-                        <a class="nav-link text-white {{ Request::is('user*') ? 'active' : '' }}" href="#userMenu" data-toggle="collapse" aria-expanded="false" aria-controls="userMenu">
-                            <i class="fas fa-user"></i> Pengguna
-                        </a>
-                        <div class="collapse {{ Request::is('user*') ? 'show' : '' }}" id="userMenu">
-                            <a class="nav-link text-white pl-4 {{ Request::is('user') ? 'active' : '' }}" href="{{ route('user.index') }}">List Pengguna</a>
-                            <a class="nav-link text-white pl-4 {{ Request::is('roles-permissions*') ? 'active' : '' }}" href="{{ route('roles-permissions.edit') }}">Izin</a>
-                        </div>
-                    </li>
+                    <a class="nav-link text-white {{ Request::is('user*') || Request::is('roles-permissions*') ? ' ' : '' }}" href="#userMenu" data-toggle="collapse" aria-expanded="false" aria-controls="userMenu">
+                        <i class="fas fa-user"></i> Pengguna
+                        <i class="fas fa-chevron-down ml-auto" id="userMenuIcon"></i>
+                    </a>
+                    <div class="collapse {{ Request::is('user*') || Request::is('roles-permissions*') ? 'show' : '' }}" id="userMenu">
+                        <a class="nav-link text-white pl-4 {{ Request::is('user') ? 'active' : '' }}" href="{{ route('user.index') }}">List Pengguna</a>
+                        <a class="nav-link text-white pl-4 {{ Request::is('roles-permissions*') ? 'active' : '' }}" href="{{ route('roles-permissions.edit') }}">Izin</a>
+                    </div>
                 @endcan
                 <li class="nav-item">
                     <a class="nav-link text-white {{ Request::is('settings') ? 'active' : '' }}" href="#">
@@ -181,6 +185,21 @@
                 } else {
                     app.style.marginLeft = '0px'; // Mengembalikan margin saat sidebar terbuka
                 }
+            });
+        });
+
+        document.addEventListener('DOMContentLoaded', function() {
+            const userMenu = document.getElementById('userMenu');
+            const userMenuIcon = document.getElementById('userMenuIcon');
+
+            $('#userMenu').on('show.bs.collapse', function () {
+                userMenuIcon.classList.remove('fa-chevron-down');
+                userMenuIcon.classList.add('fa-chevron-up');
+            });
+
+            $('#userMenu').on('hide.bs.collapse', function () {
+                userMenuIcon.classList.remove('fa-chevron-up');
+                userMenuIcon.classList.add('fa-chevron-down');
             });
         });
 

@@ -127,6 +127,7 @@ body {
 
 .navbar a:hover {
   background-color: #495057; /* Warna latar belakang saat hover */
+  color: white; /* Warna teks saat hover */
   border-radius: 5px; /* Sudut membulat saat hover */
 }
 

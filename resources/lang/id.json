@@ -1,0 +1,11 @@
+{
+  "required": ":attribute wajib diisi.",
+  "exists": ":attribute tidak valid.",
+  "max": {
+    "string": ":attribute tidak boleh lebih dari :max karakter."
+  },
+  "integer": ":attribute harus berupa angka.",
+  "min": {
+    "numeric": ":attribute tidak boleh kurang dari :min."
+  }
+}

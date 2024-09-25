@@ -5,6 +5,7 @@ namespace App\Http\Controllers;
 use App\Exports\PengajuanExport;
 use App\Import\PengajuanImport;
 use App\Models\Pengajuan;
+use App\Models\Prodi;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Log;
@@ -19,7 +20,7 @@ class PengajuanController extends Controller
         $pengajuan = $pengajuan->map(function ($item) {
             // jika isbn pernah diajukan sebelum tahun sekarang berdasarkan created_at, jika diajukan lagi berikan mark bahwa buku tersebut pernah diajukan
             $item->is_diajukan = Pengajuan::where('isbn', $item->isbn)
-	            ->where('prodi', $item->prodi)
+	            ->where('prodi_id', $item->prodi_id)
                 ->count() > 1;
             if($item->is_diajukan){
 	            $item->date_pernah_diajukan = Pengajuan::where('isbn', $item->isbn)
@@ -35,8 +36,10 @@ class PengajuanController extends Controller
 			$fileName = 'daftar_pengajuan_' . date('Y-m-d_H-i-s') . '.xlsx';
 			return Excel::download($excelReport, $fileName);
 		}
+		
+		$prodi = Prodi::all();
 
-        return view('pengajuan.index', compact('pengajuan'));
+        return view('pengajuan.index', compact('pengajuan', 'prodi'));
     }
 
     public function create()
@@ -48,17 +51,25 @@ class PengajuanController extends Controller
     public function store(Request $request)
     {
         // Validasi input
-        $request->validate([
-            'prodi' => 'required|max:100',
-            'judul' => 'required|max:255',
-            'edisi' => 'nullable|max:50',
-            'isbn' => 'required|max:20',
-            'penerbit' => 'required|max:100',
-            'author' => 'required|max:100',
-            'tahun' => 'required|integer|min:1900|max:' . date('Y'),
-            'eksemplar' => 'required|integer',
-
-        ]);
+	    $request->validate([
+		    'prodi_id' => 'required|exists:prodi,id',
+		    'judul' => 'required|max:255',
+		    'edisi' => 'nullable|max:50',
+		    'isbn' => 'required|max:20',
+		    'penerbit' => 'required|max:100',
+		    'author' => 'required|max:100',
+		    'tahun' => 'required|integer|min:1900|max:' . date('Y'),
+		    'eksemplar' => 'required|integer',
+	    ], [], [
+		    'prodi_id' => 'Prodi',
+		    'judul' => 'Judul',
+		    'edisi' => 'Edisi',
+		    'isbn' => 'ISBN',
+		    'penerbit' => 'Penerbit',
+		    'author' => 'Penulis',
+		    'tahun' => 'Tahun',
+		    'eksemplar' => 'Eksemplar',
+	    ]);
 
         // Simpan data pengajuan
         Pengajuan::create($request->all());

@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
+use Illuminate\Support\Str;
 use Spatie\Permission\Models\Permission;
 use Spatie\Permission\Models\Role;
 
@@ -12,7 +13,10 @@ class RolePermissionController extends Controller
 	{
 		$roles = Role::all();
 		$permissions = Permission::all();
-		return view('role-permission.edit', compact('roles', 'permissions'));
+		$groupedPermissions = $permissions->groupBy(function ($item) {
+			return Str::slug($item->module);
+		});
+		return view('role-permission.edit', compact('roles', 'groupedPermissions'));
 	}
 	
 	public function update(Request $request)

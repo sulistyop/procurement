@@ -47,7 +47,7 @@ Pengajuan
             @foreach($pengajuan as $item)
                 <tr>
                     <td>{{ $loop->iteration }}</td>
-                    <td>{{ $item->prodi }}</td>
+                    <td>{{ $item->prodi->nama }}</td>
                     <td>
                         {{--data ini pernah diajukan di tahun --}}
                         @if($item->is_diajukan)
@@ -163,7 +163,7 @@ Pengajuan
         $('#editPengajuanModal').on('show.bs.modal', function (event) {
             var button = $(event.relatedTarget);
             var id = button.data('id');
-            var prodi = button.data('prodi');
+            var prodi_id = button.data('prodi_id');
             var judul = button.data('judul');
             var edisi = button.data('edisi');
             var isbn = button.data('isbn');
@@ -175,7 +175,7 @@ Pengajuan
             var form = modal.find('#editPengajuanForm');
             var actionUrl = '{{ route('pengajuan.update', ':id') }}'.replace(':id', id);
             form.attr('action', actionUrl);
-            modal.find('.modal-body #prodi').val(prodi);
+            modal.find('.modal-body #prodi_id').val(prodi_id);
             modal.find('.modal-body #judul').val(judul);
             modal.find('.modal-body #edisi').val(edisi);
             modal.find('.modal-body #isbn').val(isbn);
@@ -185,4 +185,12 @@ Pengajuan
             modal.find('.modal-body #eksemplar').val(eksemplar);
         });
     </script>
+
+    @if ($errors->any())
+        <script type="text/javascript">
+            $(document).ready(function() {
+                $('#tambahPengajuanModal').modal('show');
+            });
+        </script>
+    @endif
 @endpush

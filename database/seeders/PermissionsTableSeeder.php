@@ -12,45 +12,54 @@ class PermissionsTableSeeder extends Seeder
 	public function run()
 	{
 		$permissions = [
-			'manage users',
-			'view users',
-			'create users',
-			'edit users',
-			'delete users',
-			
-			'manage roles',
-			'view roles',
-			'create roles',
-			'edit roles',
-			'delete roles',
-			
-			'manage permissions',
-			'view permissions',
-			'create permissions',
-			'edit permissions',
-			'delete permissions',
-			
-			'manage pengajuan',
-			'view pengajuan',
-			'create pengajuan',
-			'edit pengajuan',
-			'delete pengajuan',
-			'approve pengajuan',
-			'export pengajuan',
-			'import pengajuan',
-			
-			'manage rekap pengajuan',
-			'view rekap pengajuan',
-			'export rekap pengajuan',
-			
+			'users' => [
+				'manage users',
+				'view users',
+				'create users',
+				'edit users',
+				'delete users',
+			],
+			'roles' => [
+				'manage roles',
+				'view roles',
+				'create roles',
+				'edit roles',
+				'delete roles',
+			],
+			'permissions' => [
+				'manage permissions',
+				'view permissions',
+				'create permissions',
+				'edit permissions',
+				'delete permissions',
+			],
+			'pengajuan' => [
+				'manage pengajuan',
+				'view pengajuan',
+				'create pengajuan',
+				'edit pengajuan',
+				'delete pengajuan',
+				'approve pengajuan',
+				'export pengajuan',
+				'import pengajuan',
+			],
+			'rekap pengajuan' => [
+				'manage rekap pengajuan',
+				'view rekap pengajuan',
+				'export rekap pengajuan',
+			],
 		];
 		
-		// Pastikan role-permission 'admin' sudah ada di database
 		$adminRole = Role::firstOrCreate(['name' => 'admin']);
 		
-		foreach ($permissions as $permission) {
-			$perm = Permission::firstOrCreate(['name' => $permission]);
-			$adminRole->givePermissionTo($perm);
+		foreach ($permissions as $module => $modulePermissions) {
+			foreach ($modulePermissions as $permission) {
+				$perm = Permission::updateOrCreate(
+					['name' => $permission, 'module' => $module],
+					['name' => $permission, 'module' => $module]
+				);
+				$adminRole->givePermissionTo($perm);
+			}
 		}
 	}
 }

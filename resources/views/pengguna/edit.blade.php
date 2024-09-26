@@ -24,7 +24,7 @@
             </div>
             <div class="form-group">
                 <label for="roles">Roles</label>
-                <select name="roles[]" class="form-control" multiple required>
+                <select name="roles[]" class="form-control select2" multiple required>
                     @foreach($roles as $role)
                         <option value="{{ $role->name }}" {{ in_array($role->name, $user->roles->pluck('name')->toArray()) ? 'selected' : '' }}>{{ $role->name }}</option>
                     @endforeach

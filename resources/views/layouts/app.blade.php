@@ -24,6 +24,9 @@
     <!-- Add this in your Blade template, preferably in the head section -->
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/sweetalert2@11/dist/sweetalert2.min.css">
 
+    <link href="https://cdn.jsdelivr.net/npm/select2@4.1.0-rc.0/dist/css/select2.min.css" rel="stylesheet" />
+
+
     @stack('style-page')
     <style>
         /* Tambahkan CSS ini ke style.css atau dalam tag <style> di file blade Anda */
@@ -163,6 +166,8 @@
     <!-- jQuery -->
     <script src="https://code.jquery.com/jquery-3.5.1.min.js"></script>
 
+    <script src="https://cdn.jsdelivr.net/npm/select2@4.1.0-rc.0/dist/js/select2.min.js"></script>
+
     <!-- Bootstrap 4 JS -->
     <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.bundle.min.js"></script>
 
@@ -223,7 +228,12 @@
         });
 
 
-
+        document.addEventListener('DOMContentLoaded', function() {
+            // Initialize Select2 on all select elements with the class 'select2'
+            $('.select2').select2({
+                allowClear: true
+            });
+        });
     </script>
     <!-- Add this in your Blade template, preferably in the head section -->
     <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>

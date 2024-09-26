@@ -7,7 +7,7 @@
         <!-- Role Selection Dropdown -->
         <div class="form-group">
             <label for="role">Peran</label>
-            <select name="role_id" id="role" class="form-control" required>
+            <select name="role_id" id="role" class="form-control select2" required>
                 <option value="">Pilih Peran</option>
                 @foreach($roles as $role)
                     <option value="{{ $role->id }}">{{ $role->name }}</option>

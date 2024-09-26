@@ -21,6 +21,8 @@
     {{--cdn fa--}}
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.1/css/all.min.css">
     <link rel="stylesheet" href="{{ asset('css/style.css') }}">
+    <!-- Add this in your Blade template, preferably in the head section -->
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/sweetalert2@11/dist/sweetalert2.min.css">
 
     @stack('style-page')
     <style>
@@ -171,6 +173,23 @@
         $(function () {
             $('[data-toggle="tooltip"]').tooltip()
         })
+        $(document).ready(function() {
+            @if(session('success'))
+            Swal.fire({
+                icon: 'success',
+                title: 'Success',
+                text: '{{ session('success') }}',
+            });
+            @endif
+
+            @if(session('error'))
+            Swal.fire({
+                icon: 'error',
+                title: 'Error',
+                text: '{{ session('error') }}',
+            });
+            @endif
+        });
         document.addEventListener('DOMContentLoaded', function() {
             const sidebar = document.getElementById('sidebar');
             const toggleButton = document.getElementById('sidebarToggle');
@@ -204,7 +223,10 @@
         });
 
 
+
     </script>
+    <!-- Add this in your Blade template, preferably in the head section -->
+    <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
     @stack('script-page')
 
 </body>

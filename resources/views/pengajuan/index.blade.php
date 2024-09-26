@@ -71,7 +71,7 @@ Pengajuan
                             <i class="fas fa-binoculars"></i>
                         </a>
                         @if(!$item->is_approve)
-                            <a href="#" class="btn btn-warning btn-sm" data-toggle="modal" data-target="#editPengajuanModal" data-id="{{ $item->id }}" data-prodi="{{ $item->prodi_id }}" data-judul="{{ $item->judul }}" data-edisi="{{ $item->edisi }}" data-isbn="{{ $item->isbn }}" data-penerbit="{{ $item->penerbit }}" data-author="{{ $item->author }}" data-tahun="{{ $item->tahun }}" data-eksemplar="{{ $item->eksemplar }}" data-toggle="tooltip" data-placement="top" title="Edit">
+                            <a href="#" class="btn btn-warning btn-sm" data-toggle="modal" data-target="#editPengajuanModal" data-id="{{ $item->id }}" data-prodi="{{ $item->prodi->id }}" data-judul="{{ $item->judul }}" data-edisi="{{ $item->edisi }}" data-isbn="{{ $item->isbn }}" data-penerbit="{{ $item->penerbit }}" data-author="{{ $item->author }}" data-tahun="{{ $item->tahun }}" data-eksemplar="{{ $item->eksemplar }}" data-toggle="tooltip" data-placement="top" title="Edit">
                                 <i class="fas fa-edit"></i>
                             </a>
                             <form action="{{ route('pengajuan.destroy', $item->id) }}" method="POST" style="display:inline;">
@@ -106,29 +106,25 @@ Pengajuan
     <script type="text/javascript">
         $(document).ready(function() {
             $('#customers').DataTable({
-                // Aktifkan fitur sorting, search, pagination, dan length
-                "paging": true,         // Aktifkan pagination
-                "lengthChange": true,   // Tampilkan dropdown untuk panjang data
-                "searching": true,      // Aktifkan kolom pencarian
-                "ordering": true,       // Aktifkan sorting kolom
-                "info": true,           // Tampilkan informasi jumlah data
-                "autoWidth": false,     // Nonaktifkan lebar otomatis
+                "paging": true,
+                "lengthChange": true,
+                "searching": true,
+                "ordering": true,
+                "info": true,
+                "autoWidth": false,
             });
         });
-    </script>
 
-    <script type="text/javascript">
         $('#approveModal').on('show.bs.modal', function (event) {
-            var button = $(event.relatedTarget); // Button that triggered the modal
-            var id = button.data('id'); // Extract info from data-* attributes
-            var allData = button.data('all'); // Extract the entire item data
+            var button = $(event.relatedTarget);
+            var id = button.data('id');
+            var allData = button.data('all');
             var modal = $(this);
             var form = modal.find('#approveForm');
-            var actionUrl = '{{ route('pengajuan.storeApproval', ':id') }}'.replace(':id', id); // Replace :id with the actual ID
-            form.attr('action', actionUrl); // Set the form action dynamically
+            var actionUrl = '{{ route('pengajuan.storeApproval', ':id') }}'.replace(':id', id);
+            form.attr('action', actionUrl);
 
-            // Populate the modal fields
-            modal.find('.modal-body #nama_prodi').val(allData.nama_prodi);
+            modal.find('.modal-body #prodi').val(allData.prodi);
             modal.find('.modal-body #isbn').val(allData.isbn);
             modal.find('.modal-body #judul').val(allData.judul);
             modal.find('.modal-body #penerbit').val(allData.penerbit);
@@ -137,7 +133,7 @@ Pengajuan
         });
 
         $('#approveForm').on('submit', function (event) {
-            event.preventDefault(); // Prevent the default form submission
+            event.preventDefault();
 
             var form = $(this);
             var actionUrl = form.attr('action');
@@ -148,14 +144,21 @@ Pengajuan
                 method: 'POST',
                 data: formData,
                 success: function (response) {
-                    // Handle success response
-                    alert('Pengajuan approved successfully!');
-                    $('#approveModal').modal('hide');
-                    location.reload(); // Reload the page to reflect changes
+                    Swal.fire({
+                        icon: 'success',
+                        title: 'Success',
+                        text: 'Pengajuan approved successfully!',
+                    }).then(() => {
+                        $('#approveModal').modal('hide');
+                        location.reload();
+                    });
                 },
                 error: function (xhr, status, error) {
-                    // Handle error response
-                    alert('An error occurred while approving the pengajuan.');
+                    Swal.fire({
+                        icon: 'error',
+                        title: 'Error',
+                        text: 'An error occurred while approving the pengajuan.',
+                    });
                 }
             });
         });
@@ -163,7 +166,7 @@ Pengajuan
         $('#editPengajuanModal').on('show.bs.modal', function (event) {
             var button = $(event.relatedTarget);
             var id = button.data('id');
-            var prodi_id = button.data('prodi_id');
+            var prodi = button.data('prodi');
             var judul = button.data('judul');
             var edisi = button.data('edisi');
             var isbn = button.data('isbn');
@@ -175,7 +178,7 @@ Pengajuan
             var form = modal.find('#editPengajuanForm');
             var actionUrl = '{{ route('pengajuan.update', ':id') }}'.replace(':id', id);
             form.attr('action', actionUrl);
-            modal.find('.modal-body #prodi_id').val(prodi_id);
+            modal.find('.modal-body #prodi').val(prodi);
             modal.find('.modal-body #judul').val(judul);
             modal.find('.modal-body #edisi').val(edisi);
             modal.find('.modal-body #isbn').val(isbn);
@@ -184,8 +187,9 @@ Pengajuan
             modal.find('.modal-body #tahun').val(tahun);
             modal.find('.modal-body #eksemplar').val(eksemplar);
         });
-    </script>
 
+
+    </script>
     @if ($errors->any())
         <script type="text/javascript">
             $(document).ready(function() {

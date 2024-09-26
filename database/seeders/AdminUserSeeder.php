@@ -31,5 +31,19 @@
 			if($adminUser->wasRecentlyCreated) {
 				$adminUser->assignRole($adminRole);
 			}
+			
+			$userRole = Role::firstOrCreate(['name' => 'user']);
+			
+			$user = User::updateOrCreate(
+				['email' => 'user@gmail.com'],
+				[
+					'name' => 'User',
+					'password' => Hash::make('password'),
+				]
+			);
+			
+			if($user->wasRecentlyCreated) {
+				$user->assignRole($userRole);
+			}
 		}
 	}

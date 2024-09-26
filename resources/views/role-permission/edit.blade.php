@@ -150,7 +150,14 @@
             triggerEl.addEventListener('click', function (event) {
                 event.preventDefault()
                 tabTrigger.show()
+                localStorage.setItem('activeTab', triggerEl.getAttribute('href'));
             })
         });
+        // Retrieve the active tab from local storage and activate it
+        var activeTab = localStorage.getItem('activeTab');
+        if (activeTab) {
+            var tabTrigger = new bootstrap.Tab(document.querySelector(`#permissionTabs a[href="${activeTab}"]`));
+            tabTrigger.show();
+        }
     </script>
 @endpush

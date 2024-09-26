@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use App\Models\Prodi;
 use App\Models\User;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Hash;
@@ -65,7 +66,8 @@ class UserController extends Controller
 	{
 		$roles = Role::all();
 		$permissions = Permission::all();
-		return view('pengguna.edit', compact('user', 'roles', 'permissions'));
+		$prodis = Prodi::all();
+		return view('pengguna.edit', compact('user', 'roles', 'permissions', 'prodis'));
 	}
 	
 	public function update(Request $request, User $user)
@@ -77,10 +79,12 @@ class UserController extends Controller
 			'roles' => 'required|array',
 		]);
 		
+		
 		$user->update([
 			'name' => $request->name,
 			'email' => $request->email,
 			'password' => $request->password ? Hash::make($request->password) : $user->password,
+			'prodi_id' => $request->prodi_id,
 		]);
 		
 		$user->syncRoles($request->roles);

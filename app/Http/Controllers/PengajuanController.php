@@ -16,8 +16,9 @@ class PengajuanController extends Controller
     public function index()
     {
         // Menampilkan semua data pengajuan
-        $pengajuan = Pengajuan::all();
-        $pengajuan = $pengajuan->map(function ($item) {
+	    $pengajuan = Pengajuan::haveProdi()->get();
+	    
+	    $pengajuan = $pengajuan->map(function ($item) {
             // jika isbn pernah diajukan sebelum tahun sekarang berdasarkan created_at, jika diajukan lagi berikan mark bahwa buku tersebut pernah diajukan
             $item->is_diajukan = Pengajuan::where('isbn', $item->isbn)
 	            ->where('isbn', '!=', null)
@@ -84,8 +85,12 @@ class PengajuanController extends Controller
 
     public function show(Pengajuan $pengajuan)
     {
-        // Menampilkan detail pengajuan tertentu
-        return view('pengajuan.show', compact('pengajuan'));
+		if(Auth::user()->can('view pengajuan')) {
+	        // Menampilkan detail pengajuan tertentu
+	        return view('pengajuan.show', compact('pengajuan'));
+		}else{
+			return redirect()->route('pengajuan.index')->with('error', 'Anda tidak memiliki akses untuk melihat detail pengajuan.');
+		}
     }
 
     public function edit(Pengajuan $pengajuan)

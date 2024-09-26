@@ -14,7 +14,7 @@
                     @method('PUT')
                     <div class="form-group">
                         <label for="prodi_id">Prodi</label>
-                        <select class="form-control" id="prodi" name="prodi_id" value="{{ old('prodi_id') }}" required>
+                        <select class="form-control select2" id="prodi" name="prodi_id" value="{{ old('prodi_id') }}" required>
                             @foreach($prodi as $item)
                                 <option value="{{ $item->id }}" @selected(old('prodi', ) == $item->id)>{{ $item->nama }}</option>
                             @endforeach

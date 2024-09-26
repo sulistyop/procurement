@@ -67,13 +67,18 @@ Pengajuan
                             <span class="badge badge-warning">Pending</span>
                         @endif
                     <td>
+                        @can('view pengajuan')
                         <a href="{{ route('pengajuan.show', $item->id) }}" class="btn btn-info btn-sm" data-toggle="tooltip" data-placement="top" title="View">
                             <i class="fas fa-binoculars"></i>
                         </a>
+                        @endcan
                         @if(!$item->is_approve)
+                            @can('edit pengajuan')
                             <a href="#" class="btn btn-warning btn-sm" data-toggle="modal" data-target="#editPengajuanModal" data-id="{{ $item->id }}" data-prodi="{{ $item->prodi->id }}" data-judul="{{ $item->judul }}" data-edisi="{{ $item->edisi }}" data-isbn="{{ $item->isbn }}" data-penerbit="{{ $item->penerbit }}" data-author="{{ $item->author }}" data-tahun="{{ $item->tahun }}" data-eksemplar="{{ $item->eksemplar }}" data-toggle="tooltip" data-placement="top" title="Edit">
                                 <i class="fas fa-edit"></i>
                             </a>
+                            @endif
+                            @can('delete pengajuan')
                             <form action="{{ route('pengajuan.destroy', $item->id) }}" method="POST" style="display:inline;">
                                 @csrf
                                 @method('DELETE')
@@ -81,9 +86,12 @@ Pengajuan
                                     <i class="fas fa-trash-alt"></i>
                                 </button>
                             </form>
-                            <button type="button" class="btn btn-success btn-sm" data-toggle="modal" data-target="#approveModal" data-all="{{ $item }}" data-id="{{ $item->id }}" data-jumlah="{{ $item->eksemplar }}" data-toggle="tooltip" data-placement="top" title="Approve">
-                                <i class="fas fa-check"></i>
-                            </button>
+                            @endcan
+                            @can('approve pengajuan')
+                                <button type="button" class="btn btn-success btn-sm" data-toggle="modal" data-target="#approveModal" data-all="{{ $item }}" data-id="{{ $item->id }}" data-jumlah="{{ $item->eksemplar }}" data-toggle="tooltip" data-placement="top" title="Approve">
+                                    <i class="fas fa-check"></i>
+                                </button>
+                            @endcan
                         @endif
                     </td>
                 </tr>
@@ -188,7 +196,24 @@ Pengajuan
             modal.find('.modal-body #eksemplar').val(eksemplar);
         });
 
+        document.addEventListener('DOMContentLoaded', function() {
+            // Initialize Select2 when the modal is shown
+            $('#tambahPengajuanModal').on('shown.bs.modal', function () {
+                $('.select2').select2({
+                    placeholder: "Pilih opsi",
+                    allowClear: true,
+                    dropdownParent: $('#tambahPengajuanModal') // Ensure the dropdown is appended to the modal
+                });
+            });
 
+            $('#editPengajuanModal').on('shown.bs.modal', function () {
+                $('.select2').select2({
+                    placeholder: "Pilih opsi",
+                    allowClear: true,
+                    dropdownParent: $('#editPengajuanModal') // Ensure the dropdown is appended to the modal
+                });
+            });
+        });
     </script>
     @if ($errors->any())
         <script type="text/javascript">

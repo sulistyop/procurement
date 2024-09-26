@@ -7,6 +7,8 @@
         <table class="table mt-3">
             <thead>
             <tr>
+                <th>No</th>
+                <th>Prodi</th>
                 <th>Nama</th>
                 <th>Email</th>
                 <th>Roles</th>
@@ -16,6 +18,8 @@
             <tbody>
             @foreach($users as $user)
                 <tr>
+                    <td>{{ $loop->iteration }}</td>
+                    <td>{{ $user->prodi ? $user->prodi->nama : '' }}</td>
                     <td>{{ $user->name }}</td>
                     <td>{{ $user->email }}</td>
                     <td>{{ implode(', ', $user->roles->pluck('name')->toArray()) }}</td>

@@ -23,8 +23,18 @@
                 <input type="password" name="password_confirmation" class="form-control">
             </div>
             <div class="form-group">
+                <label for="prodi_id">Prodi</label>
+                <select name="prodi_id" class="form-control select2">
+                    <option value="">Pilih Prodi</option>
+                    @foreach($prodis as $prodi)
+                        <option value="{{ $prodi->id }}" {{ $prodi->id == $user->prodi_id ? 'selected' : '' }}>{{ $prodi->nama }}</option>
+                    @endforeach
+                </select>
+            </div>
+            <div class="form-group">
                 <label for="roles">Roles</label>
                 <select name="roles[]" class="form-control select2" multiple required>
+                    <option value="">Pilih Roles</option>
                     @foreach($roles as $role)
                         <option value="{{ $role->name }}" {{ in_array($role->name, $user->roles->pluck('name')->toArray()) ? 'selected' : '' }}>{{ $role->name }}</option>
                     @endforeach

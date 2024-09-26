@@ -13,7 +13,7 @@
                     @csrf
                     <div class="form-group">
                         <label for="prodi">Prodi</label>
-                        <select class="form-control" id="prodi_id" name="prodi_id" value="{{ old('prodi_id') }}" required>
+                        <select class="form-control select2" id="prodi_id" name="prodi_id" value="{{ old('prodi_id') }}" required>
                             @foreach($prodi as $item)
                                 <option value="{{ $item->id }}">{{ $item->nama }}</option>
                             @endforeach

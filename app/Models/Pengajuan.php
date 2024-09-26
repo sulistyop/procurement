@@ -3,6 +3,7 @@
 namespace App\Models;
 
 use Illuminate\Database\Eloquent\Model;
+use Illuminate\Support\Facades\Auth;
 
 class Pengajuan extends Model
 {
@@ -25,5 +26,13 @@ class Pengajuan extends Model
 	public function prodi()
 	{
 		return $this->belongsTo(Prodi::class);
+	}
+	
+	public static function haveProdi()
+	{
+		$user = Auth::user();
+		return self::when($user->prodi, function ($query) use ($user) {
+			$query->where('prodi_id', $user->prodi->id);
+		});
 	}
 }

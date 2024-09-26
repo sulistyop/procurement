@@ -133,16 +133,17 @@
                                         {{ Auth::user()->name }}
                                     </a>
 
-                                    <div class="dropdown-menu dropdown-menu-end" aria-labelledby="navbarDropdown">
+                                    <div class="dropdown-menu dropdown-menu-end profile-dropdown-menu" style="min-width: 250px" aria-labelledby="navbarDropdown">
                                         <div class="dropdown-item-text">
                                             <strong>Name:</strong> {{ Auth::user()->name }}<br>
                                             <strong>Email:</strong> {{ Auth::user()->email }}<br>
-                                            <strong>Role:</strong> {{ Auth::user()->roles->pluck('name')->first() }}
+                                            <strong>Role:</strong> {{ Auth::user()->roles->pluck('name')->first() }}<br>
+                                            <strong>Prodi:</strong> {{ Auth::user()->prodi ? Auth::user()->prodi->nama : '-' }}
                                         </div>
                                         <div class="dropdown-divider"></div>
                                         <a class="dropdown-item" href="{{ route('logout') }}"
                                            onclick="event.preventDefault();
-                                             document.getElementById('logout-form').submit();">
+                                                document.getElementById('logout-form').submit();">
                                             {{ __('Logout') }}
                                         </a>
                                         <form id="logout-form" action="{{ route('logout') }}" method="POST" class="d-none">
@@ -230,9 +231,7 @@
 
         document.addEventListener('DOMContentLoaded', function() {
             // Initialize Select2 on all select elements with the class 'select2'
-            $('.select2').select2({
-                placeholder: "Pilih opsi",
-            });
+            $('.select2').select2();
         });
     </script>
     <!-- Add this in your Blade template, preferably in the head section -->

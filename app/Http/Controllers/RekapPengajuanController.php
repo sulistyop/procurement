@@ -11,7 +11,8 @@ class RekapPengajuanController extends Controller
 {
 	public function index()
 	{
-		$pengajuan = Pengajuan::selectRaw('judul, isbn, penerbit, edisi, SUM(eksemplar) as total_eksemplar, MAX(created_at) as latest_created_at')
+		$pengajuan = Pengajuan::haveProdi()
+			->selectRaw('judul, isbn, penerbit, edisi, SUM(eksemplar) as total_eksemplar, MAX(created_at) as latest_created_at')
 			->where('is_approve', 1) // Add condition to filter approved records
 			->groupBy('judul', 'isbn', 'penerbit', 'edisi')
 			->get();

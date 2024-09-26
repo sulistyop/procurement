@@ -115,6 +115,29 @@
             }
         });
 
+        $('#role').select2({
+            placeholder: "Pilih Peran",
+            allowClear: true
+        });
+
+        // Event listener for role selection using Select2
+        $('#role').on('change', function() {
+            const roleId = $(this).val();
+            if (roleId) {
+                // Update the URL with the selected role ID
+                const newUrl = new URL(window.location.href);
+                newUrl.searchParams.set('role_id', roleId);
+                window.history.pushState({}, '', newUrl);
+
+                fetchPermissions(roleId);
+            } else {
+                // Reset checkboxes if no role is selected
+                document.querySelectorAll('#permissionsContent input[type="checkbox"]').forEach(checkbox => {
+                    checkbox.checked = false;
+                });
+            }
+        });
+
         // Function to fetch permissions based on role ID
         function fetchPermissions(roleId) {
             fetch(`/api/roles/${roleId}/permissions`)

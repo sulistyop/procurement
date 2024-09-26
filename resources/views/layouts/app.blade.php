@@ -231,7 +231,7 @@
         document.addEventListener('DOMContentLoaded', function() {
             // Initialize Select2 on all select elements with the class 'select2'
             $('.select2').select2({
-                allowClear: true
+                placeholder: "Pilih opsi",
             });
         });
     </script>

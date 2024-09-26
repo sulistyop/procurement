@@ -85,22 +85,59 @@
         });
 
         // Fetch permissions based on selected role
+        function getQueryParam(name) {
+            const urlParams = new URLSearchParams(window.location.search);
+            return urlParams.get(name);
+        }
+
+        // Set the selected role from the URL parameter
+        const roleIdFromUrl = getQueryParam('role_id');
+        if (roleIdFromUrl) {
+            document.getElementById('role').value = roleIdFromUrl;
+            fetchPermissions(roleIdFromUrl);
+        }
+
+        // Event listener for role selection
         document.getElementById('role').addEventListener('change', function() {
             const roleId = this.value;
             if (roleId) {
-                fetch(`/api/roles/${roleId}/permissions`)
-                    .then(response => response.json())
-                    .then(data => {
-                        document.querySelectorAll('#permissionsContent input[type="checkbox"]').forEach(checkbox => {
-                            checkbox.checked = data.permissions.includes(checkbox.value);
-                        });
-                        // Update form action URL with selected role ID
-                        document.getElementById('permissionsForm').action = `/roles-permissions/${roleId}`;
-                    });
+                // Update the URL with the selected role ID
+                const newUrl = new URL(window.location.href);
+                newUrl.searchParams.set('role_id', roleId);
+                window.history.pushState({}, '', newUrl);
+
+                fetchPermissions(roleId);
             } else {
                 // Reset checkboxes if no role is selected
                 document.querySelectorAll('#permissionsContent input[type="checkbox"]').forEach(checkbox => {
                     checkbox.checked = false;
+                });
+            }
+        });
+
+        // Function to fetch permissions based on role ID
+        function fetchPermissions(roleId) {
+            fetch(`/api/roles/${roleId}/permissions`)
+                .then(response => response.json())
+                .then(data => {
+                    document.querySelectorAll('#permissionsContent input[type="checkbox"]').forEach(checkbox => {
+                        checkbox.checked = data.permissions.includes(checkbox.value);
+                    });
+                    // Update form action URL with selected role ID
+                    document.getElementById('permissionsForm').action = `/roles-permissions/${roleId}`;
+                    console.log('Form action updated to:', document.getElementById('permissionsForm').action); // Log the updated form action
+                });
+        }
+
+        // Form submission validation
+        document.getElementById('permissionsForm').addEventListener('submit', function(event) {
+            const selectedRole = document.getElementById('role').value;
+            if (!selectedRole) {
+                event.preventDefault(); // Prevent form submission
+                Swal.fire({
+                    icon: 'error',
+                    title: 'Oops...',
+                    text: 'Pilih peran terlebih dahulu!',
                 });
             }
         });

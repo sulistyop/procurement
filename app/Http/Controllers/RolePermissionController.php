@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Log;
 use Illuminate\Support\Str;
 use Spatie\Permission\Models\Permission;
 use Spatie\Permission\Models\Role;
@@ -19,16 +20,20 @@ class RolePermissionController extends Controller
 		return view('role-permission.edit', compact('roles', 'groupedPermissions'));
 	}
 	
-	public function update(Request $request)
+	public function update(Request $request, $roleId)
 	{
-		$request->validate([
-			'role_id' => 'required|exists:roles,id',
-			'permissions' => 'required|array',
-		]);
-		
-		$role = Role::findById($request->role_id);
-		$role->syncPermissions($request->permissions);
-		
-		return redirect()->route('roles-permissions.edit')->with('success', 'Permissions updated successfully.');
+		try {
+			$request->validate([
+				'permissions' => 'required|array',
+			]);
+			
+			$role = Role::findById($roleId);
+			$role->syncPermissions($request->permissions);
+			
+			return redirect()->back()->with('success', 'Permissions updated successfully.');
+		} catch (\Exception $e) {
+			Log::error('Update failed: ' . $e->getMessage());
+			return redirect()->route('roles-permissions.edit')->with('error', 'Update failed.');
+		}
 	}
 }

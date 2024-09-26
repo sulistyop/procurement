@@ -65,6 +65,5 @@ Route::middleware(['auth', 'admin'])->group(function () {
 	Route::resource('user',  UserController::class);
 	
 	Route::get('/roles-permissions/edit', [RolePermissionController::class, 'edit'])->name('roles-permissions.edit');
-	Route::post('/roles-permissions/update', [RolePermissionController::class, 'update'])->name('roles-permissions.update');
-
+	Route::put('/roles-permissions/{role}', [RolePermissionController::class, 'update'])->name('roles-permissions.update');
 });

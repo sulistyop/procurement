@@ -20,6 +20,9 @@ class PengajuanController extends Controller
         $pengajuan = $pengajuan->map(function ($item) {
             // jika isbn pernah diajukan sebelum tahun sekarang berdasarkan created_at, jika diajukan lagi berikan mark bahwa buku tersebut pernah diajukan
             $item->is_diajukan = Pengajuan::where('isbn', $item->isbn)
+	            ->where('isbn', '!=', null)
+	            ->where('isbn', '!=', '-')
+	            ->where('isbn', '!=', ' ')
 	            ->where('prodi_id', $item->prodi_id)
                 ->count() > 1;
             if($item->is_diajukan){

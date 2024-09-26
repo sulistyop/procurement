@@ -1,7 +1,7 @@
 @extends('layouts.app')
 
 @section('content')
-    <div class="container">
+    <div>
         <h1>Detail Pengajuan</h1>
         <form action="{{ route('pengajuan.storeApproval', $pengajuan->id) }}" method="POST">
             @csrf

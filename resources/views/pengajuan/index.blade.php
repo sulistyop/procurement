@@ -13,7 +13,7 @@ Pengajuan
 @endpush
 
 @section('content')
-    <div class="container">
+    <div>
         <h1>Daftar Pengajuan</h1>
         <div class="mb-2">
             <a class="btn btn-outline-primary" href="#" data-toggle="modal" data-target="#tambahPengajuanModal">

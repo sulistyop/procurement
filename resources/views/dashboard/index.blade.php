@@ -5,7 +5,7 @@
 @endsection
 
 @section('content')
-    <div class="container">
+    <div>
         <div class="row">
             <!-- Kartu Total Buku Terdaftar -->
             <div class="col-md-6">

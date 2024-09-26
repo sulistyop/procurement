@@ -13,7 +13,7 @@ Pengajuan
 @endpush
 
 @section('content')
-    <div class="container">
+    <div>
         <h1>Rekap Pengajuan</h1>
         <div class="mb-2">
             <a type="button" class="btn btn-outline-info" href="{{ route('rekap-pengajuan.index').'?export=true' }}">
@@ -37,7 +37,7 @@ Pengajuan
             @foreach($pengajuan as $item)
                 <tr>
                     <td>{{ $loop->iteration }}</td>
-                    <td>{{ $item->prodi }}</td>
+                    <td>{{ $item->prodi->nama }}</td>
                     <td>
                         {{--data ini pernah diajukan di tahun --}}
                         @if($item->is_diajukan)

@@ -116,10 +116,11 @@
         <!-- Main content -->
         <div class="content flex-grow-1" id="main-content">
             <nav class="navbar navbar-expand-md navbar-light shadow-sm">
+                <button id="sidebarToggle" class="btn btn-primary ml-2" style="background-color: #0e2742;">
+                    <i class="fas fa-bars"></i>
+                </button>
                 <div class="container">
-                    <button id="sidebarToggle" class="btn btn-primary mb-3" style="background-color: #0e2742;">
-                        <i class="fas fa-bars"></i>
-                    </button>
+
                         <ul class="navbar-nav ms-auto">
                             @guest
                                 @if (Route::has('login'))
@@ -157,7 +158,7 @@
             </nav>
 
             <main class="py-4">
-                <div class="container">
+                <div class="p-4">
                     @yield('content')
                 </div>
             </main>
@@ -206,7 +207,7 @@
 
                 // Mengubah margin konten berdasarkan status sidebar
                 if (sidebar.classList.contains('active')) {
-                    app.style.marginLeft = '-50px'; // Konten tanpa margin saat sidebar tertutup
+                    app.style.marginLeft = '0px'; // Konten tanpa margin saat sidebar tertutup
                 } else {
                     app.style.marginLeft = '0px'; // Mengembalikan margin saat sidebar terbuka
                 }

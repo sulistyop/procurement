@@ -34,6 +34,15 @@
                 @endif
             </div>
             <div class="form-group">
+                <label for="prodi_id">Prodi</label>
+                <select name="prodi_id" class="form-control select2">
+                    <option value="">Pilih Prodi</option>
+                    @foreach($prodis as $prodi)
+                        <option value="{{ $prodi->id }}" {{ $prodi->id == $user->prodi_id ? 'selected' : '' }}>{{ $prodi->nama }}</option>
+                    @endforeach
+                </select>
+            </div>
+            <div class="form-group">
                 <label for="roles">Roles</label>
                 <select name="roles[]" id="roles" class="form-control select2" multiple required>
                     @foreach($roles as $role)

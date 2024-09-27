@@ -21,6 +21,7 @@ return new class extends Migration
             $table->string('author', 100);
             $table->year('tahun');
             $table->integer('eksemplar');
+            $table->integer('diterima');
             $table->timestamps();
         });
     }

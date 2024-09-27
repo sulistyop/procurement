@@ -36,9 +36,7 @@ Pengajuan
                 <th>Prodi</th>
                 <th>ISBN</th>
                 <th>Judul</th>
-                <th>Penerbit</th>
-                <th>Tahun</th>
-                <th>Jumlah</th>
+                <th>Penulis</th>
                 <th>Status</th>
                 <th>Aksi</th>
             </tr>
@@ -57,9 +55,7 @@ Pengajuan
                         @endif
                     </td>
                     <td>{{ $item->judul }}</td>
-                    <td>{{ $item->penerbit }}</td>
-                    <td>{{ $item->tahun }}</td>
-                    <td>{{ $item->eksemplar }}</td>
+                    <td>{{ $item->auhtor }}</td>
                     <td>
                         @if($item->is_approve)
                             <span class="badge badge-success">Disetujui</span>

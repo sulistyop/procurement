@@ -9,7 +9,7 @@
             <table class="table">
                 <tr>
                     <th>Prodi</th>
-                    <td>{{ $pengajuan->prodi }}</td>
+                    <td>{{ $pengajuan->prodi->nama }}</td>
                 </tr>
                 <tr>
                     <th>Judul</th>

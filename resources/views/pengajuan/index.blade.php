@@ -37,6 +37,7 @@ Pengajuan
                 <th>ISBN</th>
                 <th>Judul</th>
                 <th>Penulis</th>
+                <th>Tanggal Pengajuan</th>
                 <th>Status</th>
                 <th>Aksi</th>
             </tr>
@@ -55,7 +56,8 @@ Pengajuan
                         @endif
                     </td>
                     <td>{{ $item->judul }}</td>
-                    <td>{{ $item->auhtor }}</td>
+                    <td>{{ $item->author }}</td>
+                    <td>{{ $item->created_at }}</td>
                     <td>
                         @if($item->is_approve)
                             <span class="badge badge-success">Disetujui</span>

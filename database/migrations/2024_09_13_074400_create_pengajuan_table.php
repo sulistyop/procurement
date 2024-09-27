@@ -22,6 +22,7 @@ return new class extends Migration
             $table->year('tahun');
             $table->integer('eksemplar');
             $table->integer('diterima');
+            $table->decimal('harga')
             $table->timestamps();
         });
     }

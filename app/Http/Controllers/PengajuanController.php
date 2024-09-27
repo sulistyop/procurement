@@ -62,9 +62,9 @@ class PengajuanController extends Controller
 		    'judul' => 'required|max:255',
 		    'edisi' => 'nullable|max:50',
 		    'isbn' => 'required|max:20',
-		    'penerbit' => 'required|max:100',
+		    'penerbit' => 'nullable|max:100',
 		    'author' => 'required|max:100',
-		    'tahun' => 'required|integer|min:1900|max:' . date('Y'),
+		    'tahun' => 'nullable|integer|min:1900|max:' . date('Y'),
 		    'eksemplar' => 'required|integer',
 	    ], [], [
 		    'prodi_id' => 'Prodi',
@@ -106,9 +106,9 @@ class PengajuanController extends Controller
             'prodi_id' => 'required|max:100',
             'judul' => 'required|max:255',
             'edisi' => 'nullable|max:50',
-            'penerbit' => 'required|max:100',
+            'penerbit' => 'nullable|max:100',
             'author' => 'required|max:100',
-            'tahun' => 'required|integer|min:1900|max:' . date('Y'),
+            'tahun' => 'nullable|integer|min:1900|max:' . date('Y'),
             'eksemplar' => 'required|integer',
         ]);
 

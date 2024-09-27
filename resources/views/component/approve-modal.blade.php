@@ -31,8 +31,12 @@
                         <input type="text" name="tahun" id="tahun" class="form-control" readonly>
                     </div>
                     <div class="form-group">
-                        <label for="eksemplar">Jumlah</label>
+                        <label for="eksemplar">Jumlah Diterima</label>
                         <input type="text" name="eksemplar" id="eksemplar" class="form-control">
+                    </div>
+                    <div class="form-group">
+                        <label for="harga">Harga </label>
+                        <input type="text" name="harga" id="harga" class="form-control">
                     </div>
                 </div>
                 <div class="modal-footer">

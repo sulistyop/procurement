@@ -36,8 +36,16 @@
                     <td>{{ $pengajuan->tahun }}</td>
                 </tr>
                 <tr>
-                    <th>Jumlah Eksemplar</th>
+                    <th>Usulan Eksemplar</th>
                     <td>{{ $pengajuan->eksemplar }}</td>
+                </tr>
+                <tr>
+                    <th>Usulan Diterima</th>
+                    <td>{{ $pengajuan->eksemplar }} belum diubah</td>
+                </tr>
+                <tr>
+                    <th>Tanggal Diajukan</th>
+                    <td>{{ $pengajuan->created_at }}</td>
                 </tr>
                 <tr>
                     <th>Status</th>

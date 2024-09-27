@@ -28,8 +28,9 @@ Pengajuan
                 <th>Prodi</th>
                 <th>ISBN</th>
                 <th>Judul</th>
+                <th>Pengarang</th>
                 <th>Penerbit</th>
-                <th>Tahun</th>
+                <th>Tahun Terbit</th>
                 <th>Jumlah</th>
             </tr>
             </thead>

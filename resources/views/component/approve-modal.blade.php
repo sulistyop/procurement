@@ -7,11 +7,11 @@
                     <span aria-hidden="true">&times;</span>
                 </button>
             </div>
-            <form id="approveForm" method="POST">
+            <form id="approveForm" method="POST" action="/route-to-handle-approval">
                 @csrf
                 <div class="modal-body">
                     <div class="form-group">
-                        <label for="prodi">Prodi</label>
+                        <label for="nama_prodi">Prodi</label>
                         <input type="text" name="nama_prodi" id="nama_prodi" class="form-control" readonly>
                     </div>
                     <div class="form-group">
@@ -32,16 +32,19 @@
                     </div>
                     <div class="form-group">
                         <label for="eksemplar">Jumlah Diterima</label>
-                        <input type="text" name="eksemplar" id="eksemplar" class="form-control">
+                        <input type="number" name="eksemplar" id="eksemplar" class="form-control">
                     </div>
                     <div class="form-group">
-                        <label for="harga">Harga </label>
+                        <label for="harga">Harga</label>
                         <input type="text" name="harga" id="harga" class="form-control">
                     </div>
                 </div>
-                <div class="modal-footer">
-                    <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
-                    <button type="submit" class="btn btn-primary">Save changes</button>
+                <div class="modal-footer d-flex justify-content-between">
+                    <button type="button" class="btn btn-secondary" data-dismiss="modal">Tutup</button>
+                    <div>
+                        <button type="submit" class="btn btn-danger" name="action" value="reject">Tolak</button>
+                        <button type="submit" class="btn btn-primary" name="action" value="approve">Terima</button>
+                    </div>
                 </div>
             </form>
         </div>

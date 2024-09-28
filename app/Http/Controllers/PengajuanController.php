@@ -66,6 +66,8 @@ class PengajuanController extends Controller
 		    'author' => 'required|max:100',
 		    'tahun' => 'nullable|integer|min:1900|max:' . date('Y'),
 		    'eksemplar' => 'required|integer',
+			'diterima' => 'nullable|integer',
+			'harga' => 'nullable|numeric|min:0', // Tambahkan validasi untuk harga
 	    ], [], [
 		    'prodi_id' => 'Prodi',
 		    'judul' => 'Judul',
@@ -75,6 +77,8 @@ class PengajuanController extends Controller
 		    'author' => 'Penulis',
 		    'tahun' => 'Tahun',
 		    'eksemplar' => 'Eksemplar',
+			'diterima' => 'Diterima',
+			'harga' => 'Harga',
 	    ]);
 
         // Simpan data pengajuan
@@ -110,6 +114,8 @@ class PengajuanController extends Controller
             'author' => 'required|max:100',
             'tahun' => 'nullable|integer|min:1900|max:' . date('Y'),
             'eksemplar' => 'required|integer',
+			'diterima' => 'nullable|integer',
+			'harga' => 'nullable|numeric|min:0', // Tambahkan validasi untuk harga
         ]);
 
         // Update data pengajuan
@@ -141,6 +147,7 @@ class PengajuanController extends Controller
 			'is_approve' => true,
 			'approved_at' => now(),
 			'eksemplar' => (int)$request->eksemplar,
+			'harga' => $request->harga, // Simpan harga
 			'approved_by' => Auth::user() ? Auth::user()->id : 0, // Sesuaikan dengan id pengguna yang menyetujui
 		]);
 		

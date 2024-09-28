@@ -130,7 +130,7 @@ Pengajuan
             var actionUrl = '{{ route('pengajuan.storeApproval', ':id') }}'.replace(':id', id);
             form.attr('action', actionUrl);
 
-            modal.find('.modal-body #prodi').val(allData.prodi);
+            modal.find('.modal-body #nama_prodi').val(allData.nama_prodi);
             modal.find('.modal-body #isbn').val(allData.isbn);
             modal.find('.modal-body #judul').val(allData.judul);
             modal.find('.modal-body #penerbit').val(allData.penerbit);

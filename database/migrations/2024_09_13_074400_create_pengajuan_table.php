@@ -16,13 +16,13 @@ return new class extends Migration
             $table->string('prodi', 100);
             $table->string('judul', 255);
             $table->string('edisi', 50)->nullable();
-            $table->string('isbn', 20);
-            $table->string('penerbit', 100);
+            $table->string('isbn', 20)->nullable();
+            $table->string('penerbit', 100)->nullable();
             $table->string('author', 100);
-            $table->year('tahun');
+            $table->year('tahun')->nullable();
             $table->integer('eksemplar');
-            $table->integer('diterima');
-            $table->decimal('harga')
+            $table->integer('diterima')->nullable();
+            $table->decimal('harga')->nullable();
             $table->timestamps();
         });
     }

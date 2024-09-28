@@ -121,7 +121,7 @@
                 </button>
                 <div class="container">
 
-                        <ul class="navbar-nav ms-auto">
+                        <ul class="navbar-nav ml-auto">
                             @guest
                                 @if (Route::has('login'))
                                     <li class="nav-item">

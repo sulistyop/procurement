@@ -41,21 +41,31 @@
                 </tr>
                 <tr>
                     <th>Usulan Diterima</th>
-                    <td>{{ $pengajuan->eksemplar }} belum diubah</td>
+                    <td>{{ $pengajuan->diterima }}</td>
                 </tr>
                 <tr>
                     <th>Tanggal Diajukan</th>
                     <td>{{ $pengajuan->created_at }}</td>
                 </tr>
                 <tr>
+                    <th>Harga</th>
+                    <td>Rp. {{ number_format($pengajuan->harga, 2, ',', '.') }}</td>
+                </tr>
+                <tr>
                     <th>Status</th>
                     <td>
                         @if($pengajuan->is_approve)
                             <span class="badge badge-success">Disetujui</span>
+                        @elseif($pengajuan->is_reject)
+                            <span class="badge badge-danger">Ditolak</span>
                         @else
                             <span class="badge badge-warning">Belum disetujui</span>
                         @endif
                     </td>
+                </tr>
+                <tr>
+                    <th>Alasan</th>
+                    <td>{{ $pengajuan->reason}}</td>
                 </tr>
             </table>
             <a href="{{ route('pengajuan.index') }}" class="btn btn-secondary">Kembali</a>
@@ -63,4 +73,22 @@
 
 
     </div>
+    <script>
+        document.getElementById('harga').addEventListener('input', function (e) {
+            let value = this.value.replace(/\D/g, ''); // Menghapus semua karakter non-digit
+            if (value) {
+                // Menambahkan titik sebagai pemisah ribuan
+                this.value = value.replace(/\B(?=(\d{3})+(?!\d))/g, ".");
+            }
+        });
+
+        // Menghapus titik sebelum submit
+        document.getElementById('approveForm').addEventListener('submit', function(e) {
+            let hargaInput = document.getElementById('harga');
+            // Menghapus titik sebelum mengirim data
+            hargaInput.value = hargaInput.value.replace(/\./g, '');
+        });
+    </script>
 @endsection
+
+    

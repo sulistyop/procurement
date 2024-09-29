@@ -140,19 +140,40 @@ class PengajuanController extends Controller
     {
         $request->validate([
             'eksemplar' => 'required|integer|min:1',
+			'harga' => 'nullable|numeric|min:0',
+    		'reason' => 'required_if:action,reject|max:255', // Reason hanya wajib saat action adalah reject
         ]);
 
 		// Setujui pengajuan
 		$store = $pengajuan->update([
 			'is_approve' => true,
 			'approved_at' => now(),
-			'eksemplar' => (int)$request->eksemplar,
+			'diterima' => (int)$request->eksemplar,
 			'harga' => $request->harga, // Simpan harga
 			'approved_by' => Auth::user() ? Auth::user()->id : 0, // Sesuaikan dengan id pengguna yang menyetujui
 		]);
-		
+		// if ($request->action === 'approve') {
+		// 	// Logika jika pengajuan disetujui
+		// 	$store = $pengajuan->update([
+		// 		'is_approve' => true,
+		// 		'is_reject' => false, // Pastikan is_reject di-set ke false
+		// 		'approved_at' => now(),
+		// 		'eksemplar' => (int)$request->eksemplar,
+		// 		'harga' => $request->harga, // Simpan harga
+		// 		'approved_by' => Auth::user() ? Auth::user()->id : 0, // Sesuaikan dengan id pengguna yang menyetujui
+		// 	]);
+		// } elseif ($request->action === 'reject') {
+		// 	// Logika jika pengajuan ditolak
+		// 	$store = $pengajuan->update([
+		// 		'is_approve' => false,
+		// 		'is_reject' => true, // Set is_reject menjadi true jika ditolak
+		// 		'rejected_at' => now(), // Tambahkan timestamp jika pengajuan ditolak
+		// 		'rejected_by' => Auth::user() ? Auth::user()->id : 0, // Id pengguna yang menolak
+		// 		'reason' => $request->reason, // Tambahkan alasan penolakan jika ada
+		// 	]);
+		// }
 
-        return redirect()->route('pengajuan.index')->with('success', 'Pengajuan berhasil disetujui!');
+        return redirect()->route('pengajuan.index')->with('success', 'Pengajuan berhasil diproses!');
     }
 	
 	public function importForm()

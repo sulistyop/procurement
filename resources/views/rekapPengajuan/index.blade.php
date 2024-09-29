@@ -48,6 +48,7 @@ Pengajuan
                         @endif
                     </td>
                     <td>{{ $item->judul }}</td>
+                    <td>{{ $item->author}}</td>
                     <td>{{ $item->penerbit }}</td>
                     <td>{{ $item->tahun }}</td>
                     <td>{{ $item->eksemplar }}</td>

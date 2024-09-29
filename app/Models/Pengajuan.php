@@ -17,6 +17,8 @@ class Pengajuan extends Model
 	    'author',
 	    'tahun',
 	    'eksemplar',
+		'diterima',
+		'harga',
 	    'isbn',
 	    'is_approve',
 	    'approved_at',

@@ -30,7 +30,7 @@ class RekapPengajuanController extends Controller
 				->where('isbn', $item->isbn)
 				->where('penerbit', $item->penerbit)
 				->where('edisi', $item->edisi)
-				->sum('eksemplar');
+				->sum('diterima');
 			
 			$latestEntry->eksemplar = $summary;
 			return $latestEntry;

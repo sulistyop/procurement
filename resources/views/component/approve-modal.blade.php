@@ -32,11 +32,11 @@
                     </div>
                     <div class="form-group">
                         <label for="eksemplar">Jumlah Diterima</label>
-                        <input type="number" name="eksemplar" id="eksemplar" class="form-control">
+                        <input type="number" name="eksemplar" id="eksemplar" class="form-control" step="0.01">
                     </div>
                     <div class="form-group">
                         <label for="harga">Harga</label>
-                        <input type="text" name="harga" id="harga" class="form-control">
+                        <input type="number" name="harga" id="harga" class="form-control">
                     </div>
                 </div>
                 <div class="modal-footer d-flex justify-content-between">

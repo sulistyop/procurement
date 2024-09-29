@@ -22,7 +22,7 @@ return new class extends Migration
             $table->year('tahun')->nullable();
             $table->integer('eksemplar');
             $table->integer('diterima')->nullable();
-            $table->decimal('harga')->nullable();
+            $table->decimal('harga', 10, 2)->nullable();
             $table->timestamps();
         });
     }

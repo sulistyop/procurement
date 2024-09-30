@@ -2,8 +2,8 @@
 
 namespace App\Models;
 
-use Illuminate\Database\Eloquent\Model;
 use Illuminate\Support\Facades\Auth;
+use Illuminate\Database\Eloquent\Model;
 
 class Pengajuan extends Model
 {
@@ -22,7 +22,10 @@ class Pengajuan extends Model
 	    'isbn',
 	    'is_approve',
 	    'approved_at',
-	    'approved_by'
+	    'approved_by',
+		'is_reject',
+		'reject_at',
+		'reject_by'
     ];
 	
 	public function prodi()

@@ -2,13 +2,13 @@
 
 namespace App\Http\Controllers;
 
-use App\Exports\PengajuanExport;
-use App\Import\PengajuanImport;
-use App\Models\Pengajuan;
 use App\Models\Prodi;
+use App\Models\Pengajuan;
 use Illuminate\Http\Request;
-use Illuminate\Support\Facades\Auth;
+use App\Import\PengajuanImport;
+use App\Exports\PengajuanExport;
 use Illuminate\Support\Facades\Log;
+use Illuminate\Support\Facades\Auth;
 use Maatwebsite\Excel\Facades\Excel;
 
 class PengajuanController extends Controller
@@ -145,33 +145,33 @@ class PengajuanController extends Controller
         ]);
 
 		// Setujui pengajuan
-		$store = $pengajuan->update([
-			'is_approve' => true,
-			'approved_at' => now(),
-			'diterima' => (int)$request->eksemplar,
-			'harga' => $request->harga, // Simpan harga
-			'approved_by' => Auth::user() ? Auth::user()->id : 0, // Sesuaikan dengan id pengguna yang menyetujui
-		]);
-		// if ($request->action === 'approve') {
-		// 	// Logika jika pengajuan disetujui
-		// 	$store = $pengajuan->update([
-		// 		'is_approve' => true,
-		// 		'is_reject' => false, // Pastikan is_reject di-set ke false
-		// 		'approved_at' => now(),
-		// 		'eksemplar' => (int)$request->eksemplar,
-		// 		'harga' => $request->harga, // Simpan harga
-		// 		'approved_by' => Auth::user() ? Auth::user()->id : 0, // Sesuaikan dengan id pengguna yang menyetujui
-		// 	]);
-		// } elseif ($request->action === 'reject') {
-		// 	// Logika jika pengajuan ditolak
-		// 	$store = $pengajuan->update([
-		// 		'is_approve' => false,
-		// 		'is_reject' => true, // Set is_reject menjadi true jika ditolak
-		// 		'rejected_at' => now(), // Tambahkan timestamp jika pengajuan ditolak
-		// 		'rejected_by' => Auth::user() ? Auth::user()->id : 0, // Id pengguna yang menolak
-		// 		'reason' => $request->reason, // Tambahkan alasan penolakan jika ada
-		// 	]);
-		// }
+		// $store = $pengajuan->update([
+		// 	'is_approve' => true,
+		// 	'approved_at' => now(),
+		// 	'diterima' => (int)$request->eksemplar,
+		// 	'harga' => $request->harga, // Simpan harga
+		// 	'approved_by' => Auth::user() ? Auth::user()->id : 0, // Sesuaikan dengan id pengguna yang menyetujui
+		// ]);
+		if ($request->action === 'approve') {
+			// Logika jika pengajuan disetujui
+			$pengajuan->update([
+				'is_approve' => true,
+				'is_reject' => false, // Pastikan is_reject di-set ke false
+				'approved_at' => now(),
+				'eksemplar' => (int)$request->eksemplar,
+				'harga' => $request->harga, // Simpan harga
+				'approved_by' => Auth::user() ? Auth::user()->id : 0, // Sesuaikan dengan id pengguna yang menyetujui
+			]);
+		} elseif ($request->action === 'reject') {
+			// Logika jika pengajuan ditolak
+			$pengajuan->update([
+				'is_approve' => false,
+				'is_reject' => true, // Set is_reject menjadi true jika ditolak
+				'reject_at' => now(), // Tambahkan timestamp jika pengajuan ditolak
+				'reject_by' => Auth::user() ? Auth::user()->id : 0, // Id pengguna yang menolak
+				'reason' => $request->reason, // Tambahkan alasan penolakan jika ada
+			]);
+		}
 
         return redirect()->route('pengajuan.index')->with('success', 'Pengajuan berhasil diproses!');
     }

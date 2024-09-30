@@ -153,12 +153,7 @@ Pengajuan
 
             // masukan action ke form
             formData += '&action=' + action;
-
-            if (action === 'reject' && reason.trim() === '') {
-                event.preventDefault();
-                alert('Alasan wajib diisi ketika menolak pengajuan.');
-                return;
-            }
+            
 
             $.ajax({
                 url: actionUrl,
@@ -168,17 +163,19 @@ Pengajuan
                     Swal.fire({
                         icon: 'success',
                         title: 'Success',
-                        text: 'Pengajuan approved successfully!',
+                        text: response.message,
                     }).then(() => {
                         $('#approveModal').modal('hide');
                         location.reload();
                     });
                 },
                 error: function (xhr, status, error) {
+                    var response = JSON.parse(xhr.responseText);
+                    var errorMessage = response.message || 'An error occurred while approving the pengajuan.';
                     Swal.fire({
                         icon: 'error',
                         title: 'Error',
-                        text: 'An error occurred while approving the pengajuan.',
+                        text: errorMessage,
                     });
                 }
             });

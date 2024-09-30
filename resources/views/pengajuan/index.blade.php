@@ -15,6 +15,15 @@ Pengajuan
 @section('content')
     <div>
         <h1>Daftar Pengajuan</h1>
+        @if(session('import_errors'))
+            <div class="alert alert-danger">
+                <ul>
+                    @foreach(session('import_errors') as $failure)
+                        <li>{{ $failure->errors()[0] }} di baris {{ $failure->row() }}</li>
+                    @endforeach
+                </ul>
+            </div>
+        @endif
         <div class="mb-2">
             <a class="btn btn-outline-primary" href="#" data-toggle="modal" data-target="#tambahPengajuanModal">
                 Tambah Pengajuan

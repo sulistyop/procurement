@@ -3,8 +3,8 @@
 @section('content')
     <div class="container">
         <h1>Daftar Pengguna</h1>
-        <a href="{{ route('user.create') }}" class="btn btn-primary">Tambah Pengguna</a>
-        <table class="table mt-3">
+        <a href="{{ route('user.create') }}" class="btn btn-primary mb-3">Tambah Pengguna</a>
+        <table class="table mt-3" id="user-table">
             <thead>
             <tr>
                 <th>No</th>
@@ -37,3 +37,12 @@
         </table>
     </div>
 @endsection
+
+@push('script-page')
+    {{--jadikan datatable--}}
+    <script>
+        $(document).ready(function() {
+            $('#user-table').DataTable();
+        } );
+    </script>
+@endpush

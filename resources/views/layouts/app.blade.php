@@ -35,6 +35,10 @@
             transition: margin-left 0.3s ease;
         }
 
+        .custom-select{
+            width: 70px !important;
+        }
+
         #sidebar.active {
             margin-left: -220px; /* Menyisakan ruang untuk ikon */
         }
@@ -130,7 +134,7 @@
                                 @endif
                             @else
                                 <li class="nav-item dropdown">
-                                    <a id="navbarDropdown" class="nav-link dropdown-toggle" href="#" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false" v-pre style="color: #f2f4f7;"> {{ Auth::user()->name }} </a>
+                                    <a id="navbarDropdown" class="nav-link dropdown-toggle" href="#" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false" v-pre style="color: #f2f4f7;">
                                         {{ Auth::user()->name }}
                                     </a>
 
@@ -237,6 +241,16 @@
     </script>
     <!-- Add this in your Blade template, preferably in the head section -->
     <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+    <script type="text/javascript">
+        $(document).ready(function() {
+            $.extend(true, $.fn.dataTable.defaults, {
+
+                "language": {
+                    "url": "https://cdn.datatables.net/plug-ins/1.10.21/i18n/Indonesian.json"
+                }
+            });
+        });
+    </script>
     @stack('script-page')
 
 </body>

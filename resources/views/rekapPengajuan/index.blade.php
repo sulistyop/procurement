@@ -4,43 +4,36 @@
 Pengajuan
 @endsection
 
-@push('style-page')
-    <style>
-        .custom-select {
-            width: 150px !important; /* Ubah lebar dropdown sesuai kebutuhan */
-        }
-    </style>
-@endpush
-
 @section('content')
     <div>
         <h1>Rekap Pengajuan</h1>
 
-        <div class="mb-2">
-            <a type="button" class="btn btn-outline-info" href="{{ route('rekap-pengajuan.index').'?export=true' }}">
-                Export Excel
-                <i class="fa fa-download"></i>
-            </a>
-        </div>
+        <div class="d-flex justify-content-between mb-2">
+            <div>
+                <a type="button" class="btn btn-outline-info" href="{{ route('rekap-pengajuan.index', array_merge(request()->query(), ['export' => true])) }}">
+                    Export Excel
+                    <i class="fa fa-download"></i>
+                </a>
+            </div>
 
-        <!-- Dropdown untuk memilih tahun -->
-        <div class="form-group">
-            <label for="filter-tahun">Filter Tahun:</label>
-            <select id="filter-tahun" class="custom-select" onchange="filterByYear()">
-                <option value="">Semua Tahun</option>
-                @foreach($years as $year)
-                    <option value="{{ $year }}" {{ request('year') == $year ? 'selected' : '' }}>{{ $year }}</option>
-                @endforeach
-            </select>
-        </div>
-        <div class="form-group">
-            <label for="filter-prodi">Filter Prodi:</label>
-            <select id="filter-prodi" class="custom-select" onchange="filterByProdi()">
-                <option value="">Semua Prodi</option>
-                @foreach($prodis as $prodi)
-                    <option value="{{ $prodi->id }}" {{ request('prodi') == $prodi->id ? 'selected' : '' }}>{{ $prodi->nama }}</option>
-                @endforeach
-            </select>
+            <div class="d-flex">
+                <div class="form-group mr-2">
+                    <select id="filter-tahun" class="form-select select2" onchange="filterByYear()">
+                        <option value="">Semua Tahun</option>
+                        @foreach($years as $year)
+                            <option value="{{ $year }}" {{ request('year') == $year ? 'selected' : '' }}>{{ $year }}</option>
+                        @endforeach
+                    </select>
+                </div>
+                <div class="form-group">
+                    <select id="filter-prodi" class="form-select select2" onchange="filterByProdi()">
+                        <option value="">Semua Prodi</option>
+                        @foreach($prodis as $prodi)
+                            <option value="{{ $prodi->id }}" {{ request('prodi') == $prodi->id ? 'selected' : '' }}>{{ $prodi->nama }}</option>
+                        @endforeach
+                    </select>
+                </div>
+            </div>
         </div>
 
         <table class="table mt-4" id="customers">

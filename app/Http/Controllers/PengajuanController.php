@@ -186,19 +186,12 @@ class PengajuanController extends Controller
 	
 	public function import(Request $request)
 	{
-		$request->validate([
-			'file' => 'required|mimes:xlsx,xls,csv',
-		]);
-		
-		$import = new PengajuanImport;
-		Excel::import($import, $request->file('file'));
-		
-		if ($import->failures()->isNotEmpty()) {
-			return redirect()->route('pengajuan.importForm')
-				->with('failures', $import->failures());
+		try {
+			Excel::import(new PengajuanImport, $request->file('file'));
+			return redirect()->back()->with('success', 'Import berhasil.');
+		} catch (\Exception $e) {
+			return redirect()->back()->with('error', 'Terjadi kesalahan saat import.');
 		}
-		
-		return redirect()->route('pengajuan.index')->with('success', 'Pengajuan berhasil diimport.');
 	}
 	
 }

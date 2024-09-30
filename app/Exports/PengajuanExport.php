@@ -25,7 +25,7 @@ class PengajuanExport implements FromCollection, WithHeadings, WithStyles, WithE
 		return $this->pengajuan->map(function ($item, $key) {
 			return [
 				'No' => $key + 1,
-				'Prodi' => $item->prodi,
+				'Prodi' => $item->prodi->nama,
 				'ISBN' => $item->isbn,
 				'Judul' => $item->judul,
 				'Edisi' => $item->edisi,

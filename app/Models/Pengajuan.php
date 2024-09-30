@@ -25,7 +25,8 @@ class Pengajuan extends Model
 	    'approved_by',
 		'is_reject',
 		'reject_at',
-		'reject_by'
+		'reject_by',
+	    'reason'
     ];
 	
 	public function prodi()

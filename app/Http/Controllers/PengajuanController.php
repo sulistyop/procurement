@@ -154,7 +154,7 @@ class PengajuanController extends Controller
 		// ]);
 		if ($request->action === 'approve') {
 			// Logika jika pengajuan disetujui
-			$pengajuan->update([
+			$store = $pengajuan->update([
 				'is_approve' => true,
 				'is_reject' => false, // Pastikan is_reject di-set ke false
 				'approved_at' => now(),
@@ -164,11 +164,11 @@ class PengajuanController extends Controller
 			]);
 		} elseif ($request->action === 'reject') {
 			// Logika jika pengajuan ditolak
-			$pengajuan->update([
+			$store = $pengajuan->update([
 				'is_approve' => false,
 				'is_reject' => true, // Set is_reject menjadi true jika ditolak
-				'reject_at' => now(), // Tambahkan timestamp jika pengajuan ditolak
-				'reject_by' => Auth::user() ? Auth::user()->id : 0, // Id pengguna yang menolak
+				'rejected_at' => now(), // Tambahkan timestamp jika pengajuan ditolak
+				'rejected_by' => Auth::user() ? Auth::user()->id : 0, // Id pengguna yang menolak
 				'reason' => $request->reason, // Tambahkan alasan penolakan jika ada
 			]);
 		}

@@ -38,8 +38,8 @@
                         <label for="harga">Harga</label>
                         <input type="number" name="harga" id="harga" class="form-control">
                     </div>
-                    <div class="form-group">
-                        <label for="tahun">Alasan</label>
+                    <div class="form-group" id="reasonGroup" style="display: none;">
+                        <label for="reason">Alasan</label>
                         <input type="text" name="reason" id="reason" class="form-control">
                     </div>
                 </div>
@@ -54,3 +54,19 @@
         </div>
     </div>
 </div>
+<script>
+    document.addEventListener('DOMContentLoaded', function () {
+        const rejectButton = document.querySelector('button[name="action"][value="reject"]');
+        const reasonGroup = document.getElementById('reasonGroup');
+    
+        rejectButton.addEventListener('click', function () {
+            reasonGroup.style.display = 'block'; // Tampilkan input alasan
+        });
+    
+        // Jika Anda ingin menyembunyikan alasan ketika modal ditutup
+        $('#approveModal').on('hidden.bs.modal', function () {
+            reasonGroup.style.display = 'none'; // Sembunyikan input alasan saat modal ditutup
+            document.getElementById('reason').value = ''; // Kosongkan input alasan
+        });
+    });
+    </script>

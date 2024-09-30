@@ -32,6 +32,7 @@ Pengajuan
                 <th>Penerbit</th>
                 <th>Tahun Terbit</th>
                 <th>Jumlah</th>
+                <th>Tahun Pengadaan</th>
             </tr>
             </thead>
             <tbody>
@@ -52,6 +53,7 @@ Pengajuan
                     <td>{{ $item->penerbit }}</td>
                     <td>{{ $item->tahun }}</td>
                     <td>{{ $item->eksemplar }}</td>
+                    <td>{{ \Carbon\Carbon::parse($item->approved_at)->format('Y') }}</td>
 
                 </tr>
                 

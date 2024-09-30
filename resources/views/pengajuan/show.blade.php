@@ -45,7 +45,7 @@
                 </tr>
                 <tr>
                     <th>Tanggal Diajukan</th>
-                    <td>{{ $pengajuan->created_at }}</td>
+                    <td>{{ \Carbon\Carbon::parse($pengajuan->created_at)->setTimezone('Asia/Jakarta')->format('d M Y H:i') }}</td>
                 </tr>
                 <tr>
                     <th>Harga</th>

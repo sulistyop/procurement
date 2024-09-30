@@ -57,7 +57,7 @@ Pengajuan
                     </td>
                     <td>{{ $item->judul }}</td>
                     <td>{{ $item->author }}</td>
-                    <td>{{ \Illuminate\Support\Carbon::parse($item->created_at)->format('d-m-Y H:i:s') }}</td>
+                    <td>{{ \Illuminate\Support\Carbon::parse($item->created_at)->setTimezone('Asia/Jakarta')->format('d-m-Y H:i:s') }}</td>
                     <td>
                         @if($item->is_approve)
                             <span class="badge badge-success">Disetujui</span>

@@ -33,6 +33,15 @@ Pengajuan
                 @endforeach
             </select>
         </div>
+        <div class="form-group">
+            <label for="filter-prodi">Filter Prodi:</label>
+            <select id="filter-prodi" class="custom-select" onchange="filterByProdi()">
+                <option value="">Semua Prodi</option>
+                @foreach($prodis as $prodi)
+                    <option value="{{ $prodi->id }}" {{ request('prodi') == $prodi->id ? 'selected' : '' }}>{{ $prodi->nama }}</option>
+                @endforeach
+            </select>
+        </div>
 
         <table class="table mt-4" id="customers">
             <thead>
@@ -55,11 +64,11 @@ Pengajuan
                         <td>{{ $item->prodi->nama }}</td>
                         <td>
                             {{--data ini pernah diajukan di tahun --}}
-                            @if($item->is_diajukan)
+                            {{-- @if($item->is_diajukan)
                                 {{ $item->isbn }} <span class="badge badge-info">Pernah diajukan tahun {{ \Illuminate\Support\Carbon::parse($item->date_pernah_diajukan)->format('d-m-Y') }}</span>
-                            @else
+                            @else --}}
                                 {{ $item->isbn }}
-                            @endif
+                            {{-- @endif --}}
                         </td>
                         <td>{{ $item->judul }}</td>
                         <td>{{ $item->author }}</td>
@@ -183,5 +192,11 @@ Pengajuan
                 }
             });
         });
+        function filterByProdi() {
+            var prodi = $('#filter-prodi').val(); // Ambil prodi yang dipilih
+            var url = new URL(window.location.href); // Ambil URL saat ini
+            url.searchParams.set('prodi', prodi); // Set parameter prodi
+            window.location.href = url; // Reload halaman dengan parameter baru
+        }
     </script>
 @endpush

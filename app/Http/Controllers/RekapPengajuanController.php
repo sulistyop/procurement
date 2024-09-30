@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use App\Models\Prodi;
 use App\Models\Pengajuan;
 use Illuminate\Http\Request;
 use App\Exports\PengajuanExport;
@@ -18,6 +19,9 @@ class RekapPengajuanController extends Controller
 			->pluck('year')
 			->sort();
 	
+		// Ambil semua prodi untuk filter
+		$prodis = Prodi::all();
+	
 		// Ambil semua pengajuan yang sudah disetujui
 		$pengajuanQuery = Pengajuan::haveProdi()
 			->selectRaw('judul, isbn, penerbit, edisi, SUM(diterima) as total_eksemplar, MAX(created_at) as latest_created_at')
@@ -27,6 +31,11 @@ class RekapPengajuanController extends Controller
 		// Jika ada filter tahun, tambahkan kondisi
 		if ($request->filled('year')) {
 			$pengajuanQuery->whereYear('created_at', $request->year);
+		}
+	
+		// Jika ada filter prodi, tambahkan kondisi
+		if ($request->filled('prodi')) {
+			$pengajuanQuery->where('prodi_id', $request->prodi);
 		}
 	
 		$pengajuan = $pengajuanQuery->get();
@@ -52,6 +61,7 @@ class RekapPengajuanController extends Controller
 	
 			// Menambahkan total eksemplar ke entry terbaru
 			$latestEntry->eksemplar = $summary;
+	
 			return $latestEntry;
 		});
 	
@@ -62,11 +72,8 @@ class RekapPengajuanController extends Controller
 			return Excel::download($excelReport, $fileName);
 		}
 	
-		return view('rekapPengajuan.index', compact('pengajuan', 'years'));
+		return view('rekapPengajuan.index', compact('pengajuan', 'years', 'prodis'));
 	}
 	
-	
-
-
 
 }

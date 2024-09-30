@@ -140,7 +140,7 @@ class PengajuanController extends Controller
     {
         $request->validate([
             'eksemplar' => 'required|integer|min:1',
-			'harga' => 'nullable|numeric|min:0',
+			'harga' => 'required_if:action,approve|numeric',
     		'reason' => 'required_if:action,reject|max:255', // Reason hanya wajib saat action adalah reject
         ]);
 
@@ -163,7 +163,7 @@ class PengajuanController extends Controller
 				'harga' => $request->harga, // Simpan harga
 				'approved_by' => Auth::user() ? Auth::user()->id : 0, // Sesuaikan dengan id pengguna yang menyetujui
 			]);
-			return redirect()->route('pengajuan.index')->with('success', 'Pengajuan berhasil diproses!');
+			return response()->json(['message' => 'Pengajuan berhasil disetujui!']);
 		} elseif ($request->action === 'reject') {
 			// Logika jika pengajuan ditolak
 			$pengajuan->update([
@@ -173,7 +173,7 @@ class PengajuanController extends Controller
 				'reject_by' => Auth::user() ? Auth::user()->id : 0, // Id pengguna yang menolak
 				'reason' => $request->reason, // Tambahkan alasan penolakan jika ada
 			]);
-			return redirect()->route('pengajuan.index')->with('success', 'Pengajuan berhasil ditolak!');
+			return response()->json(['message' => 'Pengajuan berhasil ditolak!']);
 		}
 
     

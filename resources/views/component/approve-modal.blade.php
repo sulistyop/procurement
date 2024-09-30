@@ -36,7 +36,7 @@
                     </div>
                     <div class="form-group">
                         <label for="harga">Harga</label>
-                        <input type="number" name="harga" id="harga" class="form-control">
+                        <input type="number" name="harga" id="harga" value="0" class="form-control">
                     </div>
                     <div class="form-group">
                         <label for="tahun">Alasan</label>

@@ -35,10 +35,10 @@
             </div>
             <div class="form-group">
                 <label for="prodi_id">Prodi</label>
-                <select name="prodi_id" class="form-control select2">
+                <select name="prodi_id" class="form-control select2" required>
                     <option value="">Pilih Prodi</option>
                     @foreach($prodis as $prodi)
-                        <option value="{{ $prodi->id }}" {{ $prodi->id == $user->prodi_id ? 'selected' : '' }}>{{ $prodi->nama }}</option>
+                        <option value="{{ $prodi->id }}" {{ old('prodi_id') == $prodi->id ? 'selected' : '' }}>{{ $prodi->nama }}</option>
                     @endforeach
                 </select>
             </div>

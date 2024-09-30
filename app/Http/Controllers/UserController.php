@@ -2,12 +2,12 @@
 
 namespace App\Http\Controllers;
 
-use App\Models\Prodi;
 use App\Models\User;
+use App\Models\Prodi;
 use Illuminate\Http\Request;
+use Spatie\Permission\Models\Role;
 use Illuminate\Support\Facades\Hash;
 use Spatie\Permission\Models\Permission;
-use Spatie\Permission\Models\Role;
 
 class UserController extends Controller
 {
@@ -38,7 +38,8 @@ class UserController extends Controller
 	{
 		$roles = Role::all();
 		$permissions = Permission::all();
-		return view('pengguna.create', compact('roles', 'permissions'));
+		$prodis = Prodi::all(); // Ambil semua prodi
+		return view('pengguna.create', compact('roles', 'permissions', 'prodis')); // Kirim ke view
 	}
 	
 	public function store(Request $request)
@@ -48,19 +49,24 @@ class UserController extends Controller
 			'email' => 'required|string|email|max:255|unique:users',
 			'password' => 'required|string|min:8|confirmed',
 			'roles' => 'required|array',
+			'prodi_id' => 'required|exists:prodis,id', // Validasi untuk prodi_id
 		]);
 		
 		$user = User::create([
 			'name' => $request->name,
 			'email' => $request->email,
 			'password' => Hash::make($request->password),
+			'prodi_id' => $request->prodi_id, // Menyimpan prodi_id
 		]);
 		
 		$user->syncRoles($request->roles);
-		$user->syncPermissions($request->permissions);
-		
+		if ($request->permissions) {
+			$user->syncPermissions($request->permissions); // Sinkronisasi izin jika ada
+		}
+
 		return redirect()->route('user.index')->with('success', 'User berhasil dibuat.');
 	}
+
 	
 	public function edit(User $user)
 	{

@@ -47,10 +47,12 @@
                     <th>Tanggal Diajukan</th>
                     <td>{{ \Carbon\Carbon::parse($pengajuan->created_at)->setTimezone('Asia/Jakarta')->format('d M Y H:i') }}</td>
                 </tr>
-                <tr>
-                    <th>Harga</th>
-                    <td>Rp. {{ number_format($pengajuan->harga, 2, ',', '.') }}</td>
-                </tr>
+                @role('admin')
+                    <tr>
+                        <th>Harga</th>
+                        <td>Rp. {{ number_format($pengajuan->harga, 2, ',', '.') }}</td>
+                    </tr>
+                @endrole
                 <tr>
                     <th>Status</th>
                     <td>

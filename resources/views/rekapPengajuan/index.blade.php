@@ -6,8 +6,8 @@ Pengajuan
 
 @push('style-page')
     <style>
-        .custom-select{
-            width: 70px !important;
+        .custom-select {
+            width: 150px !important; /* Ubah lebar dropdown sesuai kebutuhan */
         }
     </style>
 @endpush
@@ -15,51 +15,63 @@ Pengajuan
 @section('content')
     <div>
         <h1>Rekap Pengajuan</h1>
+
         <div class="mb-2">
             <a type="button" class="btn btn-outline-info" href="{{ route('rekap-pengajuan.index').'?export=true' }}">
                 Export Excel
                 <i class="fa fa-download"></i>
             </a>
         </div>
+
+        <!-- Dropdown untuk memilih tahun -->
+        <div class="form-group">
+            <label for="filter-tahun">Filter Tahun:</label>
+            <select id="filter-tahun" class="custom-select" onchange="filterByYear()">
+                <option value="">Semua Tahun</option>
+                @foreach($years as $year)
+                    <option value="{{ $year }}" {{ request('year') == $year ? 'selected' : '' }}>{{ $year }}</option>
+                @endforeach
+            </select>
+        </div>
+
         <table class="table mt-4" id="customers">
             <thead>
-            <tr>
-                <th>No</th>
-                <th>Prodi</th>
-                <th>ISBN</th>
-                <th>Judul</th>
-                <th>Pengarang</th>
-                <th>Penerbit</th>
-                <th>Tahun Terbit</th>
-                <th>Jumlah</th>
-                <th>Tahun Pengadaan</th>
-            </tr>
+                <tr>
+                    <th>No</th>
+                    <th>Prodi</th>
+                    <th>ISBN</th>
+                    <th>Judul</th>
+                    <th>Pengarang</th>
+                    <th>Penerbit</th>
+                    <th>Tahun Terbit</th>
+                    <th>Jumlah</th>
+                    <th>Tahun Pengadaan</th>
+                </tr>
             </thead>
             <tbody>
-            @foreach($pengajuan as $item)
-                <tr>
-                    <td>{{ $loop->iteration }}</td>
-                    <td>{{ $item->prodi->nama }}</td>
-                    <td>
-                        {{--data ini pernah diajukan di tahun --}}
-                        @if($item->is_diajukan)
-                            {{ $item->isbn }} <span class="badge badge-info">Pernah diajukan tahun  {{ \Illuminate\Support\Carbon::parse($item->date_pernah_diajukan)->format('d-m-Y')  }}</span>
-                        @else
-                            {{ $item->isbn }}
-                        @endif
-                    </td>
-                    <td>{{ $item->judul }}</td>
-                    <td>{{ $item->author}}</td>
-                    <td>{{ $item->penerbit }}</td>
-                    <td>{{ $item->tahun }}</td>
-                    <td>{{ $item->eksemplar }}</td>
-                    <td>{{ \Carbon\Carbon::parse($item->approved_at)->format('Y') }}</td>
-
-                </tr>
-                
-            @endforeach
+                @foreach($pengajuan as $item)
+                    <tr>
+                        <td>{{ $loop->iteration }}</td>
+                        <td>{{ $item->prodi->nama }}</td>
+                        <td>
+                            {{--data ini pernah diajukan di tahun --}}
+                            @if($item->is_diajukan)
+                                {{ $item->isbn }} <span class="badge badge-info">Pernah diajukan tahun {{ \Illuminate\Support\Carbon::parse($item->date_pernah_diajukan)->format('d-m-Y') }}</span>
+                            @else
+                                {{ $item->isbn }}
+                            @endif
+                        </td>
+                        <td>{{ $item->judul }}</td>
+                        <td>{{ $item->author }}</td>
+                        <td>{{ $item->penerbit }}</td>
+                        <td>{{ $item->tahun }}</td>
+                        <td>{{ $item->eksemplar }}</td>
+                        <td>{{ \Carbon\Carbon::parse($item->approved_at)->format('Y') }}</td>
+                    </tr>
+                @endforeach
             </tbody>
         </table>
+
         <!-- Single Approve Modal -->
         <div class="modal fade" id="approveModal" tabindex="-1" role="dialog" aria-labelledby="approveModalLabel" aria-hidden="true">
             <div class="modal-dialog" role="document">
@@ -122,9 +134,14 @@ Pengajuan
                 "autoWidth": false,     // Nonaktifkan lebar otomatis
             });
         });
-    </script>
 
-    <script type="text/javascript">
+        function filterByYear() {
+            var year = $('#filter-tahun').val(); // Ambil tahun yang dipilih
+            var url = new URL(window.location.href); // Ambil URL saat ini
+            url.searchParams.set('year', year); // Set parameter tahun
+            window.location.href = url; // Reload halaman dengan parameter baru
+        }
+
         $('#approveModal').on('show.bs.modal', function (event) {
             var button = $(event.relatedTarget); // Button that triggered the modal
             var id = button.data('id'); // Extract info from data-* attributes

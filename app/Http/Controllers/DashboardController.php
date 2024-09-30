@@ -10,7 +10,7 @@ class DashboardController extends Controller
 {
 	public function index()
 	{
-		$totalBooks = Pengajuan::where('is_approve', 1)
+		$totalBooks = Pengajuan::where('is_approve', 0)
 			->when(Auth::user()->prodi_id, function ($query, $prodiId) {
 				return $query->where('prodi_id', $prodiId);
 			})
@@ -18,8 +18,23 @@ class DashboardController extends Controller
 			->distinct('judul')
 			->distinct('prodi_id')
 			->count();
-		$pendingBooks = Pengajuan::where('is_approve', 0)->count();
+		$acceptedBooks = Pengajuan::where('is_approve', 1)
+			->when(Auth::user()->prodi_id, function ($query, $prodiId) {
+				return $query->where('prodi_id', $prodiId);
+			})
+			->count();
+		$pendingBooks = Pengajuan::where('is_approve', 0)
+			->where('is_reject', 0)
+			->when(Auth::user()->prodi_id, function ($query, $prodiId) {
+				return $query->where('prodi_id', $prodiId);
+			})
+			->count();
+		$rejectBooks = Pengajuan::where('is_reject', 1)
+		->when(Auth::user()->prodi_id, function ($query, $prodiId) {
+			return $query->where('prodi_id', $prodiId);
+		})
+		->count();
 		
-		return view('dashboard.index', compact('totalBooks', 'pendingBooks'));
+		return view('dashboard.index', compact('totalBooks', 'acceptedBooks', 'pendingBooks', 'rejectBooks'));
 	}
 }

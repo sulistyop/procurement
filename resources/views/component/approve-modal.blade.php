@@ -38,6 +38,10 @@
                         <label for="harga">Harga</label>
                         <input type="number" name="harga" id="harga" class="form-control">
                     </div>
+                    <div class="form-group">
+                        <label for="tahun">Alasan</label>
+                        <input type="text" name="reason" id="reason" class="form-control">
+                    </div>
                 </div>
                 <div class="modal-footer d-flex justify-content-between">
                     <button type="button" class="btn btn-secondary" data-dismiss="modal">Tutup</button>

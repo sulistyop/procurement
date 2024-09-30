@@ -57,10 +57,12 @@ Pengajuan
                     </td>
                     <td>{{ $item->judul }}</td>
                     <td>{{ $item->author }}</td>
-                    <td>{{ $item->created_at }}</td>
+                    <td>{{ \Illuminate\Support\Carbon::parse($item->created_at)->format('d-m-Y H:i:s') }}</td>
                     <td>
                         @if($item->is_approve)
                             <span class="badge badge-success">Disetujui</span>
+                        @elseif($item->is_reject)
+                            <span class="badge badge-danger">Ditolak</span>
                         @else
                             <span class="badge badge-warning">Pending</span>
                         @endif
@@ -70,7 +72,7 @@ Pengajuan
                             <i class="fas fa-binoculars"></i>
                         </a>
                         @endcan
-                        @if(!$item->is_approve)
+                        @if(!$item->is_approve && !$item->is_reject)
                             @can('edit pengajuan')
                             <a href="#" class="btn btn-warning btn-sm" data-toggle="modal" data-target="#editPengajuanModal" data-id="{{ $item->id }}" data-prodi="{{ $item->prodi->id }}" data-judul="{{ $item->judul }}" data-edisi="{{ $item->edisi }}" data-isbn="{{ $item->isbn }}" data-penerbit="{{ $item->penerbit }}" data-author="{{ $item->author }}" data-tahun="{{ $item->tahun }}" data-eksemplar="{{ $item->eksemplar }}" data-toggle="tooltip" data-placement="top" title="Edit">
                                 <i class="fas fa-edit"></i>
@@ -145,6 +147,19 @@ Pengajuan
             var actionUrl = form.attr('action');
             var formData = form.serialize();
 
+
+            var action = $(this).find('button[type="submit"][clicked=true]').val();
+            var reason = $('#reason').val();
+
+            // masukan action ke form
+            formData += '&action=' + action;
+
+            if (action === 'reject' && reason.trim() === '') {
+                event.preventDefault();
+                alert('Alasan wajib diisi ketika menolak pengajuan.');
+                return;
+            }
+
             $.ajax({
                 url: actionUrl,
                 method: 'POST',
@@ -167,6 +182,11 @@ Pengajuan
                     });
                 }
             });
+        });
+
+        $('#approveForm button[type="submit"]').on('click', function() {
+            $('#approveForm button[type="submit"]').removeAttr('clicked');
+            $(this).attr('clicked', 'true');
         });
 
         $('#editPengajuanModal').on('show.bs.modal', function (event) {
@@ -211,6 +231,7 @@ Pengajuan
                     dropdownParent: $('#editPengajuanModal') // Ensure the dropdown is appended to the modal
                 });
             });
+
         });
     </script>
     @if ($errors->any())

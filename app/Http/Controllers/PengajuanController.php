@@ -159,9 +159,11 @@ class PengajuanController extends Controller
 				'is_reject' => false, // Pastikan is_reject di-set ke false
 				'approved_at' => now(),
 				'eksemplar' => (int)$request->eksemplar,
+				'diterima' => (int)$request->eksemplar,
 				'harga' => $request->harga, // Simpan harga
 				'approved_by' => Auth::user() ? Auth::user()->id : 0, // Sesuaikan dengan id pengguna yang menyetujui
 			]);
+			return redirect()->route('pengajuan.index')->with('success', 'Pengajuan berhasil diproses!');
 		} elseif ($request->action === 'reject') {
 			// Logika jika pengajuan ditolak
 			$store = $pengajuan->update([
@@ -171,9 +173,10 @@ class PengajuanController extends Controller
 				'rejected_by' => Auth::user() ? Auth::user()->id : 0, // Id pengguna yang menolak
 				'reason' => $request->reason, // Tambahkan alasan penolakan jika ada
 			]);
+			return redirect()->route('pengajuan.index')->with('success', 'Pengajuan berhasil ditolak!');
 		}
 
-        return redirect()->route('pengajuan.index')->with('success', 'Pengajuan berhasil diproses!');
+    
     }
 	
 	public function importForm()

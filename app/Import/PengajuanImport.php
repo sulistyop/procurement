@@ -19,6 +19,9 @@ class PengajuanImport implements ToModel, WithHeadingRow, WithValidation, SkipsO
 	public function model(array $row)
 	{
 		$prodi = Prodi::where('nama', 'like', '%'.$row['prodi'].'%')->first();
+		if(!$prodi) {
+			$prodi = Prodi::create(['nama' => $row['prodi']]);
+		}
 		return new Pengajuan([
 			'prodi_id' => $prodi->id,
 			'isbn' => $row['isbn'],

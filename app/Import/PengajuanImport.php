@@ -40,11 +40,7 @@ class PengajuanImport implements ToModel, WithHeadingRow, WithValidation, SkipsO
 		return [
 			'*.prodi' => 'required',
 			'*.judul' => 'required',
-			'*.edisi' => 'nullable',
-			'*.isbn' => 'required',
-			'*.penerbit' => 'required',
 			'*.author' => 'required',
-			'*.tahun' => 'required|integer|min:1900|max:' . date('Y'),
 			'*.eksemplar' => 'required|integer',
 		];
 	}

@@ -108,11 +108,18 @@
                         <a class="nav-link text-white pl-4 {{ Request::is('roles-permissions*') ? 'active' : '' }}" href="{{ route('roles-permissions.edit') }}">Izin</a>
                     </div>
                 @endcan
-                <li class="nav-item">
+               {{-- <li class="nav-item">
                     <a class="nav-link text-white {{ Request::is('settings') ? 'active' : '' }}" href="#">
                         <i class="fas fa-cog"></i> Settings
                     </a>
+                </li>--}}
+               {{--buatkan menu activity log--}}
+                <li class="nav-item">
+                    <a class="nav-link text-white {{ Request::is('activity-logs') ? 'active' : '' }}" href="{{ route('activity-logs.index') }}">
+                        <i class="fas fa-history"></i> Activity Logs
+                    </a>
                 </li>
+
             </ul>
         </div>
 
@@ -124,40 +131,39 @@
                     <i class="fas fa-bars"></i>
                 </button>
                 <div class="container">
-
-                        <ul class="navbar-nav ml-auto">
-                            @guest
-                                @if (Route::has('login'))
-                                    <li class="nav-item">
-                                        <a class="nav-link" href="{{ route('login') }}" style="color: #f2f4f7;" >{{ __('Login') }}</a>
-                                    </li>
-                                @endif
-                            @else
-                                <li class="nav-item dropdown">
-                                    <a id="navbarDropdown" class="nav-link dropdown-toggle" href="#" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false" v-pre style="color: #f2f4f7;">
-                                        {{ Auth::user()->name }}
-                                    </a>
-
-                                    <div class="dropdown-menu dropdown-menu-end profile-dropdown-menu" style="min-width: 250px" aria-labelledby="navbarDropdown">
-                                        <div class="dropdown-item-text">
-                                            <strong>Name:</strong> {{ Auth::user()->name }}<br>
-                                            <strong>Email:</strong> {{ Auth::user()->email }}<br>
-                                            <strong>Role:</strong> {{ Auth::user()->roles->pluck('name')->first() }}<br>
-                                            <strong>Prodi:</strong> {{ Auth::user()->prodi ? Auth::user()->prodi->nama : '-' }}
-                                        </div>
-                                        <div class="dropdown-divider"></div>
-                                        <a class="dropdown-item" href="{{ route('logout') }}"
-                                           onclick="event.preventDefault();
-                                                document.getElementById('logout-form').submit();">
-                                            {{ __('Logout') }}
-                                        </a>
-                                        <form id="logout-form" action="{{ route('logout') }}" method="POST" class="d-none">
-                                            @csrf
-                                        </form>
-                                    </div>
+                    <ul class="navbar-nav ml-auto">
+                        @guest
+                            @if (Route::has('login'))
+                                <li class="nav-item">
+                                    <a class="nav-link" href="{{ route('login') }}" style="color: #f2f4f7;" >{{ __('Login') }}</a>
                                 </li>
-                            @endguest
-                        </ul>
+                            @endif
+                        @else
+                            <li class="nav-item dropdown">
+                                <a id="navbarDropdown" class="nav-link dropdown-toggle" href="#" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false" v-pre style="color: #f2f4f7;">
+                                    {{ Auth::user()->name }}
+                                </a>
+
+                                <div class="dropdown-menu dropdown-menu-end profile-dropdown-menu" style="min-width: 250px" aria-labelledby="navbarDropdown">
+                                    <div class="dropdown-item-text">
+                                        <strong>Name:</strong> {{ Auth::user()->name }}<br>
+                                        <strong>Email:</strong> {{ Auth::user()->email }}<br>
+                                        <strong>Role:</strong> {{ Auth::user()->roles->pluck('name')->first() }}<br>
+                                        <strong>Prodi:</strong> {{ Auth::user()->prodi ? Auth::user()->prodi->nama : '-' }}
+                                    </div>
+                                    <div class="dropdown-divider"></div>
+                                    <a class="dropdown-item" href="{{ route('logout') }}"
+                                       onclick="event.preventDefault();
+                                            document.getElementById('logout-form').submit();">
+                                        {{ __('Logout') }}
+                                    </a>
+                                    <form id="logout-form" action="{{ route('logout') }}" method="POST" class="d-none">
+                                        @csrf
+                                    </form>
+                                </div>
+                            </li>
+                        @endguest
+                    </ul>
                 </div>
             </nav>
 

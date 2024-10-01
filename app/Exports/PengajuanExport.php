@@ -3,14 +3,14 @@
 namespace App\Exports;
 
 use App\Models\Pengajuan;
-use Illuminate\Database\Eloquent\Collection;
-use Maatwebsite\Excel\Concerns\FromCollection;
-use Maatwebsite\Excel\Concerns\WithColumnFormatting;
 use Maatwebsite\Excel\Concerns\WithEvents;
-use Maatwebsite\Excel\Concerns\WithHeadings;
 use Maatwebsite\Excel\Concerns\WithStyles;
+use Illuminate\Database\Eloquent\Collection;
+use Maatwebsite\Excel\Concerns\WithHeadings;
+use Maatwebsite\Excel\Concerns\FromCollection;
 use PhpOffice\PhpSpreadsheet\Style\NumberFormat;
 use PhpOffice\PhpSpreadsheet\Worksheet\Worksheet;
+use Maatwebsite\Excel\Concerns\WithColumnFormatting;
 
 class PengajuanExport implements FromCollection, WithHeadings, WithStyles, WithEvents, WithColumnFormatting
 {
@@ -32,7 +32,9 @@ class PengajuanExport implements FromCollection, WithHeadings, WithStyles, WithE
 				'Penerbit' => $item->penerbit,
 				'Author' => $item->author,
 				'Tahun' => $item->tahun,
-				'Eksemplar' => $item->eksemplar,
+				'Usulan' => $item->eksemplar,
+				'Diterima' => $item->diterima,
+				'Harga' => $item->harga,
 			];
 		});
 	}
@@ -48,7 +50,9 @@ class PengajuanExport implements FromCollection, WithHeadings, WithStyles, WithE
 			'Penerbit',
 			'Author',
 			'Tahun',
-			'Eksemplar',
+			'Usulan',
+			'Diterima',
+			'Harga',
 		];
 	}
 	

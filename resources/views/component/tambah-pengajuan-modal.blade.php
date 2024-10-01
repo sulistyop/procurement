@@ -39,14 +39,14 @@
                     </div>
                     <div class="form-group">
                         <label for="isbn">ISBN</label>
-                        <input type="text" class="form-control" id="isbn" name="isbn" value="{{ old('isbn') }}" required>
+                        <input type="text" class="form-control" id="isbn" name="isbn" value="{{ old('isbn') }}">
                         @error('isbn')
                         <small class="text-danger">{{ $message }}</small>
                         @enderror
                     </div>
                     <div class="form-group">
                         <label for="penerbit">Penerbit</label>
-                        <input type="text" class="form-control" id="penerbit" name="penerbit" value="{{ old('penerbit') }}" required>
+                        <input type="text" class="form-control" id="penerbit" name="penerbit" value="{{ old('penerbit') }}">
                         @error('penerbit')
                         <small class="text-danger">{{ $message }}</small>
                         @enderror
@@ -60,7 +60,7 @@
                     </div>
                     <div class="form-group">
                         <label for="tahun">Tahun Terbit</label>
-                        <input type="number" class="form-control" id="tahun" name="tahun" value="{{ old('tahun') }}" required>
+                        <input type="number" class="form-control" id="tahun" name="tahun" value="{{ old('tahun') }}">
                         @error('tahun')
                         <small class="text-danger">{{ $message }}</small>
                         @enderror

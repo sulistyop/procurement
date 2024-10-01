@@ -2,15 +2,15 @@
 	
 namespace App\Import;
 
-use App\Models\Pengajuan;
-use App\Models\Prodi;
 use Exception;
+use App\Models\Prodi;
+use App\Models\Pengajuan;
+use Maatwebsite\Excel\Concerns\ToModel;
+use Maatwebsite\Excel\Validators\Failure;
 use Maatwebsite\Excel\Concerns\SkipsFailures;
 use Maatwebsite\Excel\Concerns\SkipsOnFailure;
-use Maatwebsite\Excel\Concerns\ToModel;
 use Maatwebsite\Excel\Concerns\WithHeadingRow;
 use Maatwebsite\Excel\Concerns\WithValidation;
-use Maatwebsite\Excel\Validators\Failure;
 
 class PengajuanImport implements ToModel, WithHeadingRow, WithValidation, SkipsOnFailure
 {

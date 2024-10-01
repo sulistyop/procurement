@@ -61,7 +61,7 @@ class PengajuanController extends Controller
 		    'prodi_id' => 'required|exists:prodi,id',
 		    'judul' => 'required|max:255',
 		    'edisi' => 'nullable|max:50',
-		    'isbn' => 'required|max:20',
+		    'isbn' => 'nullable|max:20',
 		    'penerbit' => 'nullable|max:100',
 		    'author' => 'required|max:100',
 		    'tahun' => 'nullable|integer|min:1900|max:' . date('Y'),

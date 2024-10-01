@@ -34,7 +34,7 @@ class PengajuanExport implements FromCollection, WithHeadings, WithStyles, WithE
 				'Author' => $item->author,
 				'Tahun' => $item->tahun,
 				'Usulan' => $item->eksemplar,
-				'Diterima' => $item->diterima ?? 0,
+				'Diterima' => (string)($item->diterima),
 				'Harga' => $item->harga,
 			];
 		});
@@ -84,9 +84,9 @@ class PengajuanExport implements FromCollection, WithHeadings, WithStyles, WithE
 	{
 		return [
 			'H' => NumberFormat::FORMAT_NUMBER,
-			'I' => NumberFormat::FORMAT_NUMBER,
-			'J' => NumberFormat::FORMAT_NUMBER,
-			'K' => NumberFormat::FORMAT_NUMBER,
+			// 'I' => NumberFormat::FORMAT_NUMBER,
+			// 'J' => NumberFormat::FORMAT_NUMBER,
+			// 'K' => NumberFormat::FORMAT_NUMBER,
 		];
 	}
 }

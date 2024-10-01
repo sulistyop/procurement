@@ -82,8 +82,10 @@ class PengajuanController extends Controller
 	    ]);
 
         // Simpan data pengajuan
-        Pengajuan::create($request->all());
-
+	    $pengajuan = Pengajuan::create($request->all());
+	    
+	    $this->setLogActivity('Membuat pengajuan', $pengajuan);
+		
         return redirect()->route('pengajuan.index')->with('success', 'Pengajuan berhasil ditambahkan.');
     }
 
@@ -120,6 +122,8 @@ class PengajuanController extends Controller
 
         // Update data pengajuan
         $pengajuan->update($request->all());
+		
+		$this->setLogActivity('Mengubah pengajuan', $pengajuan);
 
         return redirect()->route('pengajuan.index')->with('success', 'Pengajuan berhasil diupdate.');
     }
@@ -127,7 +131,9 @@ class PengajuanController extends Controller
     public function destroy(Pengajuan $pengajuan)
     {
         // Hapus data pengajuan
+	    $dump = $pengajuan;
         $pengajuan->delete();
+		$this->setLogActivity('Menghapus pengajuan', $dump);
         return redirect()->route('pengajuan.index')->with('success', 'Pengajuan berhasil dihapus.');
     }
     public function approve($id)
@@ -144,14 +150,7 @@ class PengajuanController extends Controller
     		'reason' => 'required_if:action,reject|max:255', // Reason hanya wajib saat action adalah reject
         ]);
 
-		// Setujui pengajuan
-		// $store = $pengajuan->update([
-		// 	'is_approve' => true,
-		// 	'approved_at' => now(),
-		// 	'diterima' => (int)$request->eksemplar,
-		// 	'harga' => $request->harga, // Simpan harga
-		// 	'approved_by' => Auth::user() ? Auth::user()->id : 0, // Sesuaikan dengan id pengguna yang menyetujui
-		// ]);
+		
 		if ($request->action === 'approve') {
 			// Logika jika pengajuan disetujui
 			$store = $pengajuan->update([
@@ -163,6 +162,8 @@ class PengajuanController extends Controller
 				'harga' => $request->harga, // Simpan harga
 				'approved_by' => Auth::user() ? Auth::user()->id : 0, // Sesuaikan dengan id pengguna yang menyetujui
 			]);
+			
+			$this->setLogActivity('Menyetujui pengajuan', $pengajuan);
 			return response()->json(['message' => 'Pengajuan berhasil disetujui!']);
 		} elseif ($request->action === 'reject') {
 			// Logika jika pengajuan ditolak
@@ -173,10 +174,10 @@ class PengajuanController extends Controller
 				'rejected_by' => Auth::user() ? Auth::user()->id : 0, // Id pengguna yang menolak
 				'reason' => $request->reason, // Tambahkan alasan penolakan jika ada
 			]);
+			
+			$this->setLogActivity('Menolak pengajuan', $pengajuan);
 			return response()->json(['message' => 'Pengajuan berhasil ditolak!']);
 		}
-
-    
     }
 	
 	public function importForm()
@@ -188,6 +189,7 @@ class PengajuanController extends Controller
 	{
 		try {
 			Excel::import(new PengajuanImport, $request->file('file'));
+			$this->setLogActivity('Import data pengajuan', new Pengajuan());
 			return redirect()->back()->with('success', 'Import berhasil.');
 		} catch (\Exception $e) {
 			return redirect()->back()->with('error', 'Terjadi kesalahan saat import.');

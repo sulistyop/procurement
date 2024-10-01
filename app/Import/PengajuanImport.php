@@ -19,17 +19,18 @@ class PengajuanImport implements ToModel, WithHeadingRow, WithValidation, SkipsO
 	public function model(array $row)
 	{
 		$prodi = Prodi::where('nama', 'like', '%'.$row['prodi'].'%')->first();
+		
 		if(!$prodi) {
-			$prodi = Prodi::create(['nama' => $row['prodi']]);
+			$prodi = Prodi::create([
+				'nama' => $row['prodi'],
+				'deskripsi' => '',
+			]);
 		}
 		return new Pengajuan([
 			'prodi_id' => $prodi->id,
-			'isbn' => $row['isbn'],
 			'judul' => $row['judul'],
-			'edisi' => $row['edisi'],
-			'penerbit' => $row['penerbit'],
 			'author' => $row['author'],
-			'tahun' => $row['tahun'],
+			'tahun' => now()->year,
 			'eksemplar' => $row['eksemplar'],
 			'diterima' => $row['eksemplar'],
 			'is_approve' => 1,
@@ -44,7 +45,7 @@ class PengajuanImport implements ToModel, WithHeadingRow, WithValidation, SkipsO
 			'*.prodi' => 'required',
 			'*.judul' => 'required',
 			'*.author' => 'required',
-			'*.eksemplar' => 'required|integer',
+			'*.eksemplar' => 'required',
 		];
 	}
 	

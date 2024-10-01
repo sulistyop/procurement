@@ -74,7 +74,7 @@ Pengajuan
                         @elseif($item->is_reject)
                             <span class="badge badge-danger">Ditolak</span>
                         @else
-                            <span class="badge badge-warning">Pending</span>
+                            <span class="badge badge-warning">Proses</span>
                         @endif
                     <td>
                         @can('view pengajuan')

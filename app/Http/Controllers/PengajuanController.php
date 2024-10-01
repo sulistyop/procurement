@@ -142,25 +142,23 @@ class PengajuanController extends Controller
         return view('pengajuan.approve', compact('pengajuan'));
     }
 
-    public function storeApproval(Request $request, Pengajuan $pengajuan)
-    {
-        $request->validate([
-            'eksemplar' => 'required|integer|min:1',
+	public function storeApproval(Request $request, Pengajuan $pengajuan)
+	{
+		$request->validate([
+			'eksemplar' => 'required|integer|min:1',
 			'harga' => 'required_if:action,approve|numeric',
-    		'reason' => 'required_if:action,reject|max:255', // Reason hanya wajib saat action adalah reject
-        ]);
-
-		
+			'reason' => 'required_if:action,reject|max:255', // Reason hanya wajib saat action adalah reject
+		]);
+	
 		if ($request->action === 'approve') {
 			// Logika jika pengajuan disetujui
 			$store = $pengajuan->update([
 				'is_approve' => true,
 				'is_reject' => false, // Pastikan is_reject di-set ke false
 				'approved_at' => now(),
-				'eksemplar' => (int)$request->eksemplar,
-				'diterima' => (int)$request->eksemplar,
+				'diterima' => (int)$request->eksemplar, // Hanya set jika disetujui
 				'harga' => $request->harga, // Simpan harga
-				'approved_by' => Auth::user() ? Auth::user()->id : 0, // Sesuaikan dengan id pengguna yang menyetujui
+				'approved_by' => Auth::user() ? Auth::user()->id : 0, // Id pengguna yang menyetujui
 			]);
 			
 			$this->setLogActivity('Menyetujui pengajuan', $pengajuan);
@@ -173,12 +171,14 @@ class PengajuanController extends Controller
 				'rejected_at' => now(), // Tambahkan timestamp jika pengajuan ditolak
 				'rejected_by' => Auth::user() ? Auth::user()->id : 0, // Id pengguna yang menolak
 				'reason' => $request->reason, // Tambahkan alasan penolakan jika ada
+				'diterima' => 0, // Set kolom diterima menjadi null jika ditolak
 			]);
 			
 			$this->setLogActivity('Menolak pengajuan', $pengajuan);
 			return response()->json(['message' => 'Pengajuan berhasil ditolak!']);
 		}
-    }
+	}
+	
 	
 	public function importForm()
 	{

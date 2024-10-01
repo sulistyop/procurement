@@ -2,8 +2,8 @@
 
 namespace App\Http\Controllers;
 
-use App\Models\Pengajuan;
 use App\Models\Prodi;
+use App\Models\Pengajuan;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 
@@ -69,7 +69,7 @@ class DashboardController extends Controller
 			->when($filterProdi, function ($query) use ($filterProdi) {
 				return $query->where('prodi_id', $filterProdi);
 			})
-			->sum('diterima');
+			->sum('judul');
 		
 		$acceptedBooks = Pengajuan::where('is_approve', 1)
 			->when($userProdiId, function ($query) use ($userProdiId) {
@@ -81,7 +81,7 @@ class DashboardController extends Controller
 			->when($filterProdi, function ($query) use ($filterProdi) {
 				return $query->where('prodi_id', $filterProdi);
 			})
-			->sum('diterima');
+			->sum('judul');
 		
 		$pendingBooks = Pengajuan::where('is_approve', 0)
 			->where('is_reject', 0)
@@ -94,7 +94,7 @@ class DashboardController extends Controller
 			->when($filterProdi, function ($query) use ($filterProdi) {
 				return $query->where('prodi_id', $filterProdi);
 			})
-			->sum('eksemplar');
+			->sum('judul');
 		
 		$rejectBooks = Pengajuan::where('is_reject', 1)
 			->when($userProdiId, function ($query) use ($userProdiId) {
@@ -106,7 +106,7 @@ class DashboardController extends Controller
 			->when($filterProdi, function ($query) use ($filterProdi) {
 				return $query->where('prodi_id', $filterProdi);
 			})
-			->sum('eksemplar');
+			->sum('judul');
 		
 		$years = Pengajuan::selectRaw('YEAR(created_at) as year')
 			->where('is_approve', 1) // Filter approved records

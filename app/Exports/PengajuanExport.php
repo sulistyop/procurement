@@ -22,6 +22,7 @@ class PengajuanExport implements FromCollection, WithHeadings, WithStyles, WithE
 	
 	public function collection()
 	{
+		// dd($this->pengajuan);
 		return $this->pengajuan->map(function ($item, $key) {
 			return [
 				'No' => $key + 1,
@@ -33,7 +34,7 @@ class PengajuanExport implements FromCollection, WithHeadings, WithStyles, WithE
 				'Author' => $item->author,
 				'Tahun' => $item->tahun,
 				'Usulan' => $item->eksemplar,
-				'Diterima' => $item->diterima,
+				'Diterima' => $item->diterima ?? 0,
 				'Harga' => $item->harga,
 			];
 		});
@@ -60,7 +61,7 @@ class PengajuanExport implements FromCollection, WithHeadings, WithStyles, WithE
 	{
 		return [
 			1 => ['font' => ['bold' => true, 'color' => ['argb' => 'FFFFFF']]],
-			'A1:I1' => ['fill' => ['fillType' => 'solid', 'startColor' => ['argb' => '4CAF50']]],
+			'A1:K1' => ['fill' => ['fillType' => 'solid', 'startColor' => ['argb' => '4CAF50']]],
 		];
 	}
 	
@@ -69,10 +70,10 @@ class PengajuanExport implements FromCollection, WithHeadings, WithStyles, WithE
 		return [
 			\Maatwebsite\Excel\Events\AfterSheet::class => function (\Maatwebsite\Excel\Events\AfterSheet $event) {
 				$event->sheet->getDelegate()->freezePane('A2');
-				$event->sheet->getDelegate()->getStyle('A1:I1')->getFont()->setBold(true);
+				$event->sheet->getDelegate()->getStyle('A1:K1')->getFont()->setBold(true);
 				
 				// Auto-size all columns
-				foreach (range('A', 'I') as $column) {
+				foreach (range('A', 'K') as $column) {
 					$event->sheet->getDelegate()->getColumnDimension($column)->setAutoSize(true);
 				}
 			},
@@ -83,6 +84,9 @@ class PengajuanExport implements FromCollection, WithHeadings, WithStyles, WithE
 	{
 		return [
 			'H' => NumberFormat::FORMAT_NUMBER,
+			'I' => NumberFormat::FORMAT_NUMBER,
+			'J' => NumberFormat::FORMAT_NUMBER,
+			'K' => NumberFormat::FORMAT_NUMBER,
 		];
 	}
 }

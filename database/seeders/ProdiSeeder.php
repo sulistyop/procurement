@@ -3,9 +3,9 @@
 namespace Database\Seeders;
 
 use App\Models\Prodi;
-use Illuminate\Database\Console\Seeds\WithoutModelEvents;
 use Illuminate\Database\Seeder;
 use Illuminate\Support\Facades\DB;
+use Illuminate\Database\Console\Seeds\WithoutModelEvents;
 
 class ProdiSeeder extends Seeder
 {
@@ -13,7 +13,7 @@ class ProdiSeeder extends Seeder
 	{
 		$prodis = [
 			'Bahasa dan Sastra Arab S1',
-			'Ilmu Hadis S1',
+			'Ilmu Hadist S1',
 			'Pendidikan Agama Islam S1',
 			'Perbankan Syariah S1',
 			'Psikologi S1',

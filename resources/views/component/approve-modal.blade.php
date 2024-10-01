@@ -32,7 +32,7 @@
                     </div>
                     <div class="form-group">
                         <label for="eksemplar">Jumlah Diterima</label>
-                        <input type="number" name="eksemplar" id="eksemplar" class="form-control" step="0.01">
+                        <input type="number" name="eksemplar" id="eksemplar" class="form-control">
                     </div>
                     <div class="form-group">
                         <label for="harga">Harga</label>

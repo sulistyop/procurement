@@ -32,11 +32,12 @@ class PengajuanImport implements ToModel, WithHeadingRow, WithValidation, SkipsO
 			'author' => $row['author'],
 			'tahun' => now()->year,
 			'eksemplar' => $row['eksemplar'],
-			'diterima' => $row['eksemplar'],
-			'is_approve' => 1,
+			'diterima' => $row['diterima']  ?? NULL,
+			'is_approve' => 0,
 			'approved_at' => now(),
 			'approved_by' => auth()->id(),
 		]);
+		dd($data);
 	}
 	
 	public function rules(): array

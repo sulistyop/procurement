@@ -12,6 +12,8 @@ class ProdiSeeder extends Seeder
 	public function run()
 	{
 		$prodis = [
+			'Perpustakaan',
+			'Lembaga Pengembangan Studi Islam',
 			'Bahasa dan Sastra Arab S1',
 			'Ilmu Hadist S1',
 			'Pendidikan Agama Islam S1',

@@ -69,7 +69,7 @@ class DashboardController extends Controller
 			->when($filterProdi, function ($query) use ($filterProdi) {
 				return $query->where('prodi_id', $filterProdi);
 			})
-			->sum('judul');
+			->count('judul');
 		
 		$acceptedBooks = Pengajuan::where('is_approve', 1)
 			->when($userProdiId, function ($query) use ($userProdiId) {
@@ -81,7 +81,7 @@ class DashboardController extends Controller
 			->when($filterProdi, function ($query) use ($filterProdi) {
 				return $query->where('prodi_id', $filterProdi);
 			})
-			->sum('judul');
+			->count('judul');
 		
 		$pendingBooks = Pengajuan::where('is_approve', 0)
 			->where('is_reject', 0)
@@ -94,7 +94,7 @@ class DashboardController extends Controller
 			->when($filterProdi, function ($query) use ($filterProdi) {
 				return $query->where('prodi_id', $filterProdi);
 			})
-			->sum('judul');
+			->count('judul');
 		
 		$rejectBooks = Pengajuan::where('is_reject', 1)
 			->when($userProdiId, function ($query) use ($userProdiId) {
@@ -106,7 +106,7 @@ class DashboardController extends Controller
 			->when($filterProdi, function ($query) use ($filterProdi) {
 				return $query->where('prodi_id', $filterProdi);
 			})
-			->sum('judul');
+			->count('judul');
 		
 		$years = Pengajuan::selectRaw('YEAR(created_at) as year')
 			->where('is_approve', 1) // Filter approved records

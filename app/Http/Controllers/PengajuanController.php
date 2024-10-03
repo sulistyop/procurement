@@ -43,14 +43,22 @@ class PengajuanController extends Controller
 			return Excel::download($excelReport, $fileName);
 		}
 		
-		$prodi = Prodi::all();
-
+		// $prodi = Prodi::all();
+		$user = Auth::user();
+		$prodi = Prodi::when($user->prodi_id, function($query) use ($user){
+			return $query->where('id', $user->prodi_id);
+  		})->get();
         return view('pengajuan.index', compact('pengajuan', 'prodi'));
     }
 
     public function create()
     {
         // Menampilkan form untuk menambah pengajuan baru
+		// $user = Auth::user();
+		// $prodi = Prodi::when($user->prodi_id, function($query) use ($user){
+		// 	return $query->where('id', $user->prodi_id);
+ 		//  });
+		// return view('pengajuan.create', compact('prodi'));
         return view('pengajuan.create');
     }
 

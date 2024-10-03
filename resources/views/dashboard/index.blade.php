@@ -15,14 +15,17 @@
                     @endforeach
                 </select>
             </div>
-            <div class="form-group">
-                <select id="filter-prodi" class="form-select select2" onchange="filterByProdi()">
-                    <option value="">Semua Prodi</option>
-                    @foreach($prodis as $prodi)
-                        <option value="{{ $prodi->id }}" {{ request('prodi') == $prodi->id ? 'selected' : '' }}>{{ $prodi->nama }}</option>
-                    @endforeach
-                </select>
-            </div>
+            @if(auth()->user()->hasRole('admin'))
+                <div class="form-group">
+                    <label for="filter-prodi">Filter Prodi</label>
+                    <select id="filter-prodi" class="form-select select2" onchange="filterByProdi()">
+                        <option value="">Semua Prodi</option>
+                        @foreach($prodis as $prodi)
+                            <option value="{{ $prodi->id }}" {{ request('prodi') == $prodi->id ? 'selected' : '' }}>{{ $prodi->nama }}</option>
+                        @endforeach
+                    </select>
+                </div>
+            @endif
         </div>
         <div class="container-fluid">
             <div class="row">
@@ -32,8 +35,8 @@
                         <div class="card-header text-center">Total Buku Terdaftar</div>
                         <div class="card-body text-center">
                             <h5 class="card-title">{{ $totalBooks }}</h5>
-                            <p class="card-text">Rekap Diterima</p>
-                            <a href="{{ route('rekap-pengajuan.index') }}" class="btn btn-light btn-sm">Lihat Detail</a>
+                            <p class="card-text">Semua Pengajuan</p>
+                            <a href="{{ route('pengajuan.index') }}" class="btn btn-light btn-sm">Lihat Detail</a>
                         </div>
                     </div>
                 </div>
@@ -87,12 +90,13 @@
                     </div>
                 </div>
             </div>
+            @if(auth()->user()->hasRole('admin'))
             <div class="col-6">
                 <!-- Chart Section for Books per Prodi -->
                 <div class="row mt-4">
                     <div class="col-md-12">
                         <div class="card">
-                            <div class="card-header">Rekap Buku per Prodi</div>
+                            <div class="card-header">Rekap Buku per Prodi/Unit</div>
                             <div class="card-body">
                                 <canvas id="booksPerProdiChart"></canvas>
                             </div>
@@ -100,6 +104,7 @@
                     </div>
                 </div>
             </div>
+            @endif
         </div>
     </div>
 @endsection

@@ -34,8 +34,9 @@ class PengajuanExport implements FromCollection, WithHeadings, WithStyles, WithE
 				'Author' => $item->author,
 				'Tahun' => $item->tahun,
 				'Usulan' => $item->eksemplar,
-				'Diterima' => (string)($item->diterima),
-				'Harga' => $item->harga,
+				'Diterima' => (string)($item->diterima ?? "-"),
+				'Harga' => $item->harga ?? "-",
+				'Alasan' => $item->reason ?? "-",
 			];
 		});
 	}
@@ -54,6 +55,7 @@ class PengajuanExport implements FromCollection, WithHeadings, WithStyles, WithE
 			'Usulan',
 			'Diterima',
 			'Harga',
+			'Alasan',
 		];
 	}
 	

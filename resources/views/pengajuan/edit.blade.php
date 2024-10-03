@@ -10,6 +10,8 @@
                 <label for="prodi">Prodi</label>
                 @dd($pengajuan->prodi)
                 <select class="form-control" id="prodi" name="prodi" value="{{ old('prodi', $pengajuan->prodi) }}" required>
+                    <option value="Ilmu Hadis S1">Perpustakaan</option>
+                    <option value="Ilmu Hadis S1">Lembaga Pengembangan dan Studi Islam</option>
                     <option value="bsa">Bahasa dan Sastra Arab S1</option>
                     <option value="Bahasa dan Sastra Arab S1">Bahasa dan Sastra Arab S1</option>
                     <option value="Ilmu Hadis S1">Ilmu Hadis S1</option>

@@ -94,7 +94,7 @@
                 @can('manage rekap pengajuan')
                     <li class="nav-item">
                         <a class="nav-link text-white {{ Request::is('rekap-pengajuan') ? 'active' : '' }}" href="{{ route('rekap-pengajuan.index') }}">
-                            <i class="fas fa-table"></i> Rekap Pengajuan
+                            <i class="fas fa-table"></i> Rekap Realisasi
                         </a>
                     </li>
                 @endcan

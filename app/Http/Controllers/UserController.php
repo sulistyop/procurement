@@ -49,7 +49,7 @@ class UserController extends Controller
 			'email' => 'required|string|email|max:255|unique:users',
 			'password' => 'required|string|min:8|confirmed',
 			'roles' => 'required|array',
-			'prodi_id' => 'required|exists:prodis,id', // Validasi untuk prodi_id
+			'prodi_id' => 'required|exists:prodi,id', // Validasi untuk prodi_id
 		]);
 		
 		$user = User::create([

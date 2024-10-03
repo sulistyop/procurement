@@ -1,12 +1,12 @@
 @extends('layouts.app')
 
 @section('title')
-Pengajuan
+Realisasi
 @endsection
 
 @section('content')
     <div>
-        <h1>Rekap Pengajuan</h1>
+        <h1>Rekap Realisasi</h1>
 
         <div class="d-flex justify-content-between mb-2">
             <div>

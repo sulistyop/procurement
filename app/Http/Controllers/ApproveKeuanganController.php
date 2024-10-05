@@ -10,7 +10,6 @@ class ApproveKeuanganController extends Controller
 {
     public function index()
     {
-        // Ambil semua data pengajuan keuangan
         $approveKeuangan = ApproveKeuangan::all();
         return view('approveKeuangan.index', compact('approveKeuangan'));
     }
@@ -34,8 +33,7 @@ class ApproveKeuanganController extends Controller
             'buktiTransaksi' => $buktiPath,
             'user_id' => Auth::id(), // Simpan ID pengguna yang mengajukan
         ]);
-        $approveKeuangan = ApproveKeuangan::create($request->all());
-        $this->setLogActivity('Menambah Approve Keuangan', $approveKeuangan);
+        $this->setLogActivity('Menambah Approve', $approveKeuangan);
         return redirect()->route('approve-keuangan.index')->with('success', 'Approve Keuangan berhasil ditambahkan!');
     }
     public function edit($id)

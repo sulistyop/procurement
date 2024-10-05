@@ -26,7 +26,7 @@ class ApproveKeuanganController extends Controller
         $suratPath = $request->file('surat')->store('uploads/surat', 'public');
         $buktiPath = $request->file('buktiTransaksi')->store('uploads/bukti', 'public');
 
-        ApproveKeuangan::create([
+        $approveKeuangan = ApproveKeuangan::create([
             'nomorSurat' => $request->nomorSurat,
             'surat' => $suratPath,
             'nomorBukti' => $request->nomorBukti,

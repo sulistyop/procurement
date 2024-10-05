@@ -25,7 +25,7 @@ Keuangan
     <table class="table mt-4" id="customers">
         <thead>
             <tr>
-                <th rowspan="2">No</th>
+                <th rowspan="2" style="text-align: center; vertical-align: middle;">No</th>
                 <th colspan="2" class="text-center">Surat</th>
                 <th colspan="2" class="text-center">Bukti Transaksi</th>
                 <th colspan="2" class="text-center">Aksi</th>
@@ -59,7 +59,7 @@ Keuangan
                         -
                     @endif
                 </td>
-                <td>
+                <td style="text-align: center;">
                     <a href="#" class="btn btn-warning btn-sm editApproveKeuangan" data-toggle="modal" 
                        data-target="#editApproveKeuanganModal" 
                        data-id="{{ $item->id }}" 
@@ -71,7 +71,7 @@ Keuangan
                        <i class="fas fa-edit"></i>
                     </a>
                 </td>
-                <td>
+                <td style="text-align: center;">
                     <form action="{{ route('approve-keuangan.destroy', $item->id) }}" method="POST" style="display:inline;">
                         @csrf
                         @method('DELETE')

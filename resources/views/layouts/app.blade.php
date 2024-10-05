@@ -91,10 +91,17 @@
                         </a>
                     </li>
                 @endcan
+                {{-- @can('approve keuangan') --}}
+                    <li class="nav-item">
+                        <a class="nav-link text-white {{ Request::is('approve-keuangan') ? 'active' : '' }}" href="{{ route('approve-keuangan.index') }}">
+                            <i class="fas fa-file-invoice"></i>Approve Keuangan
+                        </a>                        
+                    </li>
+                {{-- @endcan --}}
                 @can('manage rekap pengajuan')
                     <li class="nav-item">
                         <a class="nav-link text-white {{ Request::is('rekap-pengajuan') ? 'active' : '' }}" href="{{ route('rekap-pengajuan.index') }}">
-                            <i class="fas fa-table"></i> Rekap Realisasi
+                            <i class="fas fa-table"></i> Rekap Pengajuan
                         </a>
                     </li>
                 @endcan

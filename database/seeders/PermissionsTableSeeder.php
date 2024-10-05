@@ -2,10 +2,10 @@
 
 namespace Database\Seeders;
 
-use Illuminate\Database\Console\Seeds\WithoutModelEvents;
 use Illuminate\Database\Seeder;
-use Spatie\Permission\Models\Permission;
 use Spatie\Permission\Models\Role;
+use Spatie\Permission\Models\Permission;
+use Illuminate\Database\Console\Seeds\WithoutModelEvents;
 
 class PermissionsTableSeeder extends Seeder
 {
@@ -42,6 +42,11 @@ class PermissionsTableSeeder extends Seeder
 				'approve pengajuan',
 				'export pengajuan',
 				'import pengajuan',
+			],
+			'approve keuangan' => [
+				'manage approve keuangan',
+				'view approve keuangan',
+				'export approve keuangan',
 			],
 			'rekap pengajuan' => [
 				'manage rekap pengajuan',

@@ -70,7 +70,7 @@ Pengajuan
                     <td>{{ \Illuminate\Support\Carbon::parse($item->created_at)->setTimezone('Asia/Jakarta')->format('d-m-Y H:i:s') }}</td>
                     <td>
                         @if($item->is_approve)
-                            <span class="badge badge-success">Disetujui</span>
+                            <span class="badge badge-success">Disetujui Perpustakaan</span>
                         @elseif($item->is_reject)
                             <span class="badge badge-danger">Ditolak</span>
                         @else

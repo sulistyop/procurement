@@ -1,13 +1,14 @@
 <?php
 
 use Illuminate\Support\Facades\Route;
-use App\Http\Controllers\PengajuanController;
-use App\Http\Controllers\Auth\RegisterController;
 use App\Http\Controllers\RoleController;
 use App\Http\Controllers\UserController;
 use App\Http\Controllers\PenggunaController;
-use App\Http\Controllers\RolePermissionController;
+use App\Http\Controllers\PengajuanController;
 use App\Http\Controllers\AssignRoleController;
+use App\Http\Controllers\Auth\RegisterController;
+use App\Http\Controllers\RolePermissionController;
+use App\Http\Controllers\ApproveKeuanganController;
 
 /*
 |--------------------------------------------------------------------------
@@ -49,10 +50,18 @@ Route::middleware('auth')->group(function () {
     Route::get('/pengajuan/{pengajuan}/approve', [PengajuanController::class, 'approve'])->name('pengajuan.approve');
     Route::post('/pengajuan/{pengajuan}/approve', [PengajuanController::class, 'storeApproval'])->name('pengajuan.storeApproval');
 	
+    // Route::resource('approve-keuangan', ApproveKeuanganController::class);
+    Route::get('/approve-keuangan', [ApproveKeuanganController::class, 'index'])->name('approve-keuangan.index');
+    Route::get('/approve-keuangan/create', [ApproveKeuanganController::class, 'create'])->name('approve-keuangan.create');
+    Route::post('/approve-keuangan', [ApproveKeuanganController::class, 'store'])->name('approve-keuangan.store');
+    Route::get('/approve-keuangan/{approveKeuangan}', [ApproveKeuanganController::class, 'show'])->name('approve-keuangan.show');
+    Route::get('/approve-keuangan/{approveKeuangan}/edit', [ApproveKeuanganController::class, 'edit'])->name('approve-keuangan.edit');
+    Route::put('/approve-keuangan/{approveKeuangan}', [ApproveKeuanganController::class, 'update'])->name('approve-keuangan.update');    
+    Route::delete('/approve-keuangan/{approveKeuangan}', [ApproveKeuanganController::class, 'destroy'])->name('approve-keuangan.destroy');
 	
-	// Rekap Pengajuan
+    // Rekap Pengajuan
 	Route::get('/rekap-pengajuan', [App\Http\Controllers\RekapPengajuanController::class, 'index'])->name('rekap-pengajuan.index');
-	
+
 	Route::get('pengajuan/import', [PengajuanController::class, 'importForm'])->name('pengajuan.importForm');
 	Route::post('pengajuan/import', [PengajuanController::class, 'import'])->name('pengajuan.import');
 

@@ -101,7 +101,7 @@
                 @can('manage approve keuangan')
                 <li class="nav-item">
                     <a class="nav-link text-white {{ Request::is('approve-keuangan') ? 'active' : '' }}" href="{{ route('approve-keuangan.index') }}">
-                        <i class="fas fa-file-invoice"></i>Approve Keuangan
+                        <i class="fas fa-file-invoice"></i>Bukti Approve Keuangan
                     </a>                        
                 </li>
                 @endcan

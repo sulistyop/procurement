@@ -12,7 +12,7 @@
                 <form id="uploadForm" action="{{ route('pengajuan.import') }}" method="POST" enctype="multipart/form-data">
                     @csrf
                     <div class="form-group">
-                        <label for="file">Choose Excel file</label>
+                        <label for="file">Format File Excel : buku - pengarang - jumlah usulan</label>
                         <input type="file" class="form-control" id="file" name="file" required>
                     </div>
                     <button type="submit" class="btn btn-primary">Upload</button>

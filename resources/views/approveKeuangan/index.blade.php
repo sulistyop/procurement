@@ -91,36 +91,57 @@ Keuangan
 @endsection
 
 @push('script-page')
-@section('scripts')
-<script>
-$(document).on('click', '.editApproveKeuangan', function() {
-    const id = $(this).data('id');
-    const nomorSurat = $(this).data('nomorSurat');
-    const nomorBukti = $(this).data('nomorBukti');
-    const surat = $(this).data('surat');
-    const buktiTransaksi = $(this).data('buktiTransaksi');
+<script type="text/javascript">
+    $(document).ready(function() {
+        $('#customers').DataTable({
+            "paging": true,
+            "lengthChange": true,
+            "searching": true,
+            "ordering": true,
+            "info": true,
+            "autoWidth": false,
+        });
 
-    // Set the action URL for the form
-    $('#editApproveKeuanganForm').attr('action', `/approve-keuangan/${id}`);
+        $(document).on('click', '.editApproveKeuangan', function() {
+            const id = $(this).data('id');
+            const nomorSurat = $(this).data('nomorsurat');
+            const nomorBukti = $(this).data('nomorbukti');
+            const surat = $(this).data('surat');
+            const buktiTransaksi = $(this).data('buktitransaksi');
 
-    // Set the values in the modal
-    $('#nomorSurat').val(nomorSurat);
-    $('#nomorBukti').val(nomorBukti);
-    
-    // Set the current file links
-    $('#currentSurat').attr('href', `/storage/${surat}`);
-    $('#currentBukti').attr('href', `/storage/${buktiTransaksi}`);
-});
+            // Set the action URL for the form
+            $('#editApproveKeuanganForm').attr('action', '{{ route('approve-keuangan.update', ':id') }}'.replace(':id', id));
 
+            // Set the values in the modal
+            $('#nomorSurat').val(nomorSurat);
+            $('#nomorBukti').val(nomorBukti);
+            
+            // Set the current file links
+            $('#currentSurat').attr('href', `/storage/${surat}`);
+            $('#currentBukti').attr('href', `/storage/${buktiTransaksi}`);
+        });
 
-</script>
-@endsection
+        $('#tambahApproveKeuanganModal').on('shown.bs.modal', function () {
+            $('.select2').select2({
+                placeholder: "Pilih opsi",
+                allowClear: true,
+                dropdownParent: $('#tambahApproveKeuanganModal')
+            });
+        });
 
-@if ($errors->any())
-    <script type="text/javascript">
+        $('#editApproveKeuanganModal').on('shown.bs.modal', function () {
+            $('.select2').select2({
+                placeholder: "Pilih opsi",
+                allowClear: true,
+                dropdownParent: $('#editApproveKeuanganModal')
+            });
+        });
+    });
+
+    @if ($errors->any())
         $(document).ready(function() {
             $('#tambahApproveKeuanganModal').modal('show');
         });
-    </script>
-@endif
+    @endif
+</script>
 @endpush

@@ -45,8 +45,10 @@ class PermissionsTableSeeder extends Seeder
 			],
 			'approve keuangan' => [
 				'manage approve keuangan',
+				'create approve keuangan',
+				'edit approve keuangan',
+				'delete approve keuangan',
 				'view approve keuangan',
-				'export approve keuangan',
 			],
 			'rekap pengajuan' => [
 				'manage rekap pengajuan',

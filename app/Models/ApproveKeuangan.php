@@ -14,6 +14,6 @@ class ApproveKeuangan extends Model
         'surat',
         'nomorBukti',
         'buktiTransaksi',
-        'user_id', // Jika Anda menyimpan ID pengguna yang mengajukan
+        'user_id',
     ];
 }

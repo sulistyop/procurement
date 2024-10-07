@@ -16,11 +16,12 @@
             <tbody>
             @foreach ($activityLogs as $log)
                 @php
+                    // Menetapkan kelas berdasarkan aksi
                     $actionClass = '';
                     if (stripos($log->action, 'Mengubah') !== false) {
                         $actionClass = 'text-warning';
-                    } elseif (stripos($log->action, 'Membuat') !== false) {
-                        $actionClass = 'text-success';
+                    } elseif (stripos($log->action, 'Membuat') !== false || stripos($log->action, 'Menambah Approve Keuangan') !== false) {
+                        $actionClass = 'text-success'; // Ini mencakup juga aksi menambah approve keuangan
                     } elseif (stripos($log->action, 'Menyetujui') !== false) {
                         $actionClass = 'text-primary';
                     } elseif (stripos($log->action, 'Menolak') !== false) {
@@ -37,14 +38,14 @@
                     <td class="{{ $actionClass }}">{{ $log->action }}</td>
                     <td class="{{ $actionClass }}">
                         @if($log->data)
-                            <a href="{{ route('pengajuan.show', $log->data->id) }}" class="btn btn-info btn-sm" data-toggle="tooltip" data-placement="top" title="View">
-                                {{ $log->data->judul }}
-                            </a>
+                            {{ class_basename($log->data) }}
                         @else
                             {{ class_basename($log->model) }}
                         @endif
                     </td>
-                    <td class="{{ $actionClass }}">{{ \Illuminate\Support\Carbon::parse($log->created_at)->translatedFormat('l, d F Y H:i:s') }}</td>
+                    <td class="{{ $actionClass }}">
+                        {{ \Illuminate\Support\Carbon::parse($log->created_at)->setTimezone('Asia/Jakarta')->translatedFormat('l, d F Y H:i:s') }}
+                    </td>                    
                 </tr>
             @endforeach
             </tbody>
@@ -54,10 +55,11 @@
 
 @push('style-page')
     <style>
-        .yellow { color: yellow; }
-        .green { color: green; }
-        .blue { color: blue; }
-        .red { color: red; }
+        .text-success { color: green !important; }
+        .text-warning { color: orange !important; }
+        .text-danger { color: red !important; }
+        .text-primary { color: blue !important; }
+        .text-info { color: deepskyblue !important; }
     </style>
 @endpush
 

@@ -11,7 +11,7 @@
                 <form id="editApproveKeuanganForm" action="" method="POST" enctype="multipart/form-data">
                     @csrf
                     @method('PUT')
-                    
+
                     <div class="form-group">
                         <label for="nomorSurat">Nomor Surat</label>
                         <input type="text" class="form-control" id="nomorSurat" name="nomorSurat" required>
@@ -23,7 +23,7 @@
                     <div class="form-group">
                         <label for="surat">File Surat (Saat Ini)</label>
                         <div>
-                            <a id="currentSurat" href="#" target="_blank">Lihat Surat</a>
+                            <a a href="{{ asset('storage/' . $item->surat) }}" target="_blank">Lihat Surat</a>
                         </div>
                         <label for="surat">Unggah File Surat</label>
                         <input type="file" class="form-control" id="surat" name="surat" accept="application/pdf">
@@ -43,7 +43,7 @@
                     <div class="form-group">
                         <label for="buktiTransaksi">File Bukti Transaksi (Saat Ini)</label>
                         <div>
-                            <a id="currentBukti" href="#" target="_blank">Lihat Bukti</a>
+                            <a href="{{ asset('storage/' . $item->surat) }}" target="_blank">Lihat Bukti</a>
                         </div>
                         <label for="buktiTransaksi">Unggah File Bukti Transaksi</label>
                         <input type="file" class="form-control" id="buktiTransaksi" name="buktiTransaksi" accept="application/pdf">

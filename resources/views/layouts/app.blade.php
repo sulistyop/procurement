@@ -91,19 +91,19 @@
                         </a>
                     </li>
                 @endcan
-                {{-- @can('approve keuangan') --}}
-                    <li class="nav-item">
-                        <a class="nav-link text-white {{ Request::is('approve-keuangan') ? 'active' : '' }}" href="{{ route('approve-keuangan.index') }}">
-                            <i class="fas fa-file-invoice"></i>Approve Keuangan
-                        </a>                        
-                    </li>
-                {{-- @endcan --}}
                 @can('manage rekap pengajuan')
                     <li class="nav-item">
                         <a class="nav-link text-white {{ Request::is('rekap-pengajuan') ? 'active' : '' }}" href="{{ route('rekap-pengajuan.index') }}">
                             <i class="fas fa-table"></i> Rekap Pengajuan
                         </a>
                     </li>
+                @endcan
+                @can('manage approve keuangan')
+                <li class="nav-item">
+                    <a class="nav-link text-white {{ Request::is('approve-keuangan') ? 'active' : '' }}" href="{{ route('approve-keuangan.index') }}">
+                        <i class="fas fa-file-invoice"></i>Approve Keuangan
+                    </a>                        
+                </li>
                 @endcan
                 @can('manage users')
                     <a class="nav-link text-white {{ Request::is('user*') || Request::is('roles-permissions*') ? ' ' : '' }}" href="#userMenu" data-toggle="collapse" aria-expanded="false" aria-controls="userMenu">

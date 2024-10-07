@@ -24,6 +24,7 @@ class PengajuanExport implements FromCollection, WithHeadings, WithStyles, WithE
 	{
 		// dd($this->pengajuan);
 		return $this->pengajuan->map(function ($item, $key) {
+			$totalHarga = $item->harga * ($item->diterima ?? 0);
 			return [
 				'No' => $key + 1,
 				'Prodi' => $item->prodi->nama,
@@ -36,7 +37,8 @@ class PengajuanExport implements FromCollection, WithHeadings, WithStyles, WithE
 				'Usulan' => $item->eksemplar,
 				'Diterima' => (string)($item->diterima ?? "-"),
 				'Harga' => $item->harga ?? "-",
-				'Alasan' => $item->reason ?? "-",
+				'Total Harga' => $totalHarga ?? "-" ,
+				'alasan' => $item->reason ?? "-",
 			];
 		});
 	}
@@ -50,12 +52,13 @@ class PengajuanExport implements FromCollection, WithHeadings, WithStyles, WithE
 			'Judul',
 			'Edisi',
 			'Penerbit',
-			'Author',
+			'Pengarang',
 			'Tahun',
 			'Usulan',
 			'Diterima',
 			'Harga',
-			'Alasan',
+			'Total Harga',
+			'Alasan Ditolak',
 		];
 	}
 	
@@ -63,7 +66,7 @@ class PengajuanExport implements FromCollection, WithHeadings, WithStyles, WithE
 	{
 		return [
 			1 => ['font' => ['bold' => true, 'color' => ['argb' => 'FFFFFF']]],
-			'A1:K1' => ['fill' => ['fillType' => 'solid', 'startColor' => ['argb' => '4CAF50']]],
+			'A1:M1' => ['fill' => ['fillType' => 'solid', 'startColor' => ['argb' => '4CAF50']]],
 		];
 	}
 	
@@ -72,10 +75,10 @@ class PengajuanExport implements FromCollection, WithHeadings, WithStyles, WithE
 		return [
 			\Maatwebsite\Excel\Events\AfterSheet::class => function (\Maatwebsite\Excel\Events\AfterSheet $event) {
 				$event->sheet->getDelegate()->freezePane('A2');
-				$event->sheet->getDelegate()->getStyle('A1:K1')->getFont()->setBold(true);
+				$event->sheet->getDelegate()->getStyle('A1:M1')->getFont()->setBold(true);
 				
 				// Auto-size all columns
-				foreach (range('A', 'K') as $column) {
+				foreach (range('A', 'M') as $column) {
 					$event->sheet->getDelegate()->getColumnDimension($column)->setAutoSize(true);
 				}
 			},

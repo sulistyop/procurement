@@ -72,7 +72,7 @@ class RekapPengajuanController extends Controller
 			return Excel::download($excelReport, $fileName);
 		}
 	
-		return view('rekapPengajuan.index', compact('pengajuan', 'years', 'prodis'));
+		return view('admin.rekapPengajuan.index', compact('pengajuan', 'years', 'prodis'));
 	}
 	
 

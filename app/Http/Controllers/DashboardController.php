@@ -117,6 +117,6 @@ class DashboardController extends Controller
 		// Ambil semua prodi untuk filter
 		$prodis = Prodi::all();
 		
-		return view('dashboard.index', compact('totalBooks', 'acceptedBooks', 'pendingBooks', 'rejectBooks', 'monthlyData', 'booksPerProdi', 'years', 'prodis'));
+		return view('admin.dashboard.index', compact('totalBooks', 'acceptedBooks', 'pendingBooks', 'rejectBooks', 'monthlyData', 'booksPerProdi', 'years', 'prodis'));
 	}
 }

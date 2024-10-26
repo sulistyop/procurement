@@ -1,12 +1,12 @@
-@extends('layouts.app')
+@extends('admin.layouts.app')
 
 @section('title')
-Pengajuan
+    Pengajuan
 @endsection
 
 @push('style-page')
     <style>
-        .custom-select{
+        .custom-select {
             width: 70px !important;
         }
     </style>
@@ -38,7 +38,7 @@ Pengajuan
                 <i class="fa fa-download"></i>
             </a>
         </div>
-        
+
         <table class="table mt-4" id="customers">
             <thead>
             <tr>
@@ -60,7 +60,8 @@ Pengajuan
                     <td>
                         {{--data ini pernah diajukan di tahun --}}
                         @if($item->is_diajukan)
-                            {{ $item->isbn }} <span class="badge badge-info">Pernah diajukan tahun  {{ \Illuminate\Support\Carbon::parse($item->date_pernah_diajukan)->format('d-m-Y')  }}</span>
+                            {{ $item->isbn }} <span
+                                    class="badge badge-info">Pernah diajukan tahun  {{ \Illuminate\Support\Carbon::parse($item->date_pernah_diajukan)->format('d-m-Y')  }}</span>
                         @else
                             {{ $item->isbn }}
                         @endif
@@ -75,54 +76,67 @@ Pengajuan
                             <span class="badge badge-danger">Ditolak</span>
                         @else
                             <span class="badge badge-warning">Proses</span>
-                        @endif
+                    @endif
                     <td>
                         @can('view pengajuan')
-                        <a href="{{ route('pengajuan.show', $item->id) }}" class="btn btn-info btn-sm" data-toggle="tooltip" data-placement="top" title="View">
-                            <i class="fas fa-binoculars"></i>
-                        </a>
+                            <a href="{{ route('pengajuan.show', $item->id) }}" class="btn btn-info btn-sm"
+                               data-toggle="tooltip" data-placement="top" title="View">
+                                <i class="fas fa-binoculars"></i>
+                            </a>
                         @endcan
                         @if(!$item->is_approve && !$item->is_reject)
                             @can('edit pengajuan')
-                            <a href="#" class="btn btn-warning btn-sm" data-toggle="modal" data-target="#editPengajuanModal" data-id="{{ $item->id }}" data-prodi="{{ $item->prodi->id }}" data-judul="{{ $item->judul }}" data-edisi="{{ $item->edisi }}" data-isbn="{{ $item->isbn }}" data-penerbit="{{ $item->penerbit }}" data-author="{{ $item->author }}" data-tahun="{{ $item->tahun }}" data-eksemplar="{{ $item->eksemplar }}" data-toggle="tooltip" data-placement="top" title="Edit">
-                                <i class="fas fa-edit"></i>
-                            </a>
+                                <a href="#" class="btn btn-warning btn-sm" data-toggle="modal"
+                                   data-target="#editPengajuanModal" data-id="{{ $item->id }}"
+                                   data-prodi="{{ $item->prodi->id }}" data-judul="{{ $item->judul }}"
+                                   data-edisi="{{ $item->edisi }}" data-isbn="{{ $item->isbn }}"
+                                   data-penerbit="{{ $item->penerbit }}" data-author="{{ $item->author }}"
+                                   data-tahun="{{ $item->tahun }}" data-eksemplar="{{ $item->eksemplar }}"
+                                   data-toggle="tooltip" data-placement="top" title="Edit">
+                                    <i class="fas fa-edit"></i>
+                                </a>
                             @endif
                             @can('delete pengajuan')
-                            <form action="{{ route('pengajuan.destroy', $item->id) }}" method="POST" style="display:inline;">
-                                @csrf
-                                @method('DELETE')
-                                <button type="submit" class="btn btn-danger btn-sm" onclick="return confirm('Yakin ingin menghapus?')" data-toggle="tooltip" data-placement="top" title="Delete">
-                                    <i class="fas fa-trash-alt"></i>
-                                </button>
-                            </form>
+                                <form action="{{ route('pengajuan.destroy', $item->id) }}" method="POST"
+                                      style="display:inline;">
+                                    @csrf
+                                    @method('DELETE')
+                                    <button type="submit" class="btn btn-danger btn-sm"
+                                            onclick="return confirm('Yakin ingin menghapus?')" data-toggle="tooltip"
+                                            data-placement="top" title="Delete">
+                                        <i class="fas fa-trash-alt"></i>
+                                    </button>
+                                </form>
                             @endcan
                             @can('approve pengajuan')
-                                <button type="button" class="btn btn-success btn-sm" data-toggle="modal" data-target="#approveModal" data-all="{{ $item }}" data-id="{{ $item->id }}" data-jumlah="{{ $item->eksemplar }}" data-toggle="tooltip" data-placement="top" title="Approve">
+                                <button type="button" class="btn btn-success btn-sm" data-toggle="modal"
+                                        data-target="#approveModal" data-all="{{ $item }}" data-id="{{ $item->id }}"
+                                        data-jumlah="{{ $item->eksemplar }}" data-toggle="tooltip" data-placement="top"
+                                        title="Approve">
                                     <i class="fas fa-check"></i>
                                 </button>
                             @endcan
                         @endif
                     </td>
                 </tr>
-                
+
             @endforeach
             </tbody>
         </table>
 
-        @include('component.edit-modal')
+        @include('admin.component.edit-modal')
         <!-- Include the Modal Component -->
-        @include('component.tambah-pengajuan-modal')
+        @include('admin.component.tambah-pengajuan-modal')
         <!-- Single Approve Modal -->
-        @include('component.approve-modal')
+        @include('admin.component.approve-modal')
         <!-- Upload Modal -->
-        @include('component.upload-modal')
+        @include('admin.component.upload-modal')
     </div>
 @endsection
 
 @push('script-page')
     <script type="text/javascript">
-        $(document).ready(function() {
+        $(document).ready(function () {
             $('#customers').DataTable({
                 "paging": true,
                 "lengthChange": true,
@@ -163,7 +177,7 @@ Pengajuan
 
             // masukan action ke form
             formData += '&action=' + action;
-            
+
 
             $.ajax({
                 url: actionUrl,
@@ -191,7 +205,7 @@ Pengajuan
             });
         });
 
-        $('#approveForm button[type="submit"]').on('click', function() {
+        $('#approveForm button[type="submit"]').on('click', function () {
             $('#approveForm button[type="submit"]').removeAttr('clicked');
             $(this).attr('clicked', 'true');
         });
@@ -221,7 +235,7 @@ Pengajuan
             modal.find('.modal-body #eksemplar').val(eksemplar);
         });
 
-        document.addEventListener('DOMContentLoaded', function() {
+        document.addEventListener('DOMContentLoaded', function () {
             // Initialize Select2 when the modal is shown
             $('#tambahPengajuanModal').on('shown.bs.modal', function () {
                 $('.select2').select2({
@@ -243,7 +257,7 @@ Pengajuan
     </script>
     @if ($errors->any())
         <script type="text/javascript">
-            $(document).ready(function() {
+            $(document).ready(function () {
                 $('#tambahPengajuanModal').modal('show');
             });
         </script>

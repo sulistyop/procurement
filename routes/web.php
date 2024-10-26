@@ -25,15 +25,18 @@ use App\Http\Controllers\ApproveKeuanganController;
 
 Auth::routes();
 
-Route::get('/home', [App\Http\Controllers\HomeController::class, 'index'])->name('home');
+
 
 Route::middleware('auth')->group(function () {
+	
+	Route::get('/', [\App\Http\Controllers\HomeController::class, 'index'])->name('home');
+	Route::get('/show/{pengajuan}', [\App\Http\Controllers\HomeController::class, 'show'])->name('home-show');
 	
     Route::post('/roles', [RoleController::class, 'createRole']);
     Route::post('/user/{userId}/assign-role-permission', [UserController::class, 'assignRole']);
 
 	// dashboard
-	Route::get('/', [\App\Http\Controllers\DashboardController::class, 'index'])->name('dashboard');
+	Route::get('/dashboard', [\App\Http\Controllers\DashboardController::class, 'index'])->name('dashboard');
 	
 	// route group pengajuan dengan prefix pengajuan
 	Route::group(['prefix' => 'pengajuan'], function () {

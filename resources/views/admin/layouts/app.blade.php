@@ -80,7 +80,7 @@
             </div>
             <ul class="nav flex-column">
                 <li class="nav-item">
-                    <a class="nav-link text-white {{ Request::is('/') ? 'active' : '' }}" href="{{ url('/') }}">
+                    <a class="nav-link text-white {{ Request::is('/dashboard') ? 'active' : '' }}" href="{{ url('/dashboard') }}">
                         <i class="fas fa-home"></i> Dashboard
                     </a>
                 </li>

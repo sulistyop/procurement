@@ -1,4 +1,4 @@
-@extends('layouts.app')
+@extends('admin.layouts.app')
 
 @section('content')
     <div class="container">
@@ -45,7 +45,7 @@
                     </td>
                     <td class="{{ $actionClass }}">
                         {{ \Illuminate\Support\Carbon::parse($log->created_at)->setTimezone('Asia/Jakarta')->translatedFormat('l, d F Y H:i:s') }}
-                    </td>                    
+                    </td>
                 </tr>
             @endforeach
             </tbody>
@@ -55,17 +55,31 @@
 
 @push('style-page')
     <style>
-        .text-success { color: green !important; }
-        .text-warning { color: orange !important; }
-        .text-danger { color: red !important; }
-        .text-primary { color: blue !important; }
-        .text-info { color: deepskyblue !important; }
+        .text-success {
+            color: green !important;
+        }
+
+        .text-warning {
+            color: orange !important;
+        }
+
+        .text-danger {
+            color: red !important;
+        }
+
+        .text-primary {
+            color: blue !important;
+        }
+
+        .text-info {
+            color: deepskyblue !important;
+        }
     </style>
 @endpush
 
 @push('script-page')
     <script>
-        $(document).ready(function() {
+        $(document).ready(function () {
             $('#customers').DataTable();
         });
     </script>

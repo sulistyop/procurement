@@ -17,7 +17,7 @@ class RolePermissionController extends Controller
 		$groupedPermissions = $permissions->groupBy(function ($item) {
 			return Str::slug($item->module);
 		});
-		return view('role-permission.edit', compact('roles', 'groupedPermissions'));
+		return view('admin.role-permission.edit', compact('roles', 'groupedPermissions'));
 	}
 	
 	public function update(Request $request, $roleId)

@@ -1,4 +1,4 @@
-@extends('layouts.applog')
+@extends('admin.layouts.applog')
 
 @section('content')
 <div class="container">

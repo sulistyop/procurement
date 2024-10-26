@@ -9,6 +9,11 @@
                 </button>
             </div>
             <div class="modal-body">
+                @php
+                    if(!isset($routeView)){
+                        $route = '';
+                    }
+                @endphp
                 <form action="{{ route('pengajuan.store') }}" method="POST">
                     @csrf
                     <div class="form-group">

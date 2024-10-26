@@ -13,13 +13,13 @@ class ApproveKeuanganController extends Controller
         // Retrieve all approve keuangan entries
         $approveKeuangan = ApproveKeuangan::all();
 		
-        return view('approveKeuangan.index', compact('approveKeuangan'));
+        return view('admin.approveKeuangan.index', compact('approveKeuangan'));
     }
 
     public function create()
     {
         // Show form to create new approve keuangan
-        return view('approveKeuangan.create');
+        return view('admin.approveKeuangan.create');
     }
 
     public function store(Request $request)

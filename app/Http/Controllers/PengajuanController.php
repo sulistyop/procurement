@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use App\Models\Prodi;
 use App\Models\Pengajuan;
+use App\Services\PengajuanService;
 use Illuminate\Http\Request;
 use App\Import\PengajuanImport;
 use App\Exports\PengajuanExport;
@@ -13,42 +14,23 @@ use Maatwebsite\Excel\Facades\Excel;
 
 class PengajuanController extends Controller
 {
+	protected $pengajuanService;
+	
+	public function __construct(PengajuanService $pengajuanService)
+	{
+		$this->pengajuanService = $pengajuanService;
+	}
+	
     public function index()
     {
-        // Menampilkan semua data pengajuan
-	    $pengajuan = Pengajuan::haveProdi()->get();
-	    
-	    $pengajuan = $pengajuan->map(function ($item) {
-            // jika isbn pernah diajukan sebelum tahun sekarang berdasarkan created_at, jika diajukan lagi berikan mark bahwa buku tersebut pernah diajukan
-            $item->is_diajukan = Pengajuan::where('isbn', $item->isbn)
-	            ->where('isbn', '!=', null)
-	            ->where('isbn', '!=', '-')
-	            ->where('isbn', '!=', ' ')
-	            ->where('prodi_id', $item->prodi_id)
-                ->count() > 1;
-            if($item->is_diajukan){
-	            $item->date_pernah_diajukan = Pengajuan::where('isbn', $item->isbn)
-		            ->orderBy('created_at','desc')
-		            ->first()
-		            ->created_at ?? null;
-            }
-			$item->nama_prodi = $item->prodi->nama;
-			$item->prodi_id = $item->prodi->id;
-            return $item;
-        });
+		$pengajuan = $this->pengajuanService->getPengajuan();
 		
 		if(request()->has('export')) {
-			$excelReport = new PengajuanExport($pengajuan);
-			$fileName = 'daftar_pengajuan_' . date('Y-m-d_H-i-s') . '.xlsx';
-			return Excel::download($excelReport, $fileName);
+			return $this->pengajuanService->exportPengajuan($pengajuan);
 		}
 		
-		// $prodi = Prodi::all();
-		$user = Auth::user();
-		$prodi = Prodi::when($user->prodi_id, function($query) use ($user){
-			return $query->where('id', $user->prodi_id);
-  		})->get();
-        return view('pengajuan.index', compact('pengajuan', 'prodi'));
+		$prodi = $this->pengajuanService->getProdi();
+        return view('admin.pengajuan.index', compact('pengajuan', 'prodi'));
     }
 
     public function create()
@@ -59,7 +41,7 @@ class PengajuanController extends Controller
 		// 	return $query->where('id', $user->prodi_id);
  		//  });
 		// return view('pengajuan.create', compact('prodi'));
-        return view('pengajuan.create');
+        return view('admin.pengajuan.create');
     }
 
     public function store(Request $request)
@@ -101,7 +83,7 @@ class PengajuanController extends Controller
     {
 		if(Auth::user()->can('view pengajuan')) {
 	        // Menampilkan detail pengajuan tertentu
-	        return view('pengajuan.show', compact('pengajuan'));
+	        return view('admin.pengajuan.show', compact('pengajuan'));
 		}else{
 			return redirect()->route('pengajuan.index')->with('error', 'Anda tidak memiliki akses untuk melihat detail pengajuan.');
 		}
@@ -110,7 +92,7 @@ class PengajuanController extends Controller
     public function edit(Pengajuan $pengajuan)
     {
         // Menampilkan form untuk mengedit pengajuan
-        return view('pengajuan.edit', compact('pengajuan'));
+        return view('admin.pengajuan.edit', compact('pengajuan'));
     }
 
     public function update(Request $request, Pengajuan $pengajuan)
@@ -147,7 +129,7 @@ class PengajuanController extends Controller
     public function approve($id)
     {
         $pengajuan = Pengajuan::findOrFail($id);
-        return view('pengajuan.approve', compact('pengajuan'));
+        return view('admin.pengajuan.approve', compact('pengajuan'));
     }
 
 	public function storeApproval(Request $request, Pengajuan $pengajuan)
@@ -190,7 +172,7 @@ class PengajuanController extends Controller
 	
 	public function importForm()
 	{
-		return view('pengajuan.import');
+		return view('admin.pengajuan.import');
 	}
 	
 	public function import(Request $request)

@@ -31,7 +31,7 @@ class UserController extends Controller
 	public function index()
 	{
 		$users = User::with('roles', 'permissions')->get();
-		return view('pengguna.index', compact('users'));
+		return view('admin.pengguna.index', compact('users'));
 	}
 	
 	public function create()
@@ -39,7 +39,7 @@ class UserController extends Controller
 		$roles = Role::all();
 		$permissions = Permission::all();
 		$prodis = Prodi::all(); // Ambil semua prodi
-		return view('pengguna.create', compact('roles', 'permissions', 'prodis')); // Kirim ke view
+		return view('admin.pengguna.create', compact('roles', 'permissions', 'prodis')); // Kirim ke view
 	}
 	
 	public function store(Request $request)
@@ -73,7 +73,7 @@ class UserController extends Controller
 		$roles = Role::all();
 		$permissions = Permission::all();
 		$prodis = Prodi::all();
-		return view('pengguna.edit', compact('user', 'roles', 'permissions', 'prodis'));
+		return view('admin.pengguna.edit', compact('user', 'roles', 'permissions', 'prodis'));
 	}
 	
 	public function update(Request $request, User $user)

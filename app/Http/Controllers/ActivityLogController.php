@@ -16,6 +16,6 @@ class ActivityLogController extends Controller
 				return $activityLog;
 			});
 		
-		return view('activity_logs.index', compact('activityLogs'));
+		return view('admin.activity_logs.index', compact('activityLogs'));
 	}
 }

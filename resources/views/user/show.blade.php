@@ -1,4 +1,4 @@
-@extends('layouts.app')
+@extends('user.layouts.app-user')
 
 @section('content')
     <div>
@@ -48,10 +48,10 @@
                     <td>{{ \Carbon\Carbon::parse($pengajuan->created_at)->setTimezone('Asia/Jakarta')->format('d M Y H:i') }}</td>
                 </tr>
                 @role('admin')
-                    <tr>
-                        <th>Harga</th>
-                        <td>Rp. {{ number_format($pengajuan->harga, 2, ',', '.') }}</td>
-                    </tr>
+                <tr>
+                    <th>Harga</th>
+                    <td>Rp. {{ number_format($pengajuan->harga, 2, ',', '.') }}</td>
+                </tr>
                 @endrole
                 <tr>
                     <th>Status</th>
@@ -70,7 +70,7 @@
                     <td>{{ $pengajuan->reason}}</td>
                 </tr>
             </table>
-            <a href="{{ route('pengajuan.index') }}" class="btn btn-secondary">Kembali</a>
+            <a href="{{ route('home') }}" class="btn btn-secondary">Kembali</a>
         </form>
 
 
@@ -93,4 +93,4 @@
     </script>
 @endsection
 
-    
+

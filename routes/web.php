@@ -35,29 +35,33 @@ Route::middleware('auth')->group(function () {
 	// dashboard
 	Route::get('/', [\App\Http\Controllers\DashboardController::class, 'index'])->name('dashboard');
 	
+	// route group pengajuan dengan prefix pengajuan
+	Route::group(['prefix' => 'pengajuan'], function () {
+		Route::get('/', [PengajuanController::class, 'index'])->name('pengajuan.index');
+		Route::get('/create', [PengajuanController::class, 'create'])->name('pengajuan.create');
+		
+		Route::post('/', [PengajuanController::class, 'store'])->name('pengajuan.store');
+		Route::get('/{pengajuan}', [PengajuanController::class, 'show'])->name('pengajuan.show');
+		
+		Route::get('/{pengajuan}/edit', [PengajuanController::class, 'edit'])->name('pengajuan.edit');
+		Route::put('/{pengajuan}', [PengajuanController::class, 'update'])->name('pengajuan.update');
+		Route::delete('/{pengajuan}', [PengajuanController::class, 'destroy'])->name('pengajuan.destroy');
+		
+		// Approval routes
+		Route::get('/{pengajuan}/approve', [PengajuanController::class, 'approve'])->name('pengajuan.approve');
+		Route::post('/{pengajuan}/approve', [PengajuanController::class, 'storeApproval'])->name('pengajuan.storeApproval');
+	});
 	
-    Route::get('/pengajuan', [PengajuanController::class, 'index'])->name('pengajuan.index');
-    Route::get('/pengajuan/create', [PengajuanController::class, 'create'])->name('pengajuan.create');
-    
-    Route::post('/pengajuan', [PengajuanController::class, 'store'])->name('pengajuan.store');
-    Route::get('/pengajuan/{pengajuan}', [PengajuanController::class, 'show'])->name('pengajuan.show');
-    
-    Route::get('/pengajuan/{pengajuan}/edit', [PengajuanController::class, 'edit'])->name('pengajuan.edit');
-    Route::put('/pengajuan/{pengajuan}', [PengajuanController::class, 'update'])->name('pengajuan.update');
-    Route::delete('/pengajuan/{pengajuan}', [PengajuanController::class, 'destroy'])->name('pengajuan.destroy');
-    
-    // Approval routes
-    Route::get('/pengajuan/{pengajuan}/approve', [PengajuanController::class, 'approve'])->name('pengajuan.approve');
-    Route::post('/pengajuan/{pengajuan}/approve', [PengajuanController::class, 'storeApproval'])->name('pengajuan.storeApproval');
-	
-    // Route::resource('approve-keuangan', ApproveKeuanganController::class);
-    Route::get('/approve-keuangan', [ApproveKeuanganController::class, 'index'])->name('approve-keuangan.index');
-    Route::get('/approve-keuangan/create', [ApproveKeuanganController::class, 'create'])->name('approve-keuangan.create');
-    Route::post('/approve-keuangan', [ApproveKeuanganController::class, 'store'])->name('approve-keuangan.store');
-    Route::get('/approve-keuangan/{approveKeuangan}', [ApproveKeuanganController::class, 'show'])->name('approve-keuangan.show');
-    Route::get('/approve-keuangan/{approveKeuangan}/edit', [ApproveKeuanganController::class, 'edit'])->name('approve-keuangan.edit');
-    Route::put('/approve-keuangan/{approveKeuangan}', [ApproveKeuanganController::class, 'update'])->name('approve-keuangan.update');    
-    Route::delete('/approve-keuangan/{approveKeuangan}', [ApproveKeuanganController::class, 'destroy'])->name('approve-keuangan.destroy');
+	Route::group(['prefix' => 'approve-keuangan'], function () {
+	    // Route::resource('approve-keuangan', ApproveKeuanganController::class);
+	    Route::get('/', [ApproveKeuanganController::class, 'index'])->name('approve-keuangan.index');
+	    Route::get('/create', [ApproveKeuanganController::class, 'create'])->name('approve-keuangan.create');
+	    Route::post('/', [ApproveKeuanganController::class, 'store'])->name('approve-keuangan.store');
+	    Route::get('/{approveKeuangan}', [ApproveKeuanganController::class, 'show'])->name('approve-keuangan.show');
+	    Route::get('/{approveKeuangan}/edit', [ApproveKeuanganController::class, 'edit'])->name('approve-keuangan.edit');
+	    Route::put('/{approveKeuangan}', [ApproveKeuanganController::class, 'update'])->name('approve-keuangan.update');
+	    Route::delete('/{approveKeuangan}', [ApproveKeuanganController::class, 'destroy'])->name('approve-keuangan.destroy');
+	});
 	
     // Rekap Pengajuan
 	Route::get('/rekap-pengajuan', [App\Http\Controllers\RekapPengajuanController::class, 'index'])->name('rekap-pengajuan.index');

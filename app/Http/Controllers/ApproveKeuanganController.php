@@ -12,6 +12,7 @@ class ApproveKeuanganController extends Controller
     {
         // Retrieve all approve keuangan entries
         $approveKeuangan = ApproveKeuangan::all();
+		
         return view('approveKeuangan.index', compact('approveKeuangan'));
     }
 

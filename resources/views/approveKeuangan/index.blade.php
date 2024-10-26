@@ -115,7 +115,7 @@ Keuangan
             // Set the values in the modal
             $('#nomorSurat').val(nomorSurat);
             $('#nomorBukti').val(nomorBukti);
-            
+
             // Set the current file links
             $('#currentSurat').attr('href', `/storage/${surat}`);
             $('#currentBukti').attr('href', `/storage/${buktiTransaksi}`);

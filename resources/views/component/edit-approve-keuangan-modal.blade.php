@@ -23,7 +23,7 @@
                     <div class="form-group">
                         <label for="surat">File Surat (Saat Ini)</label>
                         <div>
-                            <a a href="{{ asset('storage/' . $item->surat) }}" target="_blank">Lihat Surat</a>
+                            <a id="currentSurat" href="#" target="_blank">Lihat Surat</a>
                         </div>
                         <label for="surat">Unggah File Surat</label>
                         <input type="file" class="form-control" id="surat" name="surat" accept="application/pdf">
@@ -43,7 +43,7 @@
                     <div class="form-group">
                         <label for="buktiTransaksi">File Bukti Transaksi (Saat Ini)</label>
                         <div>
-                            <a href="{{ asset('storage/' . $item->surat) }}" target="_blank">Lihat Bukti</a>
+                            <a id="currentBukti" href="#" target="_blank">Lihat Bukti</a>
                         </div>
                         <label for="buktiTransaksi">Unggah File Bukti Transaksi</label>
                         <input type="file" class="form-control" id="buktiTransaksi" name="buktiTransaksi" accept="application/pdf">

@@ -23,6 +23,10 @@
                         <input type="text" name="judul" id="judul" class="form-control">
                     </div>
                     <div class="form-group">
+                        <label for="edisi">Edisi</label>
+                        <input type="text" name="edisi" id="edisi" class="form-control">
+                    </div>
+                    <div class="form-group">
                         <label for="penerbit">Penerbit</label>
                         <input type="text" name="penerbit" id="penerbit" class="form-control">
                     </div>
@@ -32,7 +36,7 @@
                     </div>
                     <div class="form-group">
                         <label for="eksemplar">Jumlah Diterima</label>
-                        <input type="number" name="diterima" id="eksemplar" class="form-control">
+                        <input type="number" name="eksemplar" id="eksemplar" class="form-control">
                     </div>
                     <div class="form-group">
                         <label for="harga">Harga</label>

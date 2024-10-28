@@ -152,7 +152,7 @@ class PengajuanController extends Controller
 		$data = [
 			'is_approve' => $request->action === 'approve',
 			'is_reject' => $request->action === 'reject',
-			'diterima' => $request->action === 'approve' ? (int)$request->diterima : 0,
+			'diterima' => $request->action === 'approve' ? (int)$request->eksemplar : 0,
 			'approved_by' => $request->action === 'approve' ? (Auth::user() ? Auth::user()->id : 0) : null,
 			'rejected_by' => $request->action === 'reject' ? (Auth::user() ? Auth::user()->id : 0) : null,
 			'reason' => $request->action === 'reject' ? $request->reason : null,
@@ -169,7 +169,7 @@ class PengajuanController extends Controller
 		}
 	
 		// Melakukan pembaruan
-		$pengajuan->update(array_merge($data, $request->only(['judul', 'edisi', 'penerbit', 'author', 'tahun', 'eksemplar'])));
+		$pengajuan->update(array_merge($data, $request->only(['judul', 'isbn', 'edisi', 'penerbit', 'author', 'tahun', 'eksemplar'. 'diterima'])));
 	
 		// Menetapkan aktivitas log
 		$this->setLogActivity($request->action === 'approve' ? 'Menyetujui pengajuan' : 'Menolak pengajuan', $pengajuan);

@@ -36,10 +36,10 @@ Route::middleware('auth')->group(function () {
 	Route::get('/show/{pengajuan}', [\App\Http\Controllers\HomeController::class, 'show'])->name('home-show');
 	Route::get('/{pengajuan}/edit', [HomeController::class, 'edit'])->name('home-edit');
 	Route::put('/{pengajuan}', [HomeController::class, 'update'])->name('home-update');
-
+	Route::get('/rekap', [App\Http\Controllers\RekapPengajuanController::class, 'indexUser'])->name('home-rekap');
     Route::post('/roles', [RoleController::class, 'createRole']);
     Route::post('/user/{userId}/assign-role-permission', [UserController::class, 'assignRole']);
-
+	
 	// dashboard
 	Route::get('/dashboard', [\App\Http\Controllers\DashboardController::class, 'index'])->name('dashboard');
 	

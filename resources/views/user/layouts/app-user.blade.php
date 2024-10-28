@@ -173,11 +173,10 @@
             }
         }
         .btn-custom {
-            padding: 0.25rem 0.5rem; /* Mengatur padding atas/bawah dan kiri/kanan */
-            font-size: 0.8rem; /* Mengatur ukuran font */
-        }
-    
-    </style>
+        padding: 0.25rem 0.5rem; /* Mengatur padding atas/bawah dan kiri/kanan */
+        font-size: 0.8rem; /* Mengatur ukuran font */
+    }
+        </style>
     
 </head>
 <body>
@@ -231,9 +230,22 @@
 
 <main class="py-4">
     <div class="container">
+        <!-- Menu Navigation -->
+        <nav class="mb-3">
+            <ul class="nav nav-pills">
+                <li class="nav-item">
+                    <a class="nav-link" href="{{ route('home') }}" style="color: #003366;">Pengajuan</a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link" href="{{ route('home-rekap') }}" style="color: #003366;">Rekap</a>
+                </li>
+            </ul>
+        </nav>
+
         @yield('content')
     </div>
 </main>
+
 <div class="footer">
     <p>&copy; {{ date('Y') }} {{ config('app.name') }}. All Rights Reserved.</p>
 </div>

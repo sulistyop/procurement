@@ -172,6 +172,10 @@
                 width: auto !important;
             }
         }
+        .btn-custom {
+            padding: 0.25rem 0.5rem; /* Mengatur padding atas/bawah dan kiri/kanan */
+            font-size: 0.8rem; /* Mengatur ukuran font */
+        }
     
     </style>
     

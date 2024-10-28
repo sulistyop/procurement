@@ -3,8 +3,8 @@
 namespace App\Http\Controllers\Auth;
 
 use App\Http\Controllers\Controller;
-use Illuminate\Foundation\Auth\AuthenticatesUsers;
 use Illuminate\Support\Facades\Auth;
+use Illuminate\Foundation\Auth\AuthenticatesUsers;
 
 class LoginController extends Controller
 {
@@ -26,7 +26,15 @@ class LoginController extends Controller
      *
      * @var string
      */
-    protected $redirectTo = '/home';
+    protected function redirectTo()
+    {
+        if (auth()->user()->hasRole('admin')) {
+            return '/dashboard'; // Ganti '/dashboard' dengan rute yang sesuai
+        }
+        
+        return '/user/pengajuan/index'; // Rute untuk pengguna biasa
+    }
+    
 
     /**
      * Create a new controller instance.

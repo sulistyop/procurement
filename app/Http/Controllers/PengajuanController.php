@@ -35,12 +35,6 @@ class PengajuanController extends Controller
 
     public function create()
     {
-        // Menampilkan form untuk menambah pengajuan baru
-		// $user = Auth::user();
-		// $prodi = Prodi::when($user->prodi_id, function($query) use ($user){
-		// 	return $query->where('id', $user->prodi_id);
- 		//  });
-		// return view('pengajuan.create', compact('prodi'));
         return view('admin.pengajuan.create');
     }
 

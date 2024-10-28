@@ -6,11 +6,86 @@
 
 @push('style-page')
     <style>
-        .custom-select {
-            width: 70px !important;
+        /* Body Style */
+        body {
+            background-color: #f4f7fa; /* Light background */
+            font-family: 'Arial', sans-serif;
+            color: #333;
+        }
+
+        /* Header Style */
+        h1 {
+            color: #003366; /* Dark Blue */
+            text-align: center;
+            margin-bottom: 30px;
+            font-weight: bold;
+        }
+
+        /* Button Styles */
+        .btn-outline-primary, .btn-outline-info {
+            border-radius: 25px; /* Rounded buttons */
+            font-weight: bold;
+            transition: all 0.3s ease;
+        }
+
+        .btn-outline-primary:hover, .btn-outline-info:hover {
+            transform: scale(1.05);
+            box-shadow: 0 0 15px rgba(0, 0, 0, 0.2);
+        }
+
+        /* Table Styles */
+        table {
+            border-collapse: collapse;
+            width: 100%;
+            box-shadow: 0 4px 20px rgba(0, 0, 0, 0.1);
+            margin-top: 20px;
+            background-color: white;
+        }
+
+        th, td {
+            text-align: center;
+            padding: 15px;
+            border-bottom: 1px solid #ddd;
+        }
+
+        th {
+            background-color: #003366; /* Dark Blue */
+            color: white;
+        }
+
+        tr:nth-child(even) {
+            background-color: #f9f9f9; /* Light grey */
+        }
+
+        tr:hover {
+            background-color: #e6f7ff; /* Light blue on hover */
+        }
+
+        /* Alert Styles */
+        .alert {
+            margin-top: 20px;
+            border-radius: 10px;
+            box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
+        }
+
+        /* Modal Styles */
+        .modal-content {
+            border-radius: 15px;
+            padding: 20px;
+        }
+
+        /* Responsive Table */
+        @media (max-width: 768px) {
+            th, td {
+                padding: 10px;
+            }
+            .custom-select {
+                width: auto !important;
+            }
         }
     </style>
 @endpush
+
 
 @section('content')
     <div>
@@ -25,9 +100,13 @@
             </div>
         @endif
         <div class="mb-2">
-            <a class="btn btn-outline-primary" href="#" data-toggle="modal" data-target="#tambahPengajuanModal">
+            <button type="button" class="btn btn-outline-primary" data-toggle="modal" data-target="#tambahPengajuanModal">
                 Tambah Pengajuan
                 <i class="fas fa-plus"></i>
+            </button>
+            <a type="button" class="btn btn-outline-success" data-toggle="modal" data-target="#uploadModal">
+                Upload Excel
+                <i class="fa fa-upload"></i>
             </a>
             <a type="button" class="btn btn-outline-info" href="{{ route('pengajuan.index').'?export=true' }}">
                 Export Excel
@@ -54,10 +133,8 @@
                     <td>{{ $loop->iteration }}</td>
                     <td>{{ $item->prodi->nama }}</td>
                     <td>
-                        {{--data ini pernah diajukan di tahun --}}
                         @if($item->is_diajukan)
-                            {{ $item->isbn }} <span
-                                    class="badge badge-info">Pernah diajukan tahun  {{ \Illuminate\Support\Carbon::parse($item->date_pernah_diajukan)->format('d-m-Y')  }}</span>
+                            {{ $item->isbn }} <span class="badge badge-info">Pernah diajukan tahun  {{ \Illuminate\Support\Carbon::parse($item->date_pernah_diajukan)->format('d-m-Y')  }}</span>
                         @else
                             {{ $item->isbn }}
                         @endif
@@ -72,17 +149,17 @@
                             <span class="badge badge-danger">Ditolak</span>
                         @else
                             <span class="badge badge-warning">Proses</span>
-                    @endif
+                        @endif
+                    </td>
                     <td>
-                        @can('view pengajuan')
-                            <a href="{{ route('home-show', $item->id) }}" class="btn btn-info btn-sm"
+                        <div class="d-flex justify-content-center">
+                            <a href="{{ route('home-show', $item->id) }}" class="btn btn-info btn-sm mx-1"
                                data-toggle="tooltip" data-placement="top" title="View">
                                 <i class="fas fa-binoculars"></i>
                             </a>
-                        @endcan
-                        @if(!$item->is_approve && !$item->is_reject)
-                            @can('edit pengajuan')
-                                <a href="#" class="btn btn-warning btn-sm" data-toggle="modal"
+                            
+                            @if(!$item->is_approve && !$item->is_reject)
+                                <a href="#" class="btn btn-warning btn-sm mx-1" data-toggle="modal"
                                    data-target="#editPengajuanModal" data-id="{{ $item->id }}"
                                    data-prodi="{{ $item->prodi->id }}" data-judul="{{ $item->judul }}"
                                    data-edisi="{{ $item->edisi }}" data-isbn="{{ $item->isbn }}"
@@ -91,42 +168,28 @@
                                    data-toggle="tooltip" data-placement="top" title="Edit">
                                     <i class="fas fa-edit"></i>
                                 </a>
-                            @endif
-                            @can('delete pengajuan')
-                                <form action="{{ route('pengajuan.destroy', $item->id) }}" method="POST"
-                                      style="display:inline;">
+                    
+                                <form action="{{ route('pengajuan.destroy', $item->id) }}" method="POST" style="display:inline;">
                                     @csrf
                                     @method('DELETE')
-                                    <button type="submit" class="btn btn-danger btn-sm"
-                                            onclick="return confirm('Yakin ingin menghapus?')" data-toggle="tooltip"
-                                            data-placement="top" title="Delete">
+                                    <button type="submit" class="btn btn-danger btn-sm mx-1" onclick="return confirm('Yakin ingin menghapus?')" data-toggle="tooltip" data-placement="top" title="Delete">
                                         <i class="fas fa-trash-alt"></i>
                                     </button>
                                 </form>
-                            @endcan
-                            @can('approve pengajuan')
-                                <button type="button" class="btn btn-success btn-sm" data-toggle="modal"
-                                        data-target="#approveModal" data-all="{{ $item }}" data-id="{{ $item->id }}"
-                                        data-jumlah="{{ $item->eksemplar }}" data-toggle="tooltip" data-placement="top"
-                                        title="Approve">
-                                    <i class="fas fa-check"></i>
-                                </button>
-                            @endcan
-                        @endif
+                            @endif
+                        </div>
                     </td>
+                    
+                    
                 </tr>
-
             @endforeach
             </tbody>
         </table>
 
-        @include('admin.component.edit-modal')
-        <!-- Include the Modal Component -->
-        @include('admin.component.tambah-pengajuan-modal', ['routeView' => 'user'])
-        <!-- Single Approve Modal -->
-        @include('admin.component.approve-modal')
-        <!-- Upload Modal -->
+        @include('user.edit')
+        @include('user.create')
         @include('admin.component.upload-modal')
+
     </div>
 @endsection
 
@@ -154,56 +217,7 @@
 
             modal.find('.modal-body #nama_prodi').val(allData.nama_prodi);
             modal.find('.modal-body #isbn').val(allData.isbn);
-            modal.find('.modal-body #judul').val(allData.judul);
-            modal.find('.modal-body #penerbit').val(allData.penerbit);
-            modal.find('.modal-body #tahun').val(allData.tahun);
-            modal.find('.modal-body #eksemplar').val(allData.eksemplar);
-        });
-
-        $('#approveForm').on('submit', function (event) {
-            event.preventDefault();
-
-            var form = $(this);
-            var actionUrl = form.attr('action');
-            var formData = form.serialize();
-
-
-            var action = $(this).find('button[type="submit"][clicked=true]').val();
-            var reason = $('#reason').val();
-
-            // masukan action ke form
-            formData += '&action=' + action;
-
-
-            $.ajax({
-                url: actionUrl,
-                method: 'POST',
-                data: formData,
-                success: function (response) {
-                    Swal.fire({
-                        icon: 'success',
-                        title: 'Success',
-                        text: response.message,
-                    }).then(() => {
-                        $('#approveModal').modal('hide');
-                        location.reload();
-                    });
-                },
-                error: function (xhr, status, error) {
-                    var response = JSON.parse(xhr.responseText);
-                    var errorMessage = response.message || 'An error occurred while approving the pengajuan.';
-                    Swal.fire({
-                        icon: 'error',
-                        title: 'Error',
-                        text: errorMessage,
-                    });
-                }
-            });
-        });
-
-        $('#approveForm button[type="submit"]').on('click', function () {
-            $('#approveForm button[type="submit"]').removeAttr('clicked');
-            $(this).attr('clicked', 'true');
+            modal.find('.modal-body #jumlah').val(allData.eksemplar);
         });
 
         $('#editPengajuanModal').on('show.bs.modal', function (event) {
@@ -219,7 +233,7 @@
             var eksemplar = button.data('eksemplar');
             var modal = $(this);
             var form = modal.find('#editPengajuanForm');
-            var actionUrl = '{{ route('pengajuan.update', ':id') }}'.replace(':id', id);
+            var actionUrl = '{{ route('home-update', ':id') }}'.replace(':id', id);
             form.attr('action', actionUrl);
             modal.find('.modal-body #prodi').val(prodi);
             modal.find('.modal-body #judul').val(judul);
@@ -231,31 +245,5 @@
             modal.find('.modal-body #eksemplar').val(eksemplar);
         });
 
-        document.addEventListener('DOMContentLoaded', function () {
-            // Initialize Select2 when the modal is shown
-            $('#tambahPengajuanModal').on('shown.bs.modal', function () {
-                $('.select2').select2({
-                    placeholder: "Pilih opsi",
-                    allowClear: true,
-                    dropdownParent: $('#tambahPengajuanModal') // Ensure the dropdown is appended to the modal
-                });
-            });
-
-            $('#editPengajuanModal').on('shown.bs.modal', function () {
-                $('.select2').select2({
-                    placeholder: "Pilih opsi",
-                    allowClear: true,
-                    dropdownParent: $('#editPengajuanModal') // Ensure the dropdown is appended to the modal
-                });
-            });
-
-        });
     </script>
-    @if ($errors->any())
-        <script type="text/javascript">
-            $(document).ready(function () {
-                $('#tambahPengajuanModal').modal('show');
-            });
-        </script>
-    @endif
 @endpush

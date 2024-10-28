@@ -53,6 +53,15 @@
             font-size: 16px;
             font-weight: bold;
         }
+        .footer {
+            background-color: #003366; /* Dark Blue */
+            color: white;
+            text-align: center;
+            padding: 10px 0;
+            position: relative;
+            bottom: 0;
+            width: 100%;
+        }
     </style>
 </head>
 <body>
@@ -109,6 +118,9 @@
         @yield('content')
     </div>
 </main>
+<div class="footer">
+    <p>&copy; {{ date('Y') }} {{ config('app.name') }}. All Rights Reserved.</p>
+</div>
 
 <!-- jQuery -->
 <script src="https://code.jquery.com/jquery-3.5.1.min.js"></script>

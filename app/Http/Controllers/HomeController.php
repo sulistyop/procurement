@@ -3,38 +3,123 @@
 namespace App\Http\Controllers;
 
 use App\Models\Pengajuan;
-use App\Services\PengajuanService;
 use Illuminate\Http\Request;
+use App\Services\PengajuanService;
 use Illuminate\Support\Facades\Auth;
 
 class HomeController extends Controller
 {
-	protected $pengajuanService;
-    
+    protected $pengajuanService;
+
     public function __construct(PengajuanService $pengajuanService)
-	{
-		$this->pengajuanService = $pengajuanService;
-		$this->middleware('auth');
-	}
-	
+    {
+        $this->pengajuanService = $pengajuanService;
+        $this->middleware('auth');
+    }
+
     public function index()
     {
-		$pengajuan = $this->pengajuanService->getPengajuan();
-		$prodi = $this->pengajuanService->getProdi();
-	    if(request()->has('export')) {
-		    return $this->pengajuanService->exportPengajuan($pengajuan);
-	    }
+        $pengajuan = $this->pengajuanService->getPengajuan();
+        $prodi = $this->pengajuanService->getProdi();
+        if (request()->has('export')) {
+            return $this->pengajuanService->exportPengajuan($pengajuan);
+        }
         return view('home', compact('pengajuan', 'prodi'));
     }
-	
-	// show
-	public function show(Pengajuan $pengajuan)
-	{
-		if(Auth::user()->can('view pengajuan')) {
-			// Menampilkan detail pengajuan tertentu
-			return view('user.show', compact('pengajuan'));
-		}else{
-			return redirect()->route('pengajuan.index')->with('error', 'Anda tidak memiliki akses untuk melihat detail pengajuan.');
-		}
-	}
+
+    public function create()
+    {
+        // Menampilkan form untuk menambah pengajuan baru
+		// $user = Auth::user();
+		// $prodi = Prodi::when($user->prodi_id, function($query) use ($user){
+		// 	return $query->where('id', $user->prodi_id);
+ 		//  });
+		// return view('pengajuan.create', compact('prodi'));
+        return view('home');
+    }
+
+    public function store(Request $request)
+    {
+        // Validasi input
+	    $request->validate([
+		    'prodi_id' => 'required|exists:prodi,id',
+		    'judul' => 'required|max:255',
+		    'edisi' => 'nullable|max:50',
+		    'isbn' => 'nullable|max:20',
+		    'penerbit' => 'nullable|max:100',
+		    'author' => 'required|max:100',
+		    'tahun' => 'nullable|integer|min:1900|max:' . date('Y'),
+		    'eksemplar' => 'required|integer',
+			'diterima' => 'nullable|integer',
+			'harga' => 'nullable|numeric|min:0', // Tambahkan validasi untuk harga
+	    ], [], [
+		    'prodi_id' => 'Prodi',
+		    'judul' => 'Judul',
+		    'edisi' => 'Edisi',
+		    'isbn' => 'ISBN',
+		    'penerbit' => 'Penerbit',
+		    'author' => 'Penulis',
+		    'tahun' => 'Tahun',
+		    'eksemplar' => 'Eksemplar',
+			'diterima' => 'Diterima',
+			'harga' => 'Harga',
+	    ]);
+
+        // Simpan data pengajuan
+	    $pengajuan = Pengajuan::create($request->all());
+	    
+	    $this->setLogActivity('Membuat pengajuan', $pengajuan);
+		
+        return redirect()->route('home')->with('success', 'Pengajuan berhasil ditambahkan.');
+    }
+
+
+    public function edit(Pengajuan $pengajuan)
+    {
+        // Menampilkan form untuk mengedit pengajuan
+        return view('home', compact('pengajuan'));
+    }
+
+    public function update(Request $request, Pengajuan $pengajuan)
+    {
+        // Validasi input
+        $request->validate([
+            'prodi_id' => 'required|max:100',
+            'judul' => 'required|max:255',
+            'edisi' => 'nullable|max:50',
+            'penerbit' => 'nullable|max:100',
+            'author' => 'required|max:100',
+            'tahun' => 'nullable|integer|min:1900|max:' . date('Y'),
+            'eksemplar' => 'required|integer',
+			'diterima' => 'nullable|integer',
+			'harga' => 'nullable|numeric|min:0', // Tambahkan validasi untuk harga
+        ]);
+
+        // Update data pengajuan
+        $pengajuan->update($request->all());
+		
+		$this->setLogActivity('Mengubah pengajuan', $pengajuan);
+
+        return redirect()->route('home')->with('success', 'Pengajuan berhasil diupdate.');
+    }
+
+    public function destroy(Pengajuan $pengajuan)
+    {
+        // Hapus data pengajuan
+	    $dump = $pengajuan;
+        $pengajuan->delete();
+		$this->setLogActivity('Menghapus pengajuan', $dump);
+        return redirect()->route('home')->with('success', 'Pengajuan berhasil dihapus.');
+    }
+
+    // show
+    public function show(Pengajuan $pengajuan)
+    {
+        if (Auth::user()->can('view pengajuan')) {
+            // Menampilkan detail pengajuan tertentu
+            return view('user.show', compact('pengajuan'));
+        } else {
+            return redirect()->route('home')->with('error', 'Anda tidak memiliki akses untuk melihat detail pengajuan.');
+        }
+    }
 }

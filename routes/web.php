@@ -1,6 +1,7 @@
 <?php
 
 use Illuminate\Support\Facades\Route;
+use App\Http\Controllers\HomeController;
 use App\Http\Controllers\RoleController;
 use App\Http\Controllers\UserController;
 use App\Http\Controllers\PenggunaController;
@@ -30,8 +31,12 @@ Auth::routes();
 Route::middleware('auth')->group(function () {
 	
 	Route::get('/', [\App\Http\Controllers\HomeController::class, 'index'])->name('home');
+	Route::get('/create', [HomeController::class, 'create'])->name('home-create');
+	Route::post('/create', [HomeController::class, 'store'])->name('home-store');
 	Route::get('/show/{pengajuan}', [\App\Http\Controllers\HomeController::class, 'show'])->name('home-show');
-	
+	Route::get('/{pengajuan}/edit', [HomeController::class, 'edit'])->name('home-edit');
+	Route::put('/{pengajuan}', [HomeController::class, 'update'])->name('home-update');
+
     Route::post('/roles', [RoleController::class, 'createRole']);
     Route::post('/user/{userId}/assign-role-permission', [UserController::class, 'assignRole']);
 

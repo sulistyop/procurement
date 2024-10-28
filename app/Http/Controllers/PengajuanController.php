@@ -4,10 +4,10 @@ namespace App\Http\Controllers;
 
 use App\Models\Prodi;
 use App\Models\Pengajuan;
-use App\Services\PengajuanService;
 use Illuminate\Http\Request;
 use App\Import\PengajuanImport;
 use App\Exports\PengajuanExport;
+use App\Services\PengajuanService;
 use Illuminate\Support\Facades\Log;
 use Illuminate\Support\Facades\Auth;
 use Maatwebsite\Excel\Facades\Excel;
@@ -134,40 +134,49 @@ class PengajuanController extends Controller
 
 	public function storeApproval(Request $request, Pengajuan $pengajuan)
 	{
+		// Validasi input
 		$request->validate([
-			'eksemplar' => 'required|integer|min:1',
 			'harga' => 'required_if:action,approve|numeric',
 			'reason' => 'required_if:action,reject|max:255', // Reason hanya wajib saat action adalah reject
+			'isbn' => 'nullable|max:20',
+			'judul' => 'nullable|max:255', // Validasi untuk judul
+			'edisi' => 'nullable|max:50', // Validasi untuk edisi
+			'penerbit' => 'nullable|max:100', // Validasi untuk penerbit
+			'author' => 'nullable|max:100', // Validasi untuk author
+			'tahun' => 'nullable|integer|min:1900|max:' . date('Y'), // Validasi untuk tahun
+			'eksemplar' => 'nullable|integer', // Validasi untuk eksemplar
+			'diterima' => 'nullable|integer',
 		]);
 	
+		// Array untuk menyimpan data yang akan diupdate
+		$data = [
+			'is_approve' => $request->action === 'approve',
+			'is_reject' => $request->action === 'reject',
+			'diterima' => $request->action === 'approve' ? (int)$request->diterima : 0,
+			'approved_by' => $request->action === 'approve' ? (Auth::user() ? Auth::user()->id : 0) : null,
+			'rejected_by' => $request->action === 'reject' ? (Auth::user() ? Auth::user()->id : 0) : null,
+			'reason' => $request->action === 'reject' ? $request->reason : null,
+		];
+	
+		// Jika pengajuan disetujui
 		if ($request->action === 'approve') {
-			// Logika jika pengajuan disetujui
-			$store = $pengajuan->update([
-				'is_approve' => true,
-				'is_reject' => false, // Pastikan is_reject di-set ke false
-				'approved_at' => now(),
-				'diterima' => (int)$request->eksemplar, // Hanya set jika disetujui
-				'harga' => $request->harga, // Simpan harga
-				'approved_by' => Auth::user() ? Auth::user()->id : 0, // Id pengguna yang menyetujui
-			]);
-			
-			$this->setLogActivity('Menyetujui pengajuan', $pengajuan);
-			return response()->json(['message' => 'Pengajuan berhasil disetujui!']);
-		} elseif ($request->action === 'reject') {
-			// Logika jika pengajuan ditolak
-			$store = $pengajuan->update([
-				'is_approve' => false,
-				'is_reject' => true, // Set is_reject menjadi true jika ditolak
-				'rejected_at' => now(), // Tambahkan timestamp jika pengajuan ditolak
-				'rejected_by' => Auth::user() ? Auth::user()->id : 0, // Id pengguna yang menolak
-				'reason' => $request->reason, // Tambahkan alasan penolakan jika ada
-				'diterima' => 0, // Set kolom diterima menjadi null jika ditolak
-			]);
-			
-			$this->setLogActivity('Menolak pengajuan', $pengajuan);
-			return response()->json(['message' => 'Pengajuan berhasil ditolak!']);
+			$data['approved_at'] = now();
+			$data['harga'] = $request->harga; // Simpan harga
+		} 
+		// Jika pengajuan ditolak
+		elseif ($request->action === 'reject') {
+			$data['rejected_at'] = now(); // Tambahkan timestamp jika pengajuan ditolak
 		}
+	
+		// Melakukan pembaruan
+		$pengajuan->update(array_merge($data, $request->only(['judul', 'edisi', 'penerbit', 'author', 'tahun', 'eksemplar'])));
+	
+		// Menetapkan aktivitas log
+		$this->setLogActivity($request->action === 'approve' ? 'Menyetujui pengajuan' : 'Menolak pengajuan', $pengajuan);
+		
+		return response()->json(['message' => $request->action === 'approve' ? 'Pengajuan berhasil disetujui!' : 'Pengajuan berhasil ditolak!']);
 	}
+	
 	
 	
 	public function importForm()

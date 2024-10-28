@@ -16,23 +16,23 @@
                     </div>
                     <div class="form-group">
                         <label for="isbn">ISBN</label>
-                        <input type="text" name="isbn" id="isbn" class="form-control" readonly>
+                        <input type="text" name="isbn" id="isbn" class="form-control">
                     </div>
                     <div class="form-group">
                         <label for="judul">Judul</label>
-                        <input type="text" name="judul" id="judul" class="form-control" readonly>
+                        <input type="text" name="judul" id="judul" class="form-control">
                     </div>
                     <div class="form-group">
                         <label for="penerbit">Penerbit</label>
-                        <input type="text" name="penerbit" id="penerbit" class="form-control" readonly>
+                        <input type="text" name="penerbit" id="penerbit" class="form-control">
                     </div>
                     <div class="form-group">
                         <label for="tahun">Tahun</label>
-                        <input type="text" name="tahun" id="tahun" class="form-control" readonly>
+                        <input type="text" name="tahun" id="tahun" class="form-control">
                     </div>
                     <div class="form-group">
                         <label for="eksemplar">Jumlah Diterima</label>
-                        <input type="number" name="eksemplar" id="eksemplar" class="form-control">
+                        <input type="number" name="diterima" id="eksemplar" class="form-control">
                     </div>
                     <div class="form-group">
                         <label for="harga">Harga</label>

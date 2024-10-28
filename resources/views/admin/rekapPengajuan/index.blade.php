@@ -46,7 +46,8 @@ Realisasi
                     <th>Pengarang</th>
                     <th>Penerbit</th>
                     <th>Tahun Terbit</th>
-                    <th>Jumlah</th>
+                    <th>Jumlah di Ajukan</th>
+                    <th>Jumlah di Terima</th>
                     <th>Tahun Pengadaan</th>
                 </tr>
             </thead>
@@ -56,18 +57,14 @@ Realisasi
                         <td>{{ $loop->iteration }}</td>
                         <td>{{ $item->prodi->nama }}</td>
                         <td>
-                            {{--data ini pernah diajukan di tahun --}}
-                            {{-- @if($item->is_diajukan)
-                                {{ $item->isbn }} <span class="badge badge-info">Pernah diajukan tahun {{ \Illuminate\Support\Carbon::parse($item->date_pernah_diajukan)->format('d-m-Y') }}</span>
-                            @else --}}
-                                {{ $item->isbn }}
-                            {{-- @endif --}}
+                            {{ $item->isbn }}
                         </td>
                         <td>{{ $item->judul }}</td>
                         <td>{{ $item->author }}</td>
                         <td>{{ $item->penerbit }}</td>
                         <td>{{ $item->tahun }}</td>
                         <td>{{ $item->eksemplar }}</td>
+                        <td>{{ $item->diterima }}</td>
                         <td>{{ \Carbon\Carbon::parse($item->approved_at)->format('Y') }}</td>
                     </tr>
                 @endforeach

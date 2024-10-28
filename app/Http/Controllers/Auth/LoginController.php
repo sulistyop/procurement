@@ -32,7 +32,7 @@ class LoginController extends Controller
             return '/dashboard'; // Ganti '/dashboard' dengan rute yang sesuai
         }
         
-        return '/user/pengajuan/index'; // Rute untuk pengguna biasa
+        return redirect()->route('home'); // Rute untuk pengguna biasa
     }
     
 

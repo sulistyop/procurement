@@ -38,21 +38,23 @@
             padding: 20px;
             text-align: center;
         }
-
+    
         .header img {
             height: 60px;
             margin-bottom: 10px;
         }
-
+    
         .header h1 {
             font-size: 26px;
             font-weight: 500;
         }
+    
         .form-group label {
             color: #FF5733; /* Matching orange label */
             font-size: 16px;
             font-weight: bold;
         }
+    
         .footer {
             background-color: #003366; /* Dark Blue */
             color: white;
@@ -62,7 +64,117 @@
             bottom: 0;
             width: 100%;
         }
+    
+        /* Body Style */
+        body {
+            background-color: #f4f7fa; /* Light background */
+            font-family: 'Arial', sans-serif;
+            color: #333;
+            margin: 0; /* Hapus margin default */
+            padding: 0; /* Hapus padding default */
+        }
+    
+        /* Kontainer Utama */
+        .container {
+            padding: 0; /* Hapus padding untuk kontainer */
+        }
+    
+        .container-fluid {
+            padding: 0; /* Hapus padding untuk kontainer */
+            margin: 0; /* Hapus margin untuk kontainer */
+        }
+    
+        table {
+            border-collapse: collapse;
+            width: 100%; /* Pastikan lebar tabel 100% */
+            box-shadow: 0 4px 20px rgba(0, 0, 0, 0.1);
+            margin-top: 20px;
+            background-color: white;
+            border-radius: 10px; /* Ini bisa membuat efek membulat di sudut */
+            overflow: hidden; /* Menjaga sudut tetap bulat */
+        }
+    
+        /* Header Style */
+        h1 {
+            color: #003366; /* Dark Blue */
+            text-align: center;
+            margin-bottom: 30px;
+            font-weight: bold;
+            text-transform: uppercase; /* Uppercase header */
+            letter-spacing: 1px; /* Spacing between letters */
+        }
+    
+        /* Button Styles */
+        .btn {
+            border-radius: 25px; /* Rounded buttons */
+            font-weight: bold;
+            transition: all 0.3s ease;
+            padding: 10px 20px; /* Add padding for better size */
+        }
+    
+        .btn-outline-primary {
+            background-color: #007bff; /* Blue background */
+            color: white; /* White text */
+        }
+    
+        .btn-outline-info {
+            background-color: #17a2b8; /* Info color */
+            color: white;
+        }
+    
+        .btn-outline-primary:hover, .btn-outline-info:hover {
+            transform: scale(1.05);
+            box-shadow: 0 0 15px rgba(0, 0, 0, 0.2);
+            opacity: 0.9; /* Slight opacity change on hover */
+        }
+    
+        /* Table Styles */
+        th, td {
+            text-align: center;
+            padding: 15px;
+            border-bottom: 1px solid #ddd;
+        }
+    
+        th {
+            background-color: #003366; /* Dark Blue */
+            color: white;
+        }
+    
+        tr:nth-child(even) {
+            background-color: #f9f9f9; /* Light grey */
+        }
+    
+        tr:hover {
+            background-color: #e6f7ff; /* Light blue on hover */
+        }
+    
+        /* Alert Styles */
+        .alert {
+            margin-top: 20px;
+            border-radius: 10px;
+            box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
+            padding: 15px; /* Add padding for better appearance */
+        }
+    
+        /* Modal Styles */
+        .modal-content {
+            border-radius: 15px;
+            padding: 20px;
+            background: linear-gradient(180deg, #ffffff 0%, #f4f7fa 100%); /* Gradient background */
+        }
+    
+        /* Responsive Table */
+        @media (max-width: 768px) {
+            th, td {
+                padding: 10px;
+            }
+            .custom-select {
+                width: auto !important;
+            }
+        }
+    
     </style>
+    
 </head>
 <body>
 <!-- Header Section -->

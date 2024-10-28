@@ -4,92 +4,10 @@
     Pengajuan
 @endsection
 
-@push('style-page')
-    <style>
-        /* Body Style */
-        body {
-            background-color: #f4f7fa; /* Light background */
-            font-family: 'Arial', sans-serif;
-            color: #333;
-        }
-
-        /* Header Style */
-        h1 {
-            color: #003366; /* Dark Blue */
-            text-align: center;
-            margin-bottom: 30px;
-            font-weight: bold;
-        }
-
-        /* Button Styles */
-        .btn-outline-primary, .btn-outline-info {
-            border-radius: 25px; /* Rounded buttons */
-            font-weight: bold;
-            transition: all 0.3s ease;
-        }
-
-        .btn-outline-primary:hover, .btn-outline-info:hover {
-            transform: scale(1.05);
-            box-shadow: 0 0 15px rgba(0, 0, 0, 0.2);
-        }
-
-        /* Table Styles */
-        table {
-            border-collapse: collapse;
-            width: 100%;
-            box-shadow: 0 4px 20px rgba(0, 0, 0, 0.1);
-            margin-top: 20px;
-            background-color: white;
-        }
-
-        th, td {
-            text-align: center;
-            padding: 15px;
-            border-bottom: 1px solid #ddd;
-        }
-
-        th {
-            background-color: #003366; /* Dark Blue */
-            color: white;
-        }
-
-        tr:nth-child(even) {
-            background-color: #f9f9f9; /* Light grey */
-        }
-
-        tr:hover {
-            background-color: #e6f7ff; /* Light blue on hover */
-        }
-
-        /* Alert Styles */
-        .alert {
-            margin-top: 20px;
-            border-radius: 10px;
-            box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
-        }
-
-        /* Modal Styles */
-        .modal-content {
-            border-radius: 15px;
-            padding: 20px;
-        }
-
-        /* Responsive Table */
-        @media (max-width: 768px) {
-            th, td {
-                padding: 10px;
-            }
-            .custom-select {
-                width: auto !important;
-            }
-        }
-    </style>
-@endpush
-
-
 @section('content')
-    <div>
-        <h1>Daftar Pengajuan</h1>
+    <div class="container-fluid">
+        <h1 class="mt-4">Daftar Pengajuan</h1>
+
         @if(session('import_errors'))
             <div class="alert alert-danger">
                 <ul>
@@ -99,97 +17,102 @@
                 </ul>
             </div>
         @endif
-        <div class="mb-2">
-            <button type="button" class="btn btn-outline-primary" data-toggle="modal" data-target="#tambahPengajuanModal">
-                Tambah Pengajuan
-                <i class="fas fa-plus"></i>
-            </button>
-            <a type="button" class="btn btn-outline-success" data-toggle="modal" data-target="#uploadModal">
-                Upload Excel
-                <i class="fa fa-upload"></i>
-            </a>
-            <a type="button" class="btn btn-outline-info" href="{{ route('pengajuan.index').'?export=true' }}">
-                Export Excel
-                <i class="fa fa-download"></i>
-            </a>
-        </div>
 
-        <table class="table mt-4" id="customers">
-            <thead>
-            <tr>
-                <th>No</th>
-                <th>Prodi</th>
-                <th>ISBN</th>
-                <th>Judul</th>
-                <th>Penulis</th>
-                <th>Tanggal Pengajuan</th>
-                <th>Status</th>
-                <th>Aksi</th>
-            </tr>
-            </thead>
-            <tbody>
-            @foreach($pengajuan as $item)
-                <tr>
-                    <td>{{ $loop->iteration }}</td>
-                    <td>{{ $item->prodi->nama }}</td>
-                    <td>
-                        @if($item->is_diajukan)
-                            {{ $item->isbn }} <span class="badge badge-info">Pernah diajukan tahun  {{ \Illuminate\Support\Carbon::parse($item->date_pernah_diajukan)->format('d-m-Y')  }}</span>
-                        @else
-                            {{ $item->isbn }}
-                        @endif
-                    </td>
-                    <td>{{ $item->judul }}</td>
-                    <td>{{ $item->author }}</td>
-                    <td>{{ \Illuminate\Support\Carbon::parse($item->created_at)->setTimezone('Asia/Jakarta')->format('d-m-Y H:i:s') }}</td>
-                    <td>
-                        @if($item->is_approve)
-                            <span class="badge badge-success">Disetujui Perpustakaan</span>
-                        @elseif($item->is_reject)
-                            <span class="badge badge-danger">Ditolak</span>
-                        @else
-                            <span class="badge badge-warning">Proses</span>
-                        @endif
-                    </td>
-                    <td>
-                        <div class="d-flex justify-content-center">
-                            <a href="{{ route('home-show', $item->id) }}" class="btn btn-info btn-sm mx-1"
-                               data-toggle="tooltip" data-placement="top" title="View">
-                                <i class="fas fa-binoculars"></i>
-                            </a>
-                            
-                            @if(!$item->is_approve && !$item->is_reject)
-                                <a href="#" class="btn btn-warning btn-sm mx-1" data-toggle="modal"
-                                   data-target="#editPengajuanModal" data-id="{{ $item->id }}"
-                                   data-prodi="{{ $item->prodi->id }}" data-judul="{{ $item->judul }}"
-                                   data-edisi="{{ $item->edisi }}" data-isbn="{{ $item->isbn }}"
-                                   data-penerbit="{{ $item->penerbit }}" data-author="{{ $item->author }}"
-                                   data-tahun="{{ $item->tahun }}" data-eksemplar="{{ $item->eksemplar }}"
-                                   data-toggle="tooltip" data-placement="top" title="Edit">
-                                    <i class="fas fa-edit"></i>
-                                </a>
-                    
-                                <form action="{{ route('pengajuan.destroy', $item->id) }}" method="POST" style="display:inline;">
-                                    @csrf
-                                    @method('DELETE')
-                                    <button type="submit" class="btn btn-danger btn-sm mx-1" onclick="return confirm('Yakin ingin menghapus?')" data-toggle="tooltip" data-placement="top" title="Delete">
-                                        <i class="fas fa-trash-alt"></i>
-                                    </button>
-                                </form>
-                            @endif
-                        </div>
-                    </td>
-                    
-                    
-                </tr>
-            @endforeach
-            </tbody>
-        </table>
+<div class="d-flex justify-content-between align-items-center mb-3">
+    <div>
+        <button type="button" class="btn btn-primary" data-toggle="modal" data-target="#tambahPengajuanModal">
+            <i class="fas fa-plus"></i> Tambah Pengajuan
+        </button>
+        <a type="button" class="btn btn-success" data-toggle="modal" data-target="#uploadModal">
+            <i class="fa fa-upload"></i> Upload Excel
+        </a>
+    </div>
+    <div class="ml-auto">
+        <a type="button" class="btn btn-info" href="{{ route('pengajuan.index').'?export=true' }}">
+            <i class="fa fa-download"></i> Export Excel
+        </a>
+    </div>
+</div>
+
+
+        <div class="card">
+            <div class="card-body">
+                <div class="table-responsive">
+                    <table class="table table-striped table-bordered mt-3" id="customers">
+                        <thead class="thead-dark">
+                        <tr>
+                            <th>No</th>
+                            <th>Prodi</th>
+                            <th>ISBN</th>
+                            <th>Judul</th>
+                            <th>Penulis</th>
+                            <th>Tanggal Pengajuan</th>
+                            <th>Status</th>
+                            <th>Aksi</th>
+                        </tr>
+                        </thead>
+                        <tbody>
+                        @foreach($pengajuan as $item)
+                            <tr>
+                                <td>{{ $loop->iteration }}</td>
+                                <td>{{ $item->prodi->nama }}</td>
+                                <td>
+                                    @if($item->is_diajukan)
+                                        {{ $item->isbn }} <span class="badge badge-info">Pernah diajukan tahun {{ \Illuminate\Support\Carbon::parse($item->date_pernah_diajukan)->format('d-m-Y') }}</span>
+                                    @else
+                                        {{ $item->isbn }}
+                                    @endif
+                                </td>
+                                <td>{{ $item->judul }}</td>
+                                <td>{{ $item->author }}</td>
+                                <td>{{ \Illuminate\Support\Carbon::parse($item->created_at)->setTimezone('Asia/Jakarta')->format('d-m-Y H:i:s') }}</td>
+                                <td>
+                                    @if($item->is_approve)
+                                        <span class="badge badge-success">Disetujui Perpustakaan</span>
+                                    @elseif($item->is_reject)
+                                        <span class="badge badge-danger">Ditolak</span>
+                                    @else
+                                        <span class="badge badge-warning">Proses</span>
+                                    @endif
+                                </td>
+                                <td>
+                                    <div class="d-flex justify-content-center">
+                                        <a href="{{ route('home-show', $item->id) }}" class="btn btn-info btn-sm mx-1" data-toggle="tooltip" data-placement="top" title="View">
+                                            <i class="fas fa-binoculars"></i>
+                                        </a>
+
+                                        @if(!$item->is_approve && !$item->is_reject)
+                                            <a href="#" class="btn btn-warning btn-sm mx-1" data-toggle="modal"
+                                               data-target="#editPengajuanModal" data-id="{{ $item->id }}"
+                                               data-prodi="{{ $item->prodi->id }}" data-judul="{{ $item->judul }}"
+                                               data-edisi="{{ $item->edisi }}" data-isbn="{{ $item->isbn }}"
+                                               data-penerbit="{{ $item->penerbit }}" data-author="{{ $item->author }}"
+                                               data-tahun="{{ $item->tahun }}" data-eksemplar="{{ $item->eksemplar }}"
+                                               data-toggle="tooltip" data-placement="top" title="Edit">
+                                                <i class="fas fa-edit"></i>
+                                            </a>
+
+                                            <form action="{{ route('pengajuan.destroy', $item->id) }}" method="POST" style="display:inline;">
+                                                @csrf
+                                                @method('DELETE')
+                                                <button type="submit" class="btn btn-danger btn-sm mx-1" onclick="return confirm('Yakin ingin menghapus?')" data-toggle="tooltip" data-placement="top" title="Delete">
+                                                    <i class="fas fa-trash-alt"></i>
+                                                </button>
+                                            </form>
+                                        @endif
+                                    </div>
+                                </td>
+                            </tr>
+                        @endforeach
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+        </div>
 
         @include('user.edit')
         @include('user.create')
         @include('admin.component.upload-modal')
-
     </div>
 @endsection
 
@@ -244,6 +167,5 @@
             modal.find('.modal-body #tahun').val(tahun);
             modal.find('.modal-body #eksemplar').val(eksemplar);
         });
-
     </script>
 @endpush

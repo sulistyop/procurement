@@ -65,10 +65,12 @@
                         @endif
                     </td>
                 </tr>
+                @if($pengajuan->reason)
                 <tr>
                     <th>Alasan</th>
-                    <td>{{ $pengajuan->reason}}</td>
+                    <td>{{ $pengajuan->reason }}</td>
                 </tr>
+                @endif
             </table>
             <a href="{{ route('home') }}" class="btn btn-secondary">Kembali</a>
         </form>

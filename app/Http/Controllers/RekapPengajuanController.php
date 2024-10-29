@@ -24,7 +24,7 @@ class RekapPengajuanController extends Controller
 	
 		// Ambil semua pengajuan yang sudah disetujui
 		$pengajuanQuery = Pengajuan::haveProdi()
-			->selectRaw('judul, isbn, penerbit, edisi, SUM(diterima) as total_eksemplar, MAX(created_at) as latest_created_at')
+			->selectRaw('judul, isbn, penerbit, edisi, MAX(diterima) as diterima, MAX(created_at) as latest_created_at')
 			->where('is_approve', 1) // Filter approved records
 			->groupBy('judul', 'isbn', 'penerbit', 'edisi'); // Pastikan semua kolom non-agregat ada di sini
 	
@@ -60,7 +60,7 @@ class RekapPengajuanController extends Controller
 				->sum('diterima'); // Menghitung jumlah eksemplar
 	
 			// Menambahkan total eksemplar ke entry terbaru
-			$latestEntry->eksemplar = $summary;
+			$latestEntry->diterima = $summary;
 	
 			return $latestEntry;
 		});
@@ -88,7 +88,7 @@ class RekapPengajuanController extends Controller
 	
 		// Ambil semua pengajuan yang sudah disetujui
 		$pengajuanQuery = Pengajuan::haveProdi()
-			->selectRaw('judul, isbn, penerbit, edisi, SUM(diterima) as total_eksemplar, MAX(created_at) as latest_created_at')
+			->selectRaw('judul, isbn, penerbit, edisi, MAX(diterima) as diterima, MAX(created_at) as latest_created_at')
 			->where('is_approve', 1) // Filter approved records
 			->groupBy('judul', 'isbn', 'penerbit', 'edisi'); // Pastikan semua kolom non-agregat ada di sini
 	
@@ -124,7 +124,7 @@ class RekapPengajuanController extends Controller
 				->sum('diterima'); // Menghitung jumlah eksemplar
 	
 			// Menambahkan total eksemplar ke entry terbaru
-			$latestEntry->eksemplar = $summary;
+			$latestEntry->diterima = $summary;
 	
 			return $latestEntry;
 		});

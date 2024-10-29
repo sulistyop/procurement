@@ -5,9 +5,10 @@
 @endsection
 
 @section('content')
+    <div class="container-fluid text-center my-4">
+        <h1 class="rekap-title">Pengajuan Buku</h1>
+    </div>
     <div class="container-fluid">
-        <h1 class="mt-4">Daftar Pengajuan</h1>
-
         @if(session('import_errors'))
             <div class="alert alert-danger">
                 <ul>

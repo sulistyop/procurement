@@ -3,10 +3,7 @@
 <head>
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1">
-
-    <!-- CSRF Token -->
     <meta name="csrf-token" content="{{ csrf_token() }}">
-
     <title>{{ config('app.name', 'Laravel') }}</title>
 
     <!-- Fonts -->
@@ -18,230 +15,190 @@
     <!-- DataTables CSS -->
     <link href="https://cdn.datatables.net/1.10.21/css/dataTables.bootstrap4.min.css" rel="stylesheet">
 
-    {{--cdn fa--}}
+    <!-- Font Awesome -->
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.1/css/all.min.css">
-    <link rel="stylesheet" href="{{ asset('css/style.css') }}">
-    <!-- Add this in your Blade template, preferably in the head section -->
+    
+    <!-- SweetAlert2 CSS -->
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/sweetalert2@11/dist/sweetalert2.min.css">
 
+    <!-- Select2 CSS -->
     <link href="https://cdn.jsdelivr.net/npm/select2@4.1.0-rc.0/dist/css/select2.min.css" rel="stylesheet" />
 
+    <!-- Custom CSS -->
+    <link rel="stylesheet" href="{{ asset('css/style.css') }}">
 
     @stack('style-page')
 
     <style>
-
-        /* Header Section */
-        .header {
-            background-color: #003366; /* Dark Blue */
+        /* Header and Footer */
+        .header, .footer {
+            background-color: #003366;
             color: white;
-            padding: 20px;
             text-align: center;
+            padding: 20px;
         }
-    
+
         .header img {
             height: 60px;
             margin-bottom: 10px;
         }
-    
+
         .header h1 {
             font-size: 26px;
             font-weight: 500;
         }
-    
-        .form-group label {
-            color: #FF5733; /* Matching orange label */
-            font-size: 16px;
-            font-weight: bold;
-        }
-    
+
         .footer {
-            background-color: #003366; /* Dark Blue */
-            color: white;
-            text-align: center;
-            padding: 10px 0;
+            padding: 10px;
             position: relative;
             bottom: 0;
             width: 100%;
         }
-    
+
         /* Body Style */
         body {
-            background-color: #f4f7fa; /* Light background */
+            background-color: #f4f7fa;
             font-family: 'Arial', sans-serif;
             color: #333;
-            margin: 0; /* Hapus margin default */
-            padding: 0; /* Hapus padding default */
         }
-    
-        /* Kontainer Utama */
+
         .container {
-            padding: 0; /* Hapus padding untuk kontainer */
+            padding: 0;
         }
-    
-        .container-fluid {
-            padding: 0; /* Hapus padding untuk kontainer */
-            margin: 0; /* Hapus margin untuk kontainer */
+
+        /* Menu Navigation Styles */
+        .menu-nav {
+            background-color: #c4ced8; /* Warna latar belakang menu */
+            padding: 5px 0; /* Padding atas dan bawah */
+            width: 100%; /* Memastikan lebar sama dengan header */
         }
-    
+
+        .menu-nav .nav-link {
+            color: #444c61; /* Warna teks */
+            font-size: 12px; /* Ukuran font lebih kecil */
+            padding: 8px 15px; /* Padding untuk tombol menu */
+            border-radius: 0; /* Menghapus sudut membulat */
+            transition: background-color 0.3s;
+        }
+
+        .menu-nav .nav-link:hover {
+            background-color: #6db0d6; /* Warna saat hover */
+        }
+
+        /* Right-aligned styles */
+        .menu-nav .navbar {
+            justify-content: flex-end; /* Memastikan menu berada di kanan */
+        }
+
+        /* Table Styles */
         table {
             border-collapse: collapse;
-            width: 100%; /* Pastikan lebar tabel 100% */
-            box-shadow: 0 4px 20px rgba(0, 0, 0, 0.1);
+            width: 100%;
             margin-top: 20px;
+            box-shadow: 0 4px 20px rgba(0, 0, 0, 0.1);
             background-color: white;
-            border-radius: 10px; /* Ini bisa membuat efek membulat di sudut */
-            overflow: hidden; /* Menjaga sudut tetap bulat */
+            border-radius: 10px;
+            overflow: hidden;
         }
-    
-        /* Header Style */
-        h1 {
-            color: #003366; /* Dark Blue */
-            text-align: center;
-            margin-bottom: 30px;
-            font-weight: bold;
-            text-transform: uppercase; /* Uppercase header */
-            letter-spacing: 1px; /* Spacing between letters */
-        }
-    
-        /* Button Styles */
-        .btn {
-            border-radius: 25px; /* Rounded buttons */
-            font-weight: bold;
-            transition: all 0.3s ease;
-            padding: 10px 20px; /* Add padding for better size */
-        }
-    
-        .btn-outline-primary {
-            background-color: #007bff; /* Blue background */
-            color: white; /* White text */
-        }
-    
-        .btn-outline-info {
-            background-color: #17a2b8; /* Info color */
-            color: white;
-        }
-    
-        .btn-outline-primary:hover, .btn-outline-info:hover {
-            transform: scale(1.05);
-            box-shadow: 0 0 15px rgba(0, 0, 0, 0.2);
-            opacity: 0.9; /* Slight opacity change on hover */
-        }
-    
-        /* Table Styles */
+
         th, td {
             text-align: center;
-            padding: 15px;
+            padding: 10px;
             border-bottom: 1px solid #ddd;
         }
-    
+
         th {
-            background-color: #003366; /* Dark Blue */
+            background-color: #003366;
             color: white;
         }
-    
+
         tr:nth-child(even) {
-            background-color: #f9f9f9; /* Light grey */
+            background-color: #f9f9f9;
         }
-    
+
         tr:hover {
-            background-color: #e6f7ff; /* Light blue on hover */
+            background-color: #e6f7ff;
         }
-    
-        /* Alert Styles */
-        .alert {
-            margin-top: 20px;
-            border-radius: 10px;
-            box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
-            padding: 15px; /* Add padding for better appearance */
-        }
-    
-        /* Modal Styles */
-        .modal-content {
-            border-radius: 15px;
-            padding: 20px;
-            background: linear-gradient(180deg, #ffffff 0%, #f4f7fa 100%); /* Gradient background */
-        }
-    
-        /* Responsive Table */
+
+        /* Responsive */
         @media (max-width: 768px) {
             th, td {
                 padding: 10px;
             }
-            .custom-select {
-                width: auto !important;
+            .container-fluid, .container {
+                padding: 0;
             }
         }
-        .btn-custom {
-        padding: 0.25rem 0.5rem; /* Mengatur padding atas/bawah dan kiri/kanan */
-        font-size: 0.8rem; /* Mengatur ukuran font */
-    }
-        </style>
-    
+
+        .rekap-title {
+            font-size: 36px;
+            font-weight: bold;
+            color: #2a5298;
+            text-transform: uppercase;
+            text-shadow: 2px 2px 8px rgba(0, 0, 0, 0.3);
+            margin-top: 20px;
+        }
+    </style>
 </head>
 <body>
-<!-- Header Section -->
 <div class="header">
-    <div class="container-fluid">
-        <div class=" d-flex justify-content-between align-items-center">
-            <img src="{{ asset('image/img.png') }}" alt="UAD Logo">
-
-            <nav class="navbar navbar-expand-md navbar-light shadow-sm">
-
-                <div class="container">
-                    <ul class="navbar-nav ml-auto">
-                        @guest
-                            @if (Route::has('login'))
-                                <li class="nav-item">
-                                    <a class="nav-link" href="{{ route('login') }}" style="color: #f2f4f7;" >{{ __('Login') }}</a>
-                                </li>
-                            @endif
-                        @else
-                            <li class="nav-item dropdown">
-                                <a id="navbarDropdown" class="nav-link dropdown-toggle" href="#" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false" v-pre style="color: #f2f4f7;">
-                                    {{ Auth::user()->name }}
-                                </a>
-
-                                <div class="dropdown-menu profile-dropdown-menu" style="min-width: 250px" aria-labelledby="navbarDropdown">
-                                    <div class="dropdown-item-text">
-                                        <strong>Name:</strong> {{ Auth::user()->name }}<br>
-                                        <strong>Email:</strong> {{ Auth::user()->email }}<br>
-                                        <strong>Role:</strong> {{ Auth::user()->roles->pluck('name')->first() }}<br>
-                                        <strong>Prodi:</strong> {{ Auth::user()->prodi ? Auth::user()->prodi->nama : '-' }}
-                                    </div>
-                                    <div class="dropdown-divider"></div>
-                                    <a class="dropdown-item" href="{{ route('logout') }}"
-                                       onclick="event.preventDefault();
-                                            document.getElementById('logout-form').submit();">
-                                        {{ __('Logout') }}
-                                    </a>
-                                    <form id="logout-form" action="{{ route('logout') }}" method="POST" class="d-none">
-                                        @csrf
-                                    </form>
-                                </div>
+    <div class="container-fluid d-flex justify-content-between align-items-center">
+        <img src="{{ asset('image/img.png') }}" alt="UAD Logo">
+        <nav class="navbar navbar-expand-md navbar-light shadow-sm">
+            <div class="container">
+                <ul class="navbar-nav ml-auto">
+                    @guest
+                        @if (Route::has('login'))
+                            <li class="nav-item">
+                                <a class="nav-link" href="{{ route('login') }}" style="color: #f2f4f7;">{{ __('Login') }}</a>
                             </li>
-                        @endguest
-                    </ul>
-                </div>
-            </nav>
-        </div>
+                        @endif
+                    @else
+                        <li class="nav-item dropdown">
+                            <a id="navbarDropdown" class="nav-link dropdown-toggle" href="#" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false" v-pre style="color: #f2f4f7;">
+                                {{ Auth::user()->name }}
+                            </a>
+                            <div class="dropdown-menu" aria-labelledby="navbarDropdown">
+                                <div class="dropdown-item-text">
+                                    <strong>Name:</strong> {{ Auth::user()->name }}<br>
+                                    <strong>Email:</strong> {{ Auth::user()->email }}<br>
+                                    <strong>Role:</strong> {{ Auth::user()->roles->pluck('name')->first() }}<br>
+                                    <strong>Prodi:</strong> {{ Auth::user()->prodi ? Auth::user()->prodi->nama : '-' }}
+                                </div>
+                                <div class="dropdown-divider"></div>
+                                <a class="dropdown-item" href="{{ route('logout') }}"
+                                   onclick="event.preventDefault(); document.getElementById('logout-form').submit();">
+                                    {{ __('Logout') }}
+                                </a>
+                                <form id="logout-form" action="{{ route('logout') }}" method="POST" class="d-none">
+                                    @csrf
+                                </form>
+                            </div>
+                        </li>
+                    @endguest
+                </ul>
+            </div>
+        </nav>
     </div>
 </div>
 
-<main class="py-4">
+<!-- Menu Navigation Bar -->
+<nav class="menu-nav">
     <div class="container">
-        <!-- Menu Navigation -->
-        <nav class="mb-3">
-            <ul class="nav nav-pills">
-                <li class="nav-item">
-                    <a class="nav-link" href="{{ route('home') }}" style="color: #003366;">Pengajuan</a>
-                </li>
-                <li class="nav-item">
-                    <a class="nav-link" href="{{ route('home-rekap') }}" style="color: #003366;">Rekap</a>
-                </li>
-            </ul>
-        </nav>
+        <ul class="nav nav-pills justify-content-end"> <!-- Align menu to the right -->
+            <li class="nav-item">
+                <a class="nav-link" href="{{ route('home') }}">Pengajuan</a>
+            </li>
+            <li class="nav-item">
+                <a class="nav-link" href="{{ route('home-rekap') }}">Realisasi</a>
+            </li>
+        </ul>
+    </div>
+</nav>
 
+<main class="py-4">
+    <div class="container-fluid">
+        <!-- Content Section -->
         @yield('content')
     </div>
 </main>
@@ -250,82 +207,17 @@
     <p>&copy; {{ date('Y') }} {{ config('app.name') }}. All Rights Reserved.</p>
 </div>
 
-<!-- jQuery -->
+<!-- Scripts -->
 <script src="https://code.jquery.com/jquery-3.5.1.min.js"></script>
-
 <script src="https://cdn.jsdelivr.net/npm/select2@4.1.0-rc.0/dist/js/select2.min.js"></script>
-
-<!-- Bootstrap 4 JS -->
 <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.bundle.min.js"></script>
-
-<!-- DataTables JS -->
 <script src="https://cdn.datatables.net/1.10.21/js/jquery.dataTables.min.js"></script>
 <script src="https://cdn.datatables.net/1.10.21/js/dataTables.bootstrap4.min.js"></script>
-<script>
-    $(function () {
-        $('[data-toggle="tooltip"]').tooltip()
-    })
-    $(document).ready(function() {
-        @if(session('success'))
-        Swal.fire({
-            icon: 'success',
-            title: 'Success',
-            text: '{{ session('success') }}',
-        });
-        @endif
-
-        @if(session('error'))
-        Swal.fire({
-            icon: 'error',
-            title: 'Error',
-            text: '{{ session('error') }}',
-        });
-        @endif
-    });
-    document.addEventListener('DOMContentLoaded', function() {
-        const sidebar = document.getElementById('sidebar');
-        const toggleButton = document.getElementById('sidebarToggle');
-        const app = document.getElementById('app');
-
-        toggleButton.addEventListener('click', function() {
-            sidebar.classList.toggle('active');
-
-            // Mengubah margin konten berdasarkan status sidebar
-            if (sidebar.classList.contains('active')) {
-                app.style.marginLeft = '0px'; // Konten tanpa margin saat sidebar tertutup
-            } else {
-                app.style.marginLeft = '0px'; // Mengembalikan margin saat sidebar terbuka
-            }
-        });
-    });
-
-    document.addEventListener('DOMContentLoaded', function() {
-        const userMenu = document.getElementById('userMenu');
-        const userMenuIcon = document.getElementById('userMenuIcon');
-
-        $('#userMenu').on('show.bs.collapse', function () {
-            userMenuIcon.classList.remove('fa-chevron-down');
-            userMenuIcon.classList.add('fa-chevron-up');
-        });
-
-        $('#userMenu').on('hide.bs.collapse', function () {
-            userMenuIcon.classList.remove('fa-chevron-up');
-            userMenuIcon.classList.add('fa-chevron-down');
-        });
-    });
-
-
-    document.addEventListener('DOMContentLoaded', function() {
-        // Initialize Select2 on all select elements with the class 'select2'
-        $('.select2').select2();
-    });
-</script>
-<!-- Add this in your Blade template, preferably in the head section -->
 <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
-<script type="text/javascript">
+<script>
     $(document).ready(function() {
+        $('.select2').select2();
         $.extend(true, $.fn.dataTable.defaults, {
-
             "language": {
                 "url": "https://cdn.datatables.net/plug-ins/1.10.21/i18n/Indonesian.json"
             }

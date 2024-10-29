@@ -5,9 +5,10 @@ Realisasi
 @endsection
 
 @section('content')
+    <div class="container-fluid text-center my-4">
+        <h1 class="rekap-title">Rekap Realisasi</h1>
+    </div>
     <div>
-        <h1>Rekap Realisasi</h1>
-
         <div class="d-flex justify-content-between mb-2">
             <div>
                 <a type="button" class="btn btn-outline-info" href="{{ route('rekap-pengajuan.index', array_merge(request()->query(), ['export' => true])) }}">

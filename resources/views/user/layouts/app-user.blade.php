@@ -74,16 +74,23 @@
         }
 
         .menu-nav .nav-link {
+            margin: 0 15px; /* Jarak antar menu */
+            padding: 10px; /* Padding yang lebih nyaman */
+            font-size: 14px; /* Ukuran font */
             color: #444c61; /* Warna teks */
-            font-size: 12px; /* Ukuran font lebih kecil */
-            padding: 8px 15px; /* Padding untuk tombol menu */
-            border-radius: 0; /* Menghapus sudut membulat */
-            transition: background-color 0.3s;
+            transition: color 0.3s; /* Efek transisi untuk warna */
         }
 
         .menu-nav .nav-link:hover {
-            background-color: #6db0d6; /* Warna saat hover */
+            color: #0056b3; /* Warna teks saat hover */
+            text-decoration: underline; /* Garis bawah saat hover */
         }
+
+        .menu-nav .nav-link.active {
+            color: #003366; /* Warna teks saat aktif */
+            font-weight: bold; /* Menebalkan teks saat aktif */
+        }
+
 
         /* Right-aligned styles */
         .menu-nav .navbar {
@@ -185,16 +192,21 @@
 <!-- Menu Navigation Bar -->
 <nav class="menu-nav">
     <div class="container">
-        <ul class="nav nav-pills justify-content-end"> <!-- Align menu to the right -->
+        <ul class="nav nav-pills justify-content-end">
             <li class="nav-item">
-                <a class="nav-link" href="{{ route('home') }}">Pengajuan</a>
+                <a class="nav-link" href="{{ route('home') }}">
+                    <i class="fas fa-file-alt"></i> Pengajuan
+                </a>
             </li>
             <li class="nav-item">
-                <a class="nav-link" href="{{ route('home-rekap') }}">Realisasi</a>
+                <a class="nav-link" href="{{ route('home-rekap') }}">
+                    <i class="fas fa-chart-line"></i> Realisasi
+                </a>
             </li>
         </ul>
     </div>
 </nav>
+
 
 <main class="py-4">
     <div class="container-fluid">

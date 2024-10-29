@@ -22,69 +22,73 @@ use App\Http\Controllers\ApproveKeuanganController;
 |
 */
 
-
-
 Auth::routes();
 
-
-
 Route::middleware('auth')->group(function () {
+    // Halaman utama yang mengarahkan pengguna berdasarkan perannya
+    Route::get('/', function () {
+        if (auth()->user()->isAdmin()) {
+            // Jika admin, arahkan ke dashboard
+            return redirect()->route('dashboard');
+        }
+        // Jika bukan admin, arahkan ke home
+        return redirect()->route('home');
+    })->name('home');
 	
-	Route::get('/', [\App\Http\Controllers\HomeController::class, 'index'])->name('home');
-	Route::get('/create', [HomeController::class, 'create'])->name('home-create');
-	Route::post('/create', [HomeController::class, 'store'])->name('home-store');
-	Route::get('/show/{pengajuan}', [\App\Http\Controllers\HomeController::class, 'show'])->name('home-show');
-	Route::get('/{pengajuan}/edit', [HomeController::class, 'edit'])->name('home-edit');
-	Route::put('/{pengajuan}', [HomeController::class, 'update'])->name('home-update');
-	Route::get('/rekap', [App\Http\Controllers\RekapPengajuanController::class, 'indexUser'])->name('home-rekap');
+    // Rute lainnya untuk pengguna biasa
+    Route::get('/create', [HomeController::class, 'create'])->name('home-create');
+    Route::post('/create', [HomeController::class, 'store'])->name('home-store');
+    Route::get('/show/{pengajuan}', [HomeController::class, 'show'])->name('home-show');
+    Route::get('/{pengajuan}/edit', [HomeController::class, 'edit'])->name('home-edit');
+    Route::put('/{pengajuan}', [HomeController::class, 'update'])->name('home-update');
+    Route::get('/rekap', [App\Http\Controllers\RekapPengajuanController::class, 'indexUser'])->name('home-rekap');
     Route::post('/roles', [RoleController::class, 'createRole']);
     Route::post('/user/{userId}/assign-role-permission', [UserController::class, 'assignRole']);
-	
-	// dashboard
-	Route::get('/dashboard', [\App\Http\Controllers\DashboardController::class, 'index'])->name('dashboard');
-	
-	// route group pengajuan dengan prefix pengajuan
-	Route::group(['prefix' => 'pengajuan'], function () {
-		Route::get('/', [PengajuanController::class, 'index'])->name('pengajuan.index');
-		Route::get('/create', [PengajuanController::class, 'create'])->name('pengajuan.create');
-		
-		Route::post('/', [PengajuanController::class, 'store'])->name('pengajuan.store');
-		Route::get('/{pengajuan}', [PengajuanController::class, 'show'])->name('pengajuan.show');
-		
-		Route::get('/{pengajuan}/edit', [PengajuanController::class, 'edit'])->name('pengajuan.edit');
-		Route::put('/{pengajuan}', [PengajuanController::class, 'update'])->name('pengajuan.update');
-		Route::delete('/{pengajuan}', [PengajuanController::class, 'destroy'])->name('pengajuan.destroy');
-		
-		// Approval routes
-		Route::get('/{pengajuan}/approve', [PengajuanController::class, 'approve'])->name('pengajuan.approve');
-		Route::post('/{pengajuan}/approve', [PengajuanController::class, 'storeApproval'])->name('pengajuan.storeApproval');
-	});
-	
-	Route::group(['prefix' => 'approve-keuangan'], function () {
-	    // Route::resource('approve-keuangan', ApproveKeuanganController::class);
-	    Route::get('/', [ApproveKeuanganController::class, 'index'])->name('approve-keuangan.index');
-	    Route::get('/create', [ApproveKeuanganController::class, 'create'])->name('approve-keuangan.create');
-	    Route::post('/', [ApproveKeuanganController::class, 'store'])->name('approve-keuangan.store');
-	    Route::get('/{approveKeuangan}', [ApproveKeuanganController::class, 'show'])->name('approve-keuangan.show');
-	    Route::get('/{approveKeuangan}/edit', [ApproveKeuanganController::class, 'edit'])->name('approve-keuangan.edit');
-	    Route::put('/{approveKeuangan}', [ApproveKeuanganController::class, 'update'])->name('approve-keuangan.update');
-	    Route::delete('/{approveKeuangan}', [ApproveKeuanganController::class, 'destroy'])->name('approve-keuangan.destroy');
-	});
-	
-    // Rekap Pengajuan
-	Route::get('/rekap-pengajuan', [App\Http\Controllers\RekapPengajuanController::class, 'index'])->name('rekap-pengajuan.index');
+});
 
-	Route::get('pengajuan/import', [PengajuanController::class, 'importForm'])->name('pengajuan.importForm');
-	Route::post('pengajuan/import', [PengajuanController::class, 'import'])->name('pengajuan.import');
+// Rute untuk admin
+Route::middleware(['auth', 'admin'])->group(function () {
+    Route::resource('user', UserController::class);
+    Route::get('/activity-logs', [App\Http\Controllers\ActivityLogController::class, 'index'])->name('activity-logs.index');
+    Route::get('/roles-permissions/edit', [RolePermissionController::class, 'edit'])->name('roles-permissions.edit');
+    Route::put('/roles-permissions/{role}', [RolePermissionController::class, 'update'])->name('roles-permissions.update');
+
+    // dashboard
+    Route::get('/dashboard', [\App\Http\Controllers\DashboardController::class, 'index'])->name('dashboard');
+
+    // route group pengajuan dengan prefix pengajuan
+    Route::group(['prefix' => 'pengajuan'], function () {
+        Route::get('/', [PengajuanController::class, 'index'])->name('pengajuan.index');
+        Route::get('/create', [PengajuanController::class, 'create'])->name('pengajuan.create');
+        
+        Route::post('/', [PengajuanController::class, 'store'])->name('pengajuan.store');
+        Route::get('/{pengajuan}', [PengajuanController::class, 'show'])->name('pengajuan.show');
+        
+        Route::get('/{pengajuan}/edit', [PengajuanController::class, 'edit'])->name('pengajuan.edit');
+        Route::put('/{pengajuan}', [PengajuanController::class, 'update'])->name('pengajuan.update');
+        Route::delete('/{pengajuan}', [PengajuanController::class, 'destroy'])->name('pengajuan.destroy');
+        
+        // Approval routes
+        Route::get('/{pengajuan}/approve', [PengajuanController::class, 'approve'])->name('pengajuan.approve');
+        Route::post('/{pengajuan}/approve', [PengajuanController::class, 'storeApproval'])->name('pengajuan.storeApproval');
+    });
+    
+    Route::group(['prefix' => 'approve-keuangan'], function () {
+        Route::get('/', [ApproveKeuanganController::class, 'index'])->name('approve-keuangan.index');
+        Route::get('/create', [ApproveKeuanganController::class, 'create'])->name('approve-keuangan.create');
+        Route::post('/', [ApproveKeuanganController::class, 'store'])->name('approve-keuangan.store');
+        Route::get('/{approveKeuangan}', [ApproveKeuanganController::class, 'show'])->name('approve-keuangan.show');
+        Route::get('/{approveKeuangan}/edit', [ApproveKeuanganController::class, 'edit'])->name('approve-keuangan.edit');
+        Route::put('/{approveKeuangan}', [ApproveKeuanganController::class, 'update'])->name('approve-keuangan.update');
+        Route::delete('/{approveKeuangan}', [ApproveKeuanganController::class, 'destroy'])->name('approve-keuangan.destroy');
+    });
+    
+    // Rekap Pengajuan
+    Route::get('/rekap-pengajuan', [App\Http\Controllers\RekapPengajuanController::class, 'index'])->name('rekap-pengajuan.index');
+
+    Route::get('pengajuan/import', [PengajuanController::class, 'importForm'])->name('pengajuan.importForm');
+    Route::post('pengajuan/import', [PengajuanController::class, 'import'])->name('pengajuan.import');
 
     Route::get('/register', [RegisterController::class, 'create'])->name('register');
     Route::post('/register', [RegisterController::class, 'store']);
-	
-});
-
-Route::middleware(['auth', 'admin'])->group(function () {
-	Route::resource('user',  UserController::class);
-	Route::get('/activity-logs', [App\Http\Controllers\ActivityLogController::class, 'index'])->name('activity-logs.index');
-	Route::get('/roles-permissions/edit', [RolePermissionController::class, 'edit'])->name('roles-permissions.edit');
-	Route::put('/roles-permissions/{role}', [RolePermissionController::class, 'update'])->name('roles-permissions.update');
 });

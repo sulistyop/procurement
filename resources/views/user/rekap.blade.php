@@ -33,8 +33,6 @@ Realisasi
             <thead>
                 <tr>
                     <th>No</th>
-                    <th>Prodi</th>
-                    <th>ISBN</th>
                     <th>Judul</th>
                     <th>Pengarang</th>
                     <th>Penerbit</th>
@@ -48,10 +46,6 @@ Realisasi
                 @foreach($pengajuan as $item)
                     <tr>
                         <td>{{ $loop->iteration }}</td>
-                        <td>{{ $item->prodi->nama }}</td>
-                        <td>
-                            {{ $item->isbn }}
-                        </td>
                         <td>{{ $item->judul }}</td>
                         <td>{{ $item->author }}</td>
                         <td>{{ $item->penerbit }}</td>

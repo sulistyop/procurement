@@ -43,7 +43,6 @@
                         <thead class="thead-dark">
                         <tr>
                             <th>No</th>
-                            <th>Prodi</th>
                             <th>ISBN</th>
                             <th>Judul</th>
                             <th>Penulis</th>
@@ -56,7 +55,6 @@
                         @foreach($pengajuan as $item)
                             <tr>
                                 <td>{{ $loop->iteration }}</td>
-                                <td>{{ $item->prodi->nama }}</td>
                                 <td>
                                     @if($item->is_diajukan)
                                         {{ $item->isbn }} <span class="badge badge-info">Pernah diajukan tahun {{ \Illuminate\Support\Carbon::parse($item->date_pernah_diajukan)->format('d-m-Y') }}</span>

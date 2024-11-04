@@ -57,7 +57,7 @@
                                 <td>{{ $loop->iteration }}</td>
                                 <td>
                                     @if($item->is_diajukan)
-                                        {{ $item->isbn }} <span class="badge badge-info">Pernah diajukan tahun {{ \Illuminate\Support\Carbon::parse($item->date_pernah_diajukan)->format('d-m-Y') }}</span>
+                                        {{ $item->isbn }} <span class="badge badge-info">Pernah diajukan tahun {{ \Illuminate\Support\Carbon::parse($item->date_pernah_diajukan)->format('Y') }}</span>
                                     @else
                                         {{ $item->isbn }}
                                     @endif
@@ -76,12 +76,12 @@
                                 </td>
                                 <td>
                                     <div class="d-flex justify-content-center">
-                                        <a href="{{ route('home-show', $item->id) }}" class="btn btn-info btn-custom mx-1" data-toggle="tooltip" data-placement="top" title="View">
+                                        <a href="{{ route('home-show', $item->id) }}" class="btn btn-info btn-custom mx-1 btn-sm" data-toggle="tooltip" data-placement="top" title="View">
                                             <i class="fas fa-binoculars"></i>
                                         </a>
-                                
+                                        
                                         @if(!$item->is_approve && !$item->is_reject)
-                                            <a href="#" class="btn btn-warning btn-custom mx-1" data-toggle="modal"
+                                            <a href="#" class="btn btn-warning btn-custom mx-1 btn-sm" data-toggle="modal"
                                                data-target="#editPengajuanModal" data-id="{{ $item->id }}"
                                                data-prodi="{{ $item->prodi->id }}" data-judul="{{ $item->judul }}"
                                                data-edisi="{{ $item->edisi }}" data-isbn="{{ $item->isbn }}"
@@ -90,11 +90,11 @@
                                                data-toggle="tooltip" data-placement="top" title="Edit">
                                                 <i class="fas fa-edit"></i>
                                             </a>
-                                
+                                        
                                             <form action="{{ route('pengajuan.destroy', $item->id) }}" method="POST" style="display:inline;">
                                                 @csrf
                                                 @method('DELETE')
-                                                <button type="submit" class="btn btn-danger btn-custom mx-1" onclick="return confirm('Yakin ingin menghapus?')" data-toggle="tooltip" data-placement="top" title="Delete">
+                                                <button type="submit" class="btn btn-danger btn-custom mx-1 btn-sm" onclick="return confirm('Yakin ingin menghapus?')" data-toggle="tooltip" data-placement="top" title="Delete">
                                                     <i class="fas fa-trash-alt"></i>
                                                 </button>
                                             </form>

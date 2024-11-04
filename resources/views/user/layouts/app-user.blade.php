@@ -112,6 +112,9 @@
             text-align: center;
             padding: 10px;
             border-bottom: 1px solid #ddd;
+            vertical-align: middle; /* Memastikan teks berada di tengah secara vertikal */
+            text-align: left; /* Mengatur perataan teks ke kiri */
+            padding: 12px; /* Menambahkan padding untuk ruang */
         }
 
         th {

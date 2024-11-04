@@ -6,22 +6,27 @@
         <form action="{{ route('user.update', $user->id) }}" method="POST">
             @csrf
             @method('PUT')
+
             <div class="form-group">
                 <label for="name">Nama</label>
-                <input type="text" name="name" class="form-control" value="{{ $user->name }}" required>
+                <input type="text" name="name" class="form-control" value="{{ old('name', $user->name) }}" required>
             </div>
+
             <div class="form-group">
                 <label for="email">Email</label>
-                <input type="email" name="email" class="form-control" value="{{ $user->email }}" required>
+                <input type="email" name="email" class="form-control" value="{{ old('email', $user->email) }}" required>
             </div>
+
             <div class="form-group">
                 <label for="password">Password (Kosongkan jika tidak ingin mengubah)</label>
-                <input type="password" name="password" class="form-control">
+                <input type="password" name="password" class="form-control" placeholder="Masukkan password baru jika ingin mengubahnya" autocomplete="off">
             </div>
+
             <div class="form-group">
                 <label for="password_confirmation">Konfirmasi Password</label>
-                <input type="password" name="password_confirmation" class="form-control">
+                <input type="password" name="password_confirmation" class="form-control" placeholder="Masukkan ulang password baru" autocomplete="off">
             </div>
+
             <div class="form-group">
                 <label for="prodi_id">Prodi</label>
                 <select name="prodi_id" class="form-control select2">
@@ -31,6 +36,7 @@
                     @endforeach
                 </select>
             </div>
+
             <div class="form-group">
                 <label for="roles">Roles</label>
                 <select name="roles[]" class="form-control select2" multiple required>

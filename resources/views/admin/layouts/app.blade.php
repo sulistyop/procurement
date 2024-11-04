@@ -112,7 +112,7 @@
                     </a>
                     <div class="collapse {{ Request::is('user*') || Request::is('roles-permissions*') ? 'show' : '' }}" id="userMenu">
                         <a class="nav-link text-white pl-4 {{ Request::is('user') ? 'active' : '' }}" href="{{ route('user.index') }}">List Pengguna</a>
-                        <a class="nav-link text-white pl-4 {{ Request::is('roles-permissions*') ? 'active' : '' }}" href="{{ route('roles-permissions.edit') }}">Izin</a>
+                        {{-- <a class="nav-link text-white pl-4 {{ Request::is('roles-permissions*') ? 'active' : '' }}" href="{{ route('roles-permissions.edit') }}">Izin</a> --}}
                     </div>
                 @endcan
                {{-- <li class="nav-item">

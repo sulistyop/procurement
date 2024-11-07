@@ -35,8 +35,8 @@
                         <input type="text" name="tahun" id="tahun" class="form-control">
                     </div>
                     <div class="form-group">
-                        <label for="eksemplar">Jumlah Diterima</label>
-                        <input type="number" name="eksemplar" id="eksemplar" class="form-control">
+                        <label for="diterima">Jumlah Diterima</label>
+                        <input type="number" name="diterima" id="eksemplar" class="form-control">
                     </div>
                     <div class="form-group">
                         <label for="harga">Harga</label>

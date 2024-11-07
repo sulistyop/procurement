@@ -25,17 +25,23 @@ Auth::routes();
 
 
 Route::middleware('auth')->group(function () {
-    // Hapus rute '/' dan ganti dengan dashboard untuk admin
+    // Route untuk halaman home dan lainnya
     Route::get('/home', [HomeController::class, 'index'])->name('home');
     Route::get('/create', [HomeController::class, 'create'])->name('home-create');
     Route::post('/create', [HomeController::class, 'store'])->name('home-store');
-    Route::get('/show/{pengajuan}', [HomeController::class, 'show'])->name('home-show');
+    Route::get('/rekap', [App\Http\Controllers\RekapPengajuanController::class, 'indexUser'])->name('home-rekap');
+    
+    // Pastikan route ini berada setelah route statis lainnya
     Route::get('/{pengajuan}/edit', [HomeController::class, 'edit'])->name('home-edit');
     Route::put('/{pengajuan}', [HomeController::class, 'update'])->name('home-update');
-    Route::get('/rekap', [App\Http\Controllers\RekapPengajuanController::class, 'indexUser'])->name('home-rekap');
+    Route::get('/show/{pengajuan}', [HomeController::class, 'show'])->name('home-show');
+
+
+    // Routes untuk roles dan assign-role-permission
     Route::post('/roles', [RoleController::class, 'createRole']);
     Route::post('/user/{userId}/assign-role-permission', [UserController::class, 'assignRole']);
 });
+
 
 Route::middleware(['auth', 'admin'])->group(function () {
     Route::resource('user', UserController::class);

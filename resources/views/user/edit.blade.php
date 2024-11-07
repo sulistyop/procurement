@@ -72,7 +72,10 @@
                         <small class="text-danger">{{ $message }}</small>
                         @enderror
                     </div>
-                    <button type="submit" class="btn btn-primary">Update</button>
+                    <button type="submit" class="btn btn-primary">
+                        <i class="fas fa-sync-alt"></i> Update
+                    </button>
+                    
                 </form>
             </div>
         </div>

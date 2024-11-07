@@ -81,9 +81,14 @@
                             </div>
                 
                             <div class="modal-footer">
-                                <button type="submit" class="btn btn-primary">Simpan</button>
-                                <a href="{{ route('home') }}" class="btn btn-secondary">Kembali</a> <!-- Tombol Kembali -->
+                                <button type="submit" class="btn btn-save">
+                                    <i class="fas fa-save"></i> Simpan
+                                </button>
+                                <a href="{{ route('home') }}" class="btn btn-back">
+                                    <i class="fas fa-arrow-left"></i> Kembali
+                                </a>
                             </div>
+                            
                         </form>
                     </div>
                 </div>

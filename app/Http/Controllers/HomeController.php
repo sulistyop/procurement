@@ -112,14 +112,15 @@ class HomeController extends Controller
         return redirect()->route('home')->with('success', 'Pengajuan berhasil dihapus.');
     }
 
-    // show
     public function show(Pengajuan $pengajuan)
     {
         if (Auth::user()->can('view pengajuan')) {
-            // Menampilkan detail pengajuan tertentu
             return view('user.show', compact('pengajuan'));
         } else {
+            // Pengguna tidak memiliki izin
             return redirect()->route('home')->with('error', 'Anda tidak memiliki akses untuk melihat detail pengajuan.');
         }
     }
+    
+    
 }

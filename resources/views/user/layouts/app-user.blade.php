@@ -148,6 +148,52 @@
             text-shadow: 2px 2px 8px rgba(0, 0, 0, 0.3);
             margin-top: 20px;
         }
+        /* Tombol Simpan */
+        .btn-save {
+            padding: 10px 20px;
+            font-size: 14px;
+            font-weight: 600;
+            border-radius: 30px;
+            border: none;
+            background-color: #28a745;
+            color: white;
+            transition: all 0.3s ease;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+
+        .btn-save:hover {
+            background-color: #218838;
+            transform: translateY(-3px);
+            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.2);
+        }
+
+        /* Tombol Kembali */
+        .btn-back {
+            padding: 10px 20px;
+            font-size: 14px;
+            font-weight: 600;
+            border-radius: 30px;
+            border: none;
+            background-color: #6c757d;
+            color: white;
+            transition: all 0.3s ease;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+
+        .btn-back:hover {
+            background-color: #5a6268;
+            transform: translateY(-3px);
+            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.2);
+        }
+
+        .btn-save i, .btn-back i {
+            margin-right: 8px;
+        }
+
     </style>
 </head>
 <body>

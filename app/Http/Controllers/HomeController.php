@@ -114,12 +114,7 @@ class HomeController extends Controller
 
     public function show(Pengajuan $pengajuan)
     {
-        if (Auth::user()->can('view pengajuan')) {
-            return view('user.show', compact('pengajuan'));
-        } else {
-            // Pengguna tidak memiliki izin
-            return redirect()->route('home')->with('error', 'Anda tidak memiliki akses untuk melihat detail pengajuan.');
-        }
+		return view('user.show', compact('pengajuan'));
     }
     
     

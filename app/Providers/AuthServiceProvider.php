@@ -22,10 +22,5 @@ class AuthServiceProvider extends ServiceProvider
     public function boot(): void
     {
         $this->registerPolicies();
-
-        // Definisikan Gate untuk izin 'view pengajuan'
-        Gate::define('view pengajuan', function ($user) {
-            return $user->hasRole('admin') || $user->hasRole('user');
-        });
     }
 }

@@ -29,7 +29,7 @@
         </a>
     </div>
     <div class="ml-auto">
-        <a type="button" class="btn btn-info" href="{{ route('pengajuan.index').'?export=true' }}">
+        <a type="button" class="btn btn-info" href="{{ route('home').'?export=true' }}">
             <i class="fa fa-download"></i> Export Excel
         </a>
     </div>
@@ -39,7 +39,7 @@
         <div class="card">
             <div class="card-body">
                 <div class="table-responsive">
-                    <table class="table table-striped table-bordered mt-3" id="customers">
+                    <table class="table table-bordered mt-3" id="customers">
                         <thead class="thead-dark">
                         <tr>
                             <th>No</th>
@@ -166,6 +166,13 @@
             modal.find('.modal-body #author').val(author);
             modal.find('.modal-body #tahun').val(tahun);
             modal.find('.modal-body #eksemplar').val(eksemplar);
+        });
+
+        $(document).ready(function() {
+            $('#customers tbody').on('click', 'tr', function() {
+                $('#customers tr').removeClass('highlighted-row');
+                $(this).addClass('highlighted-row');
+            });
         });
     </script>
 @endpush

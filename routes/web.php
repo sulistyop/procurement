@@ -40,13 +40,16 @@ Route::middleware('auth')->group(function () {
     // Routes untuk roles dan assign-role-permission
     Route::post('/roles', [RoleController::class, 'createRole']);
     Route::post('/user/{userId}/assign-role-permission', [UserController::class, 'assignRole']);
+	
+	Route::get('pengajuan/import', [PengajuanController::class, 'importForm'])->name('pengajuan.importForm');
+	Route::post('pengajuan/import', [PengajuanController::class, 'import'])->name('pengajuan.import');
 });
 
 
 Route::middleware(['auth', 'admin'])->group(function () {
     Route::resource('user', UserController::class);
     Route::get('/activity-logs', [App\Http\Controllers\ActivityLogController::class, 'index'])->name('activity-logs.index');
-    Route::get('/roles-permissions/edit', [RolePermissionController::class, 'edit'])->name('roles-permissions.edit');
+    Route::get('/user-permission', [RolePermissionController::class, 'edit'])->name('roles-permissions.edit');
     Route::put('/roles-permissions/{role}', [RolePermissionController::class, 'update'])->name('roles-permissions.update');
 
     // Dashboard
@@ -80,8 +83,7 @@ Route::middleware(['auth', 'admin'])->group(function () {
     // Rekap Pengajuan
     Route::get('/rekap-pengajuan', [App\Http\Controllers\RekapPengajuanController::class, 'index'])->name('rekap-pengajuan.index');
 
-    Route::get('pengajuan/import', [PengajuanController::class, 'importForm'])->name('pengajuan.importForm');
-    Route::post('pengajuan/import', [PengajuanController::class, 'import'])->name('pengajuan.import');
+ 
 
     Route::get('/register', [RegisterController::class, 'create'])->name('register');
     Route::post('/register', [RegisterController::class, 'store']);

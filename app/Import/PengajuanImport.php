@@ -37,6 +37,18 @@ class PengajuanImport implements ToModel, WithHeadingRow, WithValidation, SkipsO
                 'deskripsi' => '',
             ]);
         }
+	    
+	    /*dd([
+		    'prodi_id' => $prodi->id,
+		    'judul' => $row['judul'],
+		    'author' => $row['author'],
+		    'tahun' => now()->year,
+		    'eksemplar' => $row['eksemplar'],
+		    'diterima' => $row['diterima'] ?? NULL,
+		    'is_approve' => 0,
+		    'approved_at' => now(),
+		    'approved_by' => $userId,
+	    ]);*/
 
         // Membuat record pengajuan
         return new Pengajuan([

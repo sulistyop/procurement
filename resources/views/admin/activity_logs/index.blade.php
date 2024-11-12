@@ -56,7 +56,7 @@
 @push('style-page')
     <style>
         .text-success {
-            color: green !important;
+            color: blue !important;
         }
 
         .text-warning {
@@ -68,7 +68,7 @@
         }
 
         .text-primary {
-            color: blue !important;
+            color: green !important;
         }
 
         .text-info {

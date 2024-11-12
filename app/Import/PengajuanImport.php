@@ -55,7 +55,7 @@ class PengajuanImport implements ToModel, WithHeadingRow, WithValidation, SkipsO
             'prodi_id' => $prodi->id,
             'judul' => $row['judul'],
             'author' => $row['author'],
-            'tahun' => now()->year,
+            'tahun' => $row['tahun'] ?? NULL,
             'eksemplar' => $row['eksemplar'],
             'diterima' => $row['diterima'] ?? NULL,
             'is_approve' => 0,

@@ -24,6 +24,17 @@
                 </ul>
             </div>
         @endif
+        @if(session('success'))
+            <div class="alert alert-success">
+                {{ session('success') }}
+            </div>
+        @endif
+
+        @if(session('error'))
+            <div class="alert alert-danger">
+                {{ session('error') }}
+            </div>
+        @endif
         <div class="mb-2">
             <a class="btn btn-outline-primary" href="#" data-toggle="modal" data-target="#tambahPengajuanModal">
                 Tambah Pengajuan
@@ -34,7 +45,7 @@
                 <i class="fa fa-upload"></i>
             </a>
             <a type="button" class="btn btn-outline-info" href="{{ route('pengajuan.index').'?export=true' }}">
-                Export Excel
+                Download Excel
                 <i class="fa fa-download"></i>
             </a>
         </div>

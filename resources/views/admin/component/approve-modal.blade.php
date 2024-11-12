@@ -31,7 +31,7 @@
                         <input type="text" name="penerbit" id="penerbit" class="form-control">
                     </div>
                     <div class="form-group">
-                        <label for="tahun">Tahun</label>
+                        <label for="tahun">Tahun Terbit</label>
                         <input type="text" name="tahun" id="tahun" class="form-control">
                     </div>
                     <div class="form-group">

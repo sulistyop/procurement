@@ -18,19 +18,31 @@
                 </ul>
             </div>
         @endif
+        @if(session('success'))
+            <div class="alert alert-success">
+                {{ session('success') }}
+            </div>
+        @endif
+
+        @if(session('error'))
+            <div class="alert alert-danger">
+                {{ session('error') }}
+            </div>
+        @endif
+
 
 <div class="d-flex justify-content-between align-items-center mb-3">
     <div>
-        <button type="button" class="btn btn-primary" data-toggle="modal" data-target="#tambahPengajuanModal">
+        <button type="button" class="btn btn-outline-primary" data-toggle="modal" data-target="#tambahPengajuanModal">
             <i class="fas fa-plus"></i> Tambah Pengajuan
         </button>
-        <a type="button" class="btn btn-success" data-toggle="modal" data-target="#uploadModal">
+        <a type="button" class="btn btn-outline-success" data-toggle="modal" data-target="#uploadModal">
             <i class="fa fa-upload"></i> Upload Excel
         </a>
     </div>
     <div class="ml-auto">
-        <a type="button" class="btn btn-info" href="{{ route('home').'?export=true' }}">
-            <i class="fa fa-download"></i> Export Excel
+        <a type="button" class="btn btn-outline-info" href="{{ route('home').'?export=true' }}">
+            <i class="fa fa-download"></i> Download Excel
         </a>
     </div>
 </div>

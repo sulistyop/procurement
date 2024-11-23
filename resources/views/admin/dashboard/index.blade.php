@@ -36,7 +36,7 @@
                         <div class="card-body text-center">
                             <h5 class="card-title">{{ $totalBooks }}</h5>
                             <p class="card-text">Semua Pengajuan</p>
-                            <a href="{{ route('pengajuan.index') }}" class="btn btn-light btn-sm">Lihat Detail</a>
+                            <a href="{{ route('pengajuan.proses') }}" class="btn btn-light btn-sm">Lihat Detail</a>
                         </div>
                     </div>
                 </div>
@@ -47,7 +47,7 @@
                         <div class="card-body text-center">
                             <h5 class="card-title">{{ $acceptedBooks }}</h5>
                             <p class="card-text">Jumlah buku diterima.</p>
-                            <a href="{{ route('pengajuan.index') }}" class="btn btn-light btn-sm">Lihat Detail</a>
+                            <a href="{{ route('rekap-pengajuan.index') }}" class="btn btn-light btn-sm">Lihat Detail</a>
                         </div>
                     </div>
                 </div>
@@ -58,7 +58,7 @@
                         <div class="card-body text-center">
                             <h5 class="card-title">{{ $rejectBooks }}</h5>
                             <p class="card-text">Jumlah buku yang ditolak.</p>
-                            <a href="{{ route('pengajuan.index') }}" class="btn btn-light btn-sm">Lihat Detail</a>
+                            <a href="{{ route('pengajuan.tolak') }}" class="btn btn-light btn-sm">Lihat Detail</a>
                         </div>
                     </div>
                 </div>
@@ -69,7 +69,7 @@
                         <div class="card-body text-center">
                             <h5 class="card-title">{{ $pendingBooks }}</h5>
                             <p class="card-text">Buku belum diproses.</p>
-                            <a href="{{ route('pengajuan.index') }}" class="btn btn-light btn-sm">Lihat Detail</a>
+                            <a href="{{ route('pengajuan.proses') }}" class="btn btn-light btn-sm">Lihat Detail</a>
                         </div>
                     </div>
                 </div>

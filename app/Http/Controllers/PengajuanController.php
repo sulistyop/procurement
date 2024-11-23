@@ -222,5 +222,67 @@ class PengajuanController extends Controller
 			return redirect()->back()->with('error', 'Terjadi kesalahan saat import.');
 		}
 	}
-	
+	public function proses(Request $request)
+	{    $parents = ParentPengajuan::all();
+		$prodi = Prodi::all();
+		
+		// Ambil parent_pengajuan_id dari query string
+		$idParent = $request->query('parent_pengajuan_id');
+		$selectedParent = ParentPengajuan::find($idParent); // Temukan ParentPengajuan berdasarkan ID jika ada
+		
+		if ($idParent && !$selectedParent) {
+			return redirect()->route('pengajuan.proses')->with('error', 'Parent tidak ditemukan.');
+		}
+		
+		// Query untuk mengambil data Pengajuan sesuai dengan parent_pengajuan_id dan is_approve = 0
+		$pengajuanQuery = Pengajuan::with('prodi')
+        ->where('is_approve', 0)  // Status belum diproses
+        ->where('is_reject', 0);  // Status tidak ditolak
+		if ($idParent) {
+			$pengajuanQuery->where('parent_pengajuan_id', $idParent);
+		}
+		
+		$pengajuan = $pengajuanQuery->get();
+		
+		return view('admin.pengajuan.proses', [
+			'pengajuan' => $pengajuan,
+			'parentPengajuan' => $selectedParent,
+			'parents' => $parents,
+			'prodi' => $prodi,
+			'idParent' => $idParent, // Kirim idParent ke view untuk dipakai di select
+		]);
+	}
+	public function tolak(Request $request)
+	{    $parents = ParentPengajuan::all();
+		$prodi = Prodi::all();
+		
+		// Ambil parent_pengajuan_id dari query string
+		$idParent = $request->query('parent_pengajuan_id');
+		$selectedParent = ParentPengajuan::find($idParent); // Temukan ParentPengajuan berdasarkan ID jika ada
+		
+		if ($idParent && !$selectedParent) {
+			return redirect()->route('pengajuan.proses')->with('error', 'Parent tidak ditemukan.');
+		}
+		
+		// Query untuk mengambil data Pengajuan sesuai dengan parent_pengajuan_id dan is_approve = 0
+		$pengajuanQuery = Pengajuan::with('prodi')
+        ->where(function($query) {
+            $query->where('is_approve', 0) // Status Proses
+                  ->orWhere('is_reject', 1); // Status Ditolak
+        });
+		
+		if ($idParent) {
+			$pengajuanQuery->where('parent_pengajuan_id', $idParent);
+		}
+		
+		$pengajuan = $pengajuanQuery->get();
+		
+		return view('admin.pengajuan.proses', [
+			'pengajuan' => $pengajuan,
+			'parentPengajuan' => $selectedParent,
+			'parents' => $parents,
+			'prodi' => $prodi,
+			'idParent' => $idParent, // Kirim idParent ke view untuk dipakai di select
+		]);
+	}
 }

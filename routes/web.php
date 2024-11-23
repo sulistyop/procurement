@@ -74,6 +74,8 @@ Route::middleware(['auth', 'admin'])->group(function () {
         Route::get('/{pengajuan}/edit', [PengajuanController::class, 'edit'])->name('pengajuan.edit');
         Route::put('/{pengajuan}', [PengajuanController::class, 'update'])->name('pengajuan.update');
         Route::delete('/{pengajuan}', [PengajuanController::class, 'destroy'])->name('pengajuan.destroy');
+        Route::get('/pengajuan/proses', [PengajuanController::class, 'proses'])->name('pengajuan.proses');
+        Route::get('/pengajuan/tolak', [PengajuanController::class, 'tolak'])->name('pengajuan.tolak');
 
         // Rute approval
         Route::get('/{pengajuan}/approve', [PengajuanController::class, 'approve'])->name('pengajuan.approve');

@@ -25,7 +25,10 @@ class PengajuanController extends Controller
 	public function index(Request $request)
 	{
 		$parents = ParentPengajuan::all();
-		$prodi = Prodi::all();
+		$user = Auth::user();
+		$prodi = Prodi::when($user->prodi_id, function($query) use ($user){
+			return $query->where('id', $user->prodi_id);
+		})->get();
 		
 		// Ambil parent_pengajuan_id dari query string
 		$idParent = $request->query('parent_pengajuan_id');

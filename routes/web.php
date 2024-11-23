@@ -10,6 +10,7 @@ use App\Http\Controllers\AssignRoleController;
 use App\Http\Controllers\Auth\RegisterController;
 use App\Http\Controllers\RolePermissionController;
 use App\Http\Controllers\ApproveKeuanganController;
+use App\Http\Controllers\ParentPengajuanController;
 
 /*
 |--------------------------------------------------------------------------
@@ -54,8 +55,17 @@ Route::middleware(['auth', 'admin'])->group(function () {
 
     // Dashboard
     Route::get('/dashboard', [\App\Http\Controllers\DashboardController::class, 'index'])->name('dashboard');
-
-    // Rute grup pengajuan dengan prefix pengajuan
+    
+    Route::resource('parent-pengajuan', ParentPengajuanController::class)->names([
+        'index' => 'admin.parent-pengajuan.index',
+        'create' => 'admin.parent-pengajuan.create',
+        'store' => 'admin.parent-pengajuan.store',
+        'show' => 'admin.parent-pengajuan.show',
+        'edit' => 'admin.parent-pengajuan.edit',
+        'update' => 'admin.parent-pengajuan.update',
+        'destroy' => 'admin.parent-pengajuan.destroy',
+    ]);
+    Route::get('parent-pengajuan/{id}/view', [ParentPengajuanController::class, 'view'])->name('admin.parent-pengajuan.view');
     Route::group(['prefix' => 'pengajuan'], function () {
         Route::get('/', [PengajuanController::class, 'index'])->name('pengajuan.index');
         Route::get('/create', [PengajuanController::class, 'create'])->name('pengajuan.create');

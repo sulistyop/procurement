@@ -17,17 +17,30 @@
                 <form action="{{ route('pengajuan.store') }}" method="POST">
                     @csrf
                     <div class="form-group">
-                        <label for="prodi">Prodi/Unit</label>
-                        <select class="form-control select2" id="prodi_id" name="prodi_id" required>
+                        <label for="prodi_id">Prodi</label>
+                        <select class="form-control select2" id="prodi" name="prodi_id" value="{{ old('prodi_id') }}" required>
                             @foreach($prodi as $item)
-                                <option value="{{ $item->id }}">{{ $item->nama }}</option>
+                                <option value="{{ $item->id }}" @selected(old('prodi', ) == $item->id)>{{ $item->nama }}</option>
                             @endforeach
                         </select>
-                        @error('prodi')
+                        @error('prodi_id')
                         <small class="text-danger">{{ $message }}</small>
                         @enderror
                     </div>
-
+                    <div class="form-group">
+                        <label for="parent_pengajuan_id">Parent Pengajuan</label>
+                        <select name="parent_pengajuan_id" id="parent_pengajuan_id" class="form-control" disabled>
+                            @foreach($parents as $parent)
+                                <option value="{{ $parent->id }}" 
+                                    @if($parent->id == $idParent) selected @endif>
+                                    {{ $parent->nama }}
+                                </option>
+                            @endforeach
+                        </select>                                               
+                        @error('parent_pengajuan_id')
+                            <div class="text-danger">{{ $message }}</div>
+                        @enderror
+                    </div>
                     <div class="form-group">
                         <label for="judul">Judul</label>
                         <input type="text" class="form-control" id="judul" name="judul" value="{{ old('judul') }}" required>

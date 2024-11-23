@@ -26,7 +26,8 @@ class Pengajuan extends Model
 		'is_reject',
 		'reject_at',
 		'reject_by',
-	    'reason'
+	    'reason',
+		'parent_pengajuan_id'
     ];
 	
 	public function prodi()
@@ -41,4 +42,10 @@ class Pengajuan extends Model
 			$query->where('prodi_id', $user->prodi->id);
 		});
 	}
+	// Di dalam app/Models/Pengajuan.php
+	public function parentPengajuan()
+	{
+		return $this->belongsTo(ParentPengajuan::class, 'parent_pengajuan_id');
+	}
+
 }

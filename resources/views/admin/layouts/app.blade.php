@@ -86,7 +86,7 @@
                 </li>
                 @can('manage pengajuan')
                     <li class="nav-item">
-                        <a class="nav-link text-white {{ Request::is('pengajuan') ? 'active' : '' }}" href="{{ url('/pengajuan') }}">
+                        <a class="nav-link text-white {{ Request::is('parent-pengajuan') ? 'active' : '' }}" href="{{ url('/parent-pengajuan') }}">
                             <i class="fas fa-file-alt"></i> Data Pengajuan
                         </a>
                     </li>
@@ -94,7 +94,7 @@
                 @can('manage rekap pengajuan')
                     <li class="nav-item">
                         <a class="nav-link text-white {{ Request::is('rekap-pengajuan') ? 'active' : '' }}" href="{{ route('rekap-pengajuan.index') }}">
-                            <i class="fas fa-table"></i> Rekap Pengajuan
+                            <i class="fas fa-table"></i> Realisasi Pengajuan
                         </a>
                     </li>
                 @endcan

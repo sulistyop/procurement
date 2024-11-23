@@ -6,6 +6,7 @@ use App\Models\Prodi;
 use App\Models\Pengajuan;
 use Illuminate\Http\Request;
 use App\Import\PengajuanImport;
+use App\Models\ParentPengajuan;
 use App\Exports\PengajuanExport;
 use App\Services\PengajuanService;
 use Illuminate\Support\Facades\Log;
@@ -21,58 +22,93 @@ class PengajuanController extends Controller
 		$this->pengajuanService = $pengajuanService;
 	}
 	
-    public function index()
-    {
-		$pengajuan = $this->pengajuanService->getPengajuan();
+	public function index(Request $request)
+	{
+		$parents = ParentPengajuan::all();
+		$prodi = Prodi::all();
 		
-		if(request()->has('export')) {
-			return $this->pengajuanService->exportPengajuan($pengajuan);
+		// Ambil parent_pengajuan_id dari query string
+		$idParent = $request->query('parent_pengajuan_id');
+		$selectedParent = ParentPengajuan::find($idParent); // Temukan ParentPengajuan berdasarkan ID jika ada
+		
+		if ($idParent && !$selectedParent) {
+			return redirect()->route('pengajuan.index')->with('error', 'Parent tidak ditemukan.');
+		}
+	
+		// Query untuk mengambil data Pengajuan sesuai dengan parent_pengajuan_id
+		$pengajuanQuery = Pengajuan::with('prodi');
+		
+		if ($idParent) {
+			$pengajuanQuery->where('parent_pengajuan_id', $idParent);
 		}
 		
-		$prodi = $this->pengajuanService->getProdi();
-        return view('admin.pengajuan.index', compact('pengajuan', 'prodi'));
-    }
-
-    public function create()
-    {
-        return view('admin.pengajuan.create');
-    }
-
-    public function store(Request $request)
-    {
-        // Validasi input
-	    $request->validate([
-		    'prodi_id' => 'required|exists:prodi,id',
-		    'judul' => 'required|max:255',
-		    'edisi' => 'nullable|max:50',
-		    'isbn' => 'nullable|max:20',
-		    'penerbit' => 'nullable|max:100',
-		    'author' => 'required|max:100',
-		    'tahun' => 'nullable|integer|min:1900|max:' . date('Y'),
-		    'eksemplar' => 'required|integer',
-			'diterima' => 'nullable|integer',
-			'harga' => 'nullable|numeric|min:0', // Tambahkan validasi untuk harga
-	    ], [], [
-		    'prodi_id' => 'Prodi',
-		    'judul' => 'Judul',
-		    'edisi' => 'Edisi',
-		    'isbn' => 'ISBN',
-		    'penerbit' => 'Penerbit',
-		    'author' => 'Penulis',
-		    'tahun' => 'Tahun',
-		    'eksemplar' => 'Eksemplar',
-			'diterima' => 'Diterima',
-			'harga' => 'Harga',
-	    ]);
-
-        // Simpan data pengajuan
-	    $pengajuan = Pengajuan::create($request->all());
-	    
-	    $this->setLogActivity('Membuat pengajuan', $pengajuan);
+		$pengajuan = $pengajuanQuery->get();
 		
-        return redirect()->route('pengajuan.index')->with('success', 'Pengajuan berhasil ditambahkan.');
-    }
-
+		return view('admin.pengajuan.index', [
+			'pengajuan' => $pengajuan,
+			'parentPengajuan' => $selectedParent,
+			'parents' => $parents,
+			'prodi' => $prodi,
+			'idParent' => $idParent, // Kirim idParent ke view untuk dipakai di select
+		]);
+	}
+	
+	public function create(Request $request)
+	{
+		// Ambil data Prodi yang ada
+		$prodi = Prodi::all();
+		
+		// Ambil parent_id dari query parameter
+		$parent_id = $request->query('parent_pengajuan_id');
+		
+		// Ambil prodi_id yang dipilih
+		$prodi_id = $request->query('prodi_id'); // Bisa juga dari request form jika ada
+		
+		// Ambil ParentPengajuan berdasarkan prodi_id
+		$parents = ParentPengajuan::where('prodi_id', $prodi_id)->get();
+		
+		// Ambil data ParentPengajuan berdasarkan parent_id
+		$parent = ParentPengajuan::find($parent_id);
+		
+		// Kirim data ke view
+		return view('admin.pengajuan.create', [
+			'parents' => $parents,
+			'parent_id' => $parent_id,  // Kirimkan parent_id
+			'prodi' => $prodi,          // Kirim data prodi jika diperlukan
+			'parent' => $parent,
+		]);
+	}
+	
+	public function store(Request $request)
+	{
+		// Validasi input
+		$request->validate([
+			'prodi_id' => 'required|exists:prodi,id',
+			'judul' => 'required|max:255',
+			'edisi' => 'nullable|max:50',
+			'isbn' => 'nullable|max:20',
+			'penerbit' => 'nullable|max:100',
+			'author' => 'required|max:100',
+			'tahun' => 'nullable|integer|min:1900|max:' . date('Y'),
+			'eksemplar' => 'required|integer',
+			'diterima' => 'nullable|integer',
+			'harga' => 'nullable|numeric|min:0',
+			'parent_pengajuan_id' => 'nullable|exists:parent_pengajuan,id',  // Validasi parent_id
+		]);
+	
+		// Ambil data request
+		$data = $request->all();
+	
+		// Simpan pengajuan dengan parent_pengajuan_id
+		$pengajuan = Pengajuan::create($data);
+	
+		// Log activity
+		$this->setLogActivity('Membuat pengajuan', $pengajuan);
+	
+		// Redirect kembali ke halaman pengajuan dengan success
+		return redirect()->route('pengajuan.index')->with('success', 'Pengajuan berhasil ditambahkan.');
+	}
+	
     public function show(Pengajuan $pengajuan)
     {
 		if(Auth::user()->can('view pengajuan')) {

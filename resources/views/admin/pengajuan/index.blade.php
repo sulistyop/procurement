@@ -40,6 +40,11 @@
                 Tambah Pengajuan
                 <i class="fas fa-plus"></i>
             </a>
+            {{-- @foreach($parents as $parent)
+            <a href="{{ route('pengajuan.create', ['parent_pengajuan_id' => $parent->id]) }}">
+                Tambah Pengajuan untuk Parent {{ $parent->name }}
+            </a> --}}
+            {{-- @endforeach --}}
             <a type="button" class="btn btn-outline-success" data-toggle="modal" data-target="#uploadModal">
                 Upload Excel
                 <i class="fa fa-upload"></i>
@@ -48,7 +53,10 @@
                 Download Excel
                 <i class="fa fa-download"></i>
             </a>
-        </div>
+        </div>       
+        @if(isset($parentPengajuan))
+        <h3>Pengajuan untuk Parent: {{ $parentPengajuan->nama }}</h3>
+        @endif
 
         <table class="table mt-4" id="customers">
             <thead>
@@ -92,7 +100,7 @@
                         @can('view pengajuan')
                             <a href="{{ route('pengajuan.show', $item->id) }}" class="btn btn-info btn-sm"
                                data-toggle="tooltip" data-placement="top" title="View">
-                                <i class="fas fa-binoculars"></i>
+                                 <i class="fas fa-binoculars"></i>
                             </a>
                         @endcan
                         @if(!$item->is_approve && !$item->is_reject)
@@ -130,7 +138,6 @@
                         @endif
                     </td>
                 </tr>
-
             @endforeach
             </tbody>
         </table>
@@ -265,6 +272,24 @@
             });
 
         });
+        function filterByYear() {
+            var year = $('#filter-tahun').val(); // Ambil tahun yang dipilih
+            var url = new URL(window.location.href); // Ambil URL saat ini
+            url.searchParams.set('year', year); // Set parameter tahun
+            window.location.href = url; // Reload halaman dengan parameter baru
+        }
+        function filterByProdi() {
+            var prodi = $('#filter-prodi').val(); // Ambil prodi yang dipilih
+            var url = new URL(window.location.href); // Ambil URL saat ini
+            url.searchParams.set('prodi', prodi); // Set parameter prodi
+            window.location.href = url; // Reload halaman dengan parameter baru
+        }
+        function filterByParent() {
+            var parent = $('#filter-parent').val(); // Ambil id_parent yang dipilih
+            var url = new URL(window.location.href); // Ambil URL saat ini
+            url.searchParams.set('id_parent', parent); // Set parameter id_parent
+            window.location.href = url; // Reload halaman dengan parameter baru
+        }
     </script>
     @if ($errors->any())
         <script type="text/javascript">

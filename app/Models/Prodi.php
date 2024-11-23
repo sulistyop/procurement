@@ -13,4 +13,10 @@ class Prodi extends Model
 	{
 		return $this->hasMany(Pengajuan::class);
 	}
+
+	public function parentPengajuan()
+	{
+		return $this->belongsTo(ParentPengajuan::class, 'parent_pengajuan_id');
+	}
+
 }

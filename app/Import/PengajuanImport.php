@@ -5,6 +5,7 @@ use Exception;
 use App\Models\User;
 use App\Models\Prodi;
 use App\Models\Pengajuan;
+use App\Models\ParentPengajuan;
 use Maatwebsite\Excel\Concerns\ToModel;
 use Maatwebsite\Excel\Validators\Failure;
 use Maatwebsite\Excel\Concerns\SkipsFailures;
@@ -22,42 +23,44 @@ class PengajuanImport implements ToModel, WithHeadingRow, WithValidation, SkipsO
         $userId = auth()->id();
         $user = User::find($userId);
 
-        // Misalnya User punya relasi ke Prodi (User -> belongsTo -> Prodi)
-        $prodi = $user->prodi; // Ambil prodi dari user yang sedang login
+        // Mendapatkan ParentPengajuan yang terkait dengan user yang sedang login
+        $parent = ParentPengajuan::where('user_id', $userId)->first();
 
-        // Jika tidak ada prodi, coba cari berdasarkan nama yang diimpor
-        if (!$prodi) {
+        // Pastikan ada ParentPengajuan yang ditemukan
+        if (!$parent) {
+            throw new Exception('Parent Pengajuan tidak ditemukan.');
+        }
+
+        // Ambil Prodi dari ParentPengajuan
+        $prodi = $parent->prodi;
+
+        // Jika Prodi tidak ada, cari berdasarkan nama dari data yang diimpor
+        if (!$prodi && isset($row['prodi'])) {
             $prodi = Prodi::where('nama', 'like', '%' . $row['prodi'] . '%')->first();
         }
 
-        // Jika masih tidak ditemukan, buat Prodi baru
-        if (!$prodi) {
+        // Jika Prodi masih belum ditemukan, buat Prodi baru
+        if (!$prodi && isset($row['prodi'])) {
             $prodi = Prodi::create([
                 'nama' => $row['prodi'],
-                'deskripsi' => '',
+                'deskripsi' => '', // Deskripsi bisa dikosongkan atau diisi jika diperlukan
             ]);
         }
-	    
-	    /*dd([
-		    'prodi_id' => $prodi->id,
-		    'judul' => $row['judul'],
-		    'author' => $row['author'],
-		    'tahun' => now()->year,
-		    'eksemplar' => $row['eksemplar'],
-		    'diterima' => $row['diterima'] ?? NULL,
-		    'is_approve' => 0,
-		    'approved_at' => now(),
-		    'approved_by' => $userId,
-	    ]);*/
+
+        // Jika Prodi tidak ada, beri exception agar tidak ada data yang hilang
+        if (empty($row['prodi'])) {
+            throw new Exception('Nama Prodi tidak ditemukan di baris impor.');
+        }
+        
 
         // Membuat record pengajuan
         return new Pengajuan([
             'prodi_id' => $prodi->id,
             'judul' => $row['judul'],
             'author' => $row['author'],
-            'tahun' => $row['tahun'] ?? NULL,
+            'tahun' => $row['tahun'] ?? null,
             'eksemplar' => $row['eksemplar'],
-            'diterima' => $row['diterima'] ?? NULL,
+            'diterima' => $row['diterima'] ?? null,
             'is_approve' => 0,
             'approved_at' => now(),
             'approved_by' => $userId,
@@ -78,8 +81,9 @@ class PengajuanImport implements ToModel, WithHeadingRow, WithValidation, SkipsO
      */
     public function onFailure(Failure ...$failures)
     {
-        // Handle the failures how you'd like.
+        // Menangani kegagalan impor dengan menyimpan kegagalan pada session
         session()->flash('import_errors', $failures);
         throw new Exception('Import failed');
     }
 }
+

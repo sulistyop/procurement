@@ -36,7 +36,7 @@
                         <div class="card-body text-center">
                             <h5 class="card-title">{{ $totalBooks }}</h5>
                             <p class="card-text">Semua Pengajuan</p>
-                            <a href="{{ route('pengajuan.proses') }}" class="btn btn-light btn-sm">Lihat Detail</a>
+                            <a href="{{ route('pengajuan.index') }}" class="btn btn-light btn-sm">Lihat Detail</a>
                         </div>
                     </div>
                 </div>

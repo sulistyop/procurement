@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use Carbon\Carbon;
 use App\Models\Prodi;
 use App\Models\Pengajuan;
 use Illuminate\Http\Request;
@@ -24,12 +25,6 @@ class PengajuanController extends Controller
 	
 	public function index(Request $request)
 	{
-		$parents = ParentPengajuan::all();
-		$user = Auth::user();
-		$prodi = Prodi::when($user->prodi_id, function($query) use ($user){
-			return $query->where('id', $user->prodi_id);
-		})->get();
-		
 		// Ambil parent_pengajuan_id dari query string
 		$idParent = $request->query('parent_pengajuan_id');
 		$selectedParent = ParentPengajuan::find($idParent); // Temukan ParentPengajuan berdasarkan ID jika ada
@@ -37,6 +32,11 @@ class PengajuanController extends Controller
 		if ($idParent && !$selectedParent) {
 			return redirect()->route('pengajuan.index')->with('error', 'Parent tidak ditemukan.');
 		}
+		
+		// Ambil prodi_id dari ParentPengajuan yang dipilih
+		$prodi = Prodi::when($selectedParent, function($query) use ($selectedParent) {
+			return $query->where('id', $selectedParent->prodi_id); // Filter Prodi berdasarkan prodi_id dari ParentPengajuan
+		})->get();
 	
 		// Query untuk mengambil data Pengajuan sesuai dengan parent_pengajuan_id
 		$pengajuanQuery = Pengajuan::with('prodi');
@@ -50,7 +50,7 @@ class PengajuanController extends Controller
 		return view('admin.pengajuan.index', [
 			'pengajuan' => $pengajuan,
 			'parentPengajuan' => $selectedParent,
-			'parents' => $parents,
+			'parents' => ParentPengajuan::all(),
 			'prodi' => $prodi,
 			'idParent' => $idParent, // Kirim idParent ke view untuk dipakai di select
 		]);
@@ -58,8 +58,10 @@ class PengajuanController extends Controller
 	
 	public function create(Request $request)
 	{
-		// Ambil data Prodi yang ada
-		$prodi = Prodi::all();
+		$user = Auth::user();
+		$prodi = Prodi::when($user->prodi_id, function($query) use ($user){
+			return $query->where('id', $user->prodi_id);
+		})->get();
 		
 		// Ambil parent_id dari query parameter
 		$parent_id = $request->query('parent_pengajuan_id');
@@ -256,36 +258,42 @@ class PengajuanController extends Controller
 		]);
 	}
 	public function tolak(Request $request)
-	{    $parents = ParentPengajuan::all();
+	{
+		$parents = ParentPengajuan::all();
 		$prodi = Prodi::all();
-		
+	
 		// Ambil parent_pengajuan_id dari query string
 		$idParent = $request->query('parent_pengajuan_id');
 		$selectedParent = ParentPengajuan::find($idParent); // Temukan ParentPengajuan berdasarkan ID jika ada
-		
+	
 		if ($idParent && !$selectedParent) {
 			return redirect()->route('pengajuan.proses')->with('error', 'Parent tidak ditemukan.');
 		}
-		
-		// Query untuk mengambil data Pengajuan sesuai dengan parent_pengajuan_id dan is_approve = 0
+	
+		// Filter tanggal (default ke tanggal sekarang)
+		$fromDate = $request->query('from_date', Carbon::now()->startOfDay()); // Tanggal mulai
+		$toDate = $request->query('to_date', Carbon::now()->endOfDay()); // Tanggal akhir
+	
+		// Query untuk mengambil data Pengajuan sesuai dengan parent_pengajuan_id, is_approve = 0 dan is_reject = 1
 		$pengajuanQuery = Pengajuan::with('prodi')
-        ->where(function($query) {
-            $query->where('is_approve', 0) // Status Proses
-                  ->orWhere('is_reject', 1); // Status Ditolak
-        });
-		
+			->where('is_approve', 0) // Status Proses
+			->where('is_reject', 1) // Status Ditolak
+			->whereBetween('created_at', [$fromDate, $toDate]); // Filter berdasarkan tanggal
+	
 		if ($idParent) {
 			$pengajuanQuery->where('parent_pengajuan_id', $idParent);
 		}
-		
+	
 		$pengajuan = $pengajuanQuery->get();
-		
+	
 		return view('admin.pengajuan.proses', [
 			'pengajuan' => $pengajuan,
 			'parentPengajuan' => $selectedParent,
 			'parents' => $parents,
 			'prodi' => $prodi,
 			'idParent' => $idParent, // Kirim idParent ke view untuk dipakai di select
+			'fromDate' => $fromDate->format('Y-m-d'), // Kirim fromDate ke view
+			'toDate' => $toDate->format('Y-m-d'), // Kirim toDate ke view
 		]);
 	}
 }

@@ -14,7 +14,7 @@ class RekapPengajuanController extends Controller
     {
         // Ambil tahun yang tersedia untuk filter
         $years = Pengajuan::selectRaw('EXTRACT(YEAR FROM created_at) as year')
-            ->where('is_approve', 1) // Filter approved records
+            ->where('is_approve', 1)
             ->distinct()
             ->pluck('year')
             ->sort();
@@ -25,19 +25,27 @@ class RekapPengajuanController extends Controller
         // Ambil semua pengajuan yang sudah disetujui
         $pengajuanQuery = Pengajuan::haveProdi()
             ->selectRaw('judul, isbn, penerbit, edisi, MAX(diterima) as diterima, MAX(created_at) as latest_created_at')
-            ->where('is_approve', 1) // Filter approved records
-            ->groupBy('judul', 'isbn', 'penerbit', 'edisi'); // Pastikan semua kolom non-agregat ada di sini
+            ->where('is_approve', 1)
+            ->groupBy('judul', 'isbn', 'penerbit', 'edisi');
     
-        // Jika ada filter tahun, tambahkan kondisi
+        // Filter berdasarkan tahun jika ada
         if ($request->filled('year')) {
-            $pengajuanQuery->whereYear('created_at', $request->year); // Ubah ini juga
+            $pengajuanQuery->whereYear('created_at', $request->year);
         }
+    
+        // Filter berdasarkan tanggal jika ada, jika tidak, set tanggal default
+        $startDate = $request->start_date ?: '2001-01-01'; // Default tanggal mulai
+        $endDate = $request->end_date ?: '2001-01-01'; // Default tanggal akhir
+    
+        $pengajuanQuery->whereDate('created_at', '>=', $startDate)
+                       ->whereDate('created_at', '<=', $endDate);
     
         // Jika ada filter prodi, tambahkan kondisi
         if ($request->filled('prodi')) {
             $pengajuanQuery->where('prodi_id', $request->prodi);
         }
     
+        // Ambil data pengajuan berdasarkan query yang sudah difilter
         $pengajuan = $pengajuanQuery->get();
     
         // Mapping untuk menambahkan total eksemplar
@@ -73,8 +81,8 @@ class RekapPengajuanController extends Controller
         }
     
         return view('admin.rekapPengajuan.index', compact('pengajuan', 'years', 'prodis'));
-    }
-
+    }    
+    
     public function indexUser(Request $request)
     {
         // Ambil tahun yang tersedia untuk filter

@@ -26,6 +26,22 @@
                 {{ session('error') }}
             </div>
         @endif
+        <form method="get" action="{{ route('pengajuan.tolak') }}">
+            <div class="row">
+                <div class="col-md-4">
+                    <label for="from_date">Dari Tanggal:</label>
+                    <input type="date" id="from_date" name="from_date" class="form-control" value="{{ $fromDate }}">
+                </div>
+                <div class="col-md-4">
+                    <label for="to_date">Sampai Tanggal:</label>
+                    <input type="date" id="to_date" name="to_date" class="form-control" value="{{ $toDate }}">
+                </div>
+                <div class="col-md-4">
+                    <label>&nbsp;</label>
+                    <button type="submit" class="btn btn-primary form-control mt-2">Filter</button>
+                </div>
+            </div>
+        </form>  
         <div class="mb-2">
             <a type="button" class="btn btn-outline-info" href="{{ route('pengajuan.index').'?export=true' }}">
                 Download Excel

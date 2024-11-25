@@ -81,7 +81,7 @@
             <ul class="nav flex-column">
                 <li class="nav-item">
                     <a class="nav-link text-white {{ Request::is('/dashboard') ? 'active' : '' }}" href="{{ url('/dashboard') }}">
-                        <i class="fas fa-home"></i> Dashboard
+                        <i class="fas fa-tachometer-alt"></i> Dashboard
                     </a>
                 </li>
                 @can('manage pengajuan')
@@ -92,44 +92,47 @@
                     </li>
                 @endcan
                 @can('manage rekap pengajuan')
+                    <a class="nav-link text-white {{ Request::is('rekap-pengajuan') || Request::is('pengajuan-ditolak') ? ' ' : '' }}" href="#rekapMenu" data-toggle="collapse" aria-expanded="false" aria-controls="rekapMenu">
+                        <i class="fas fa-chart-bar"></i> Realisasi Pengajuan
+                        <i class="fas fa-chevron-down ml-auto" id="rekapMenuIcon"></i>
+                    </a>
+                    <div class="collapse {{ Request::is('rekap-pengajuan') || Request::is('pengajuan-ditolak') ? 'show' : '' }}" id="rekapMenu">
+                        <a class="nav-link text-white pl-4 {{ Request::is('rekap-pengajuan') ? 'active' : '' }}" href="{{ route('rekap-pengajuan.index') }}">
+                            <i class="fas fa-check-circle"></i> Pengajuan Diterima
+                        </a>
+                        <a class="nav-link text-white pl-4 {{ Request::is('pengajuan-ditolak') ? 'active' : '' }}" href="{{ route('pengajuan.tolak') }}">
+                            <i class="fas fa-times-circle"></i> Pengajuan Ditolak
+                        </a>
+                    </div>
+                @endcan
+                @can('manage approve keuangan')
                     <li class="nav-item">
-                        <a class="nav-link text-white {{ Request::is('rekap-pengajuan') ? 'active' : '' }}" href="{{ route('rekap-pengajuan.index') }}">
-                            <i class="fas fa-table"></i> Realisasi Pengajuan
+                        <a class="nav-link text-white {{ Request::is('approve-keuangan') ? 'active' : '' }}" href="{{ route('approve-keuangan.index') }}">
+                            <i class="fas fa-coins"></i> Bukti Approve Keuangan
                         </a>
                     </li>
                 @endcan
-                @can('manage approve keuangan')
-                <li class="nav-item">
-                    <a class="nav-link text-white {{ Request::is('approve-keuangan') ? 'active' : '' }}" href="{{ route('approve-keuangan.index') }}">
-                        <i class="fas fa-file-invoice"></i>Bukti Approve Keuangan
-                    </a>                        
-                </li>
-                @endcan
                 @can('manage users')
                     <a class="nav-link text-white {{ Request::is('user*') || Request::is('roles-permissions*') ? ' ' : '' }}" href="#userMenu" data-toggle="collapse" aria-expanded="false" aria-controls="userMenu">
-                        <i class="fas fa-user"></i> Pengguna
+                        <i class="fas fa-users"></i> Pengguna
                         <i class="fas fa-chevron-down ml-auto" id="userMenuIcon"></i>
                     </a>
                     <div class="collapse {{ Request::is('user*') || Request::is('roles-permissions*') ? 'show' : '' }}" id="userMenu">
-                        <a class="nav-link text-white pl-4 {{ Request::is('user') ? 'active' : '' }}" href="{{ route('user.index') }}">List Pengguna</a>
-                        <a class="nav-link text-white pl-4 {{ Request::is('roles-permissions*') ? 'active' : '' }}" href="{{ route('roles-permissions.edit') }}">Izin</a>
+                        <a class="nav-link text-white pl-4 {{ Request::is('user') ? 'active' : '' }}" href="{{ route('user.index') }}">
+                            <i class="fas fa-user"></i> List Pengguna
+                        </a>
+                        <a class="nav-link text-white pl-4 {{ Request::is('roles-permissions*') ? 'active' : '' }}" href="{{ route('roles-permissions.edit') }}">
+                            <i class="fas fa-user-shield"></i> Izin
+                        </a>
                     </div>
                 @endcan
-               {{-- <li class="nav-item">
-                    <a class="nav-link text-white {{ Request::is('settings') ? 'active' : '' }}" href="#">
-                        <i class="fas fa-cog"></i> Settings
-                    </a>
-                </li>--}}
-               {{--buatkan menu activity log--}}
                 <li class="nav-item">
                     <a class="nav-link text-white {{ Request::is('activity-logs') ? 'active' : '' }}" href="{{ route('activity-logs.index') }}">
                         <i class="fas fa-history"></i> Activity Logs
                     </a>
                 </li>
-
             </ul>
         </div>
-
 
         <!-- Main content -->
         <div class="content flex-grow-1" id="main-content">

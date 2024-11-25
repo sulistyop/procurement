@@ -11,6 +11,7 @@ use App\Http\Controllers\Auth\RegisterController;
 use App\Http\Controllers\RolePermissionController;
 use App\Http\Controllers\ApproveKeuanganController;
 use App\Http\Controllers\ParentPengajuanController;
+use App\Http\Controllers\ParentPengajuanUserController;
 
 /*
 |--------------------------------------------------------------------------
@@ -27,7 +28,20 @@ Auth::routes();
 
 Route::middleware('auth')->group(function () {
     // Route untuk halaman home dan lainnya
+    // Rute welcome
+    Route::get('/welcome', [ParentPengajuanUserController::class, 'index'])->name('welcome');
+    Route::prefix('user')->name('user.')->middleware('auth')->group(function () {
+        Route::get('parent-pengajuan', [ParentPengajuanUserController::class, 'index'])->name('parent-pengajuan.index');
+        Route::get('parent-pengajuan/create', [ParentPengajuanUserController::class, 'create'])->name('parent-pengajuan.create');
+        Route::post('parent-pengajuan', [ParentPengajuanUserController::class, 'store'])->name('parent-pengajuan.store');
+        Route::get('parent-pengajuan/{id}/edit', [ParentPengajuanUserController::class, 'edit'])->name('parent-pengajuan.edit');
+        Route::put('parent-pengajuan/{id}', [ParentPengajuanUserController::class, 'update'])->name('parent-pengajuan.update');
+        Route::delete('parent-pengajuan/{id}', [ParentPengajuanUserController::class, 'destroy'])->name('parent-pengajuan.destroy');
+        Route::get('parent-pengajuan/{id}/view', [ParentPengajuanUserController::class, 'view'])->name('parent-pengajuan.view');
+    });
+    
     Route::get('/home', [HomeController::class, 'index'])->name('home');
+    Route::get('parent-pengajuan/{id}/view', [ParentPengajuanUserController::class, 'view'])->name('user.parent-pengajuan.view');
     Route::get('/create', [HomeController::class, 'create'])->name('home-create');
     Route::post('/create', [HomeController::class, 'store'])->name('home-store');
     Route::get('/rekap', [App\Http\Controllers\RekapPengajuanController::class, 'indexUser'])->name('home-rekap');
@@ -106,6 +120,6 @@ Route::get('/', function () {
     if (auth()->check() && auth()->user()->hasRole('admin')) {
         return redirect()->route('dashboard'); // Arahkan admin ke dashboard
     }
-    return redirect()->route('home'); // Arahkan user biasa ke home
+    return redirect()->route('welcome'); // Arahkan user biasa ke home
 })->middleware('auth'); // Tambahkan middleware auth di sini
 

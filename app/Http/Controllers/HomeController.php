@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use App\Models\Prodi;
 use App\Models\Pengajuan;
 use Illuminate\Http\Request;
 use App\Services\PengajuanService;
@@ -16,17 +17,29 @@ class HomeController extends Controller
         $this->pengajuanService = $pengajuanService;
         $this->middleware('auth');
     }
-
-    public function index()
+    public function index(Request $request)
     {
-        $pengajuan = $this->pengajuanService->getPengajuan();
-        $prodi = $this->pengajuanService->getProdi();
-        if (request()->has('export')) {
+        // Ambil nilai parent_pengajuan_id dan prodi_id dari request
+        $parentPengajuanId = $request->input('parent_pengajuan_id');
+        $prodiId = $request->input('prodi_id');
+        
+        // Ambil data berdasarkan parent_pengajuan_id dan prodi_id
+        $pengajuan = Pengajuan::where('parent_pengajuan_id', $parentPengajuanId)
+                              ->where('prodi_id', $prodiId)
+                              ->get();
+    
+        // Ambil data prodi (misalnya, untuk ditampilkan di dropdown atau lainnya)
+        $prodi = Prodi::all();
+    
+        // Cek apakah ingin melakukan ekspor
+        if ($request->has('export')) {
             return $this->pengajuanService->exportPengajuan($pengajuan);
         }
+    
+        // Kirim data ke view
         return view('home', compact('pengajuan', 'prodi'));
     }
-
+    
     public function create()
     {
         // Menampilkan form untuk menambah pengajuan baru

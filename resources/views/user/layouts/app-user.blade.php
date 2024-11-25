@@ -30,6 +30,24 @@
     @stack('style-page')
 
     <style>
+        /* Global Layout */
+        html, body {
+            height: 100%;
+        }
+
+        body {
+            display: flex;
+            flex-direction: column;
+            background-color: #f4f7fa;
+            font-family: 'Arial', sans-serif;
+            color: #333;
+        }
+
+        /* Content Section */
+        main {
+            flex: 1;
+        }
+
         /* Header and Footer */
         .header, .footer {
             background-color: #003366;
@@ -53,6 +71,10 @@
             position: relative;
             bottom: 0;
             width: 100%;
+            background-color: #003366;
+            color: white;
+            font-size: 14px;
+            border-top: 3px solid #003366;
         }
 
         /* Body Style */
@@ -62,39 +84,33 @@
             color: #333;
         }
 
-        .container {
-            padding: 0;
-        }
-
         /* Menu Navigation Styles */
         .menu-nav {
-            background-color: #c4ced8; /* Warna latar belakang menu */
-            padding: 5px 0; /* Padding atas dan bawah */
-            width: 100%; /* Memastikan lebar sama dengan header */
+            background-color: #c4ced8;
+            padding: 5px 0;
+            width: 100%;
         }
 
         .menu-nav .nav-link {
-            margin: 0 15px; /* Jarak antar menu */
-            padding: 10px; /* Padding yang lebih nyaman */
-            font-size: 14px; /* Ukuran font */
-            color: #444c61; /* Warna teks */
-            transition: color 0.3s; /* Efek transisi untuk warna */
+            margin: 0 15px;
+            padding: 10px;
+            font-size: 14px;
+            color: #444c61;
+            transition: color 0.3s;
         }
 
         .menu-nav .nav-link:hover {
-            color: #0056b3; /* Warna teks saat hover */
-            text-decoration: underline; /* Garis bawah saat hover */
+            color: #0056b3;
+            text-decoration: underline;
         }
 
         .menu-nav .nav-link.active {
-            color: #003366; /* Warna teks saat aktif */
-            font-weight: bold; /* Menebalkan teks saat aktif */
+            color: #003366;
+            font-weight: bold;
         }
 
-
-        /* Right-aligned styles */
         .menu-nav .navbar {
-            justify-content: flex-end; /* Memastikan menu berada di kanan */
+            justify-content: flex-end;
         }
 
         /* Table Styles */
@@ -112,9 +128,9 @@
             text-align: center;
             padding: 10px;
             border-bottom: 1px solid #ddd;
-            vertical-align: middle; /* Memastikan teks berada di tengah secara vertikal */
-            text-align: left; /* Mengatur perataan teks ke kiri */
-            padding: 12px; /* Menambahkan padding untuk ruang */
+            vertical-align: middle;
+            text-align: left;
+            padding: 12px;
         }
 
         th {
@@ -135,9 +151,6 @@
             th, td {
                 padding: 10px;
             }
-            .container-fluid, .container {
-                padding: 0;
-            }
         }
 
         .rekap-title {
@@ -148,6 +161,7 @@
             text-shadow: 2px 2px 8px rgba(0, 0, 0, 0.3);
             margin-top: 20px;
         }
+
         /* Tombol Simpan */
         .btn-save {
             padding: 10px 20px;
@@ -158,9 +172,6 @@
             background-color: #28a745;
             color: white;
             transition: all 0.3s ease;
-            display: flex;
-            align-items: center;
-            justify-content: center;
         }
 
         .btn-save:hover {
@@ -179,9 +190,6 @@
             background-color: #6c757d;
             color: white;
             transition: all 0.3s ease;
-            display: flex;
-            align-items: center;
-            justify-content: center;
         }
 
         .btn-back:hover {
@@ -193,7 +201,6 @@
         .btn-save i, .btn-back i {
             margin-right: 8px;
         }
-
     </style>
 </head>
 <body>
@@ -243,7 +250,7 @@
     <div class="container">
         <ul class="nav nav-pills justify-content-end">
             <li class="nav-item">
-                <a class="nav-link" href="{{ route('home') }}">
+                <a class="nav-link" href="{{ route('welcome') }}">
                     <i class="fas fa-file-alt"></i> Pengajuan
                 </a>
             </li>
@@ -256,7 +263,6 @@
     </div>
 </nav>
 
-
 <main class="py-4">
     <div class="container-fluid">
         <!-- Content Section -->
@@ -265,26 +271,19 @@
 </main>
 
 <div class="footer">
-    <p>&copy; {{ date('Y') }} {{ config('app.name') }}. All Rights Reserved.</p>
+    <p>ASP &copy; {{ date('Y') }} . Perpustakaan Universitas Ahmad Dahlan.</p>
 </div>
 
 <!-- Scripts -->
 <script src="https://code.jquery.com/jquery-3.5.1.min.js"></script>
 <script src="https://cdn.jsdelivr.net/npm/select2@4.1.0-rc.0/dist/js/select2.min.js"></script>
-<script src="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.bundle.min.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/sweetalert2@11/dist/sweetalert2.min.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.9.2/dist/umd/popper.min.js"></script>
+<script src="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
 <script src="https://cdn.datatables.net/1.10.21/js/jquery.dataTables.min.js"></script>
 <script src="https://cdn.datatables.net/1.10.21/js/dataTables.bootstrap4.min.js"></script>
-<script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
-<script>
-    $(document).ready(function() {
-        $('.select2').select2();
-        $.extend(true, $.fn.dataTable.defaults, {
-            "language": {
-                "url": "https://cdn.datatables.net/plug-ins/1.10.21/i18n/Indonesian.json"
-            }
-        });
-    });
-</script>
-@stack('script-page')
+
+@stack('scripts')
+
 </body>
 </html>

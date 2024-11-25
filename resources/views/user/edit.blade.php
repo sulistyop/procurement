@@ -1,4 +1,3 @@
-<!-- resources/views/components/edit-pengajuan-modal.blade.php -->
 <div class="modal fade" id="editPengajuanModal" tabindex="-1" role="dialog" aria-labelledby="editPengajuanModalLabel" aria-hidden="true">
     <div class="modal-dialog" role="document">
         <div class="modal-content">

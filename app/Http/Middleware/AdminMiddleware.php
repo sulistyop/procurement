@@ -15,6 +15,6 @@ class AdminMiddleware
 			return $next($request);
 		}
 		
-		return redirect('/home')->with('error', 'Anda tidak memiliki akses ke halaman ini.');
+		return redirect('/welcome')->with('error', 'Anda tidak memiliki akses ke halaman ini.');
 	}
 }

@@ -1,26 +1,34 @@
 <?php
-
 namespace App\Http\Controllers;
 
 use App\Models\Prodi;
 use App\Models\Pengajuan;
 use Illuminate\Http\Request;
 use App\Models\ParentPengajuan;
+use Illuminate\Support\Facades\Auth;
 
 class ParentPengajuanUserController extends Controller
 {
     public function index()
     {
-        $parentPengajuans = ParentPengajuan::all();
+        // Ambil user yang sedang login
+        $user = auth()->user();
+        
+        // Ambil ParentPengajuan yang sesuai dengan prodi yang dimiliki oleh user
+        $parentPengajuans = ParentPengajuan::where('prodi_id', $user->prodi_id)->get(); 
+
         return view('user.parent-pengajuan.index', compact('parentPengajuans'));
     }
 
     public function create()
     {
-        $prodis = Prodi::all(); // Ambil semua data Prodi
-        return view('user.parent-pengajuan.create', compact('prodis'));
-    }
+        // Ambil Prodi berdasarkan prodi_id milik user yang sedang login
+        $user = auth()->user();  // Ambil user yang sedang login
+        $prodi = Prodi::where('id', $user->prodi_id)->get();  // Ambil Prodi yang sesuai dengan prodi_id user
 
+        return view('user.parent-pengajuan.create', compact('prodi'));
+    }
+    
     public function store(Request $request)
     {
         $request->validate([
@@ -30,12 +38,11 @@ class ParentPengajuanUserController extends Controller
     
         ParentPengajuan::create([
             'nama' => $request->nama,
-            'prodi_id' => $request->prodi_id, // Pastikan ini disimpan
+            'prodi_id' => $request->prodi_id, // Menyimpan prodi_id
         ]);
     
         return redirect()->route('user.parent-pengajuan.index')->with('success', 'Parent Pengajuan berhasil disimpan.');
     }
-    
 
     public function edit($id)
     {
@@ -60,9 +67,16 @@ class ParentPengajuanUserController extends Controller
         ParentPengajuan::findOrFail($id)->delete();
         return redirect()->route('user.parent-pengajuan.index')->with('success', 'Data berhasil dihapus.');
     }
-    // Di dalam ParentPengajuanController.php
+
     public function view($id)
     {
-        return redirect()->route('pengajuan.index', ['parent_pengajuan_id' => $id]);
+        // Ambil prodi_id yang dimiliki oleh user
+        $prodiId = auth()->user()->prodi_id; // Asumsi: user memiliki kolom prodi_id
+    
+        return redirect()->route('home', [
+            'parent_pengajuan_id' => $id,
+            'prodi_id' => $prodiId
+        ]);
     }
+    
 }

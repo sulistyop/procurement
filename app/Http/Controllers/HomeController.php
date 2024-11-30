@@ -5,6 +5,7 @@ namespace App\Http\Controllers;
 use App\Models\Prodi;
 use App\Models\Pengajuan;
 use Illuminate\Http\Request;
+use App\Models\ParentPengajuan;
 use App\Services\PengajuanService;
 use Illuminate\Support\Facades\Auth;
 
@@ -22,11 +23,23 @@ class HomeController extends Controller
         // Ambil nilai parent_pengajuan_id dan prodi_id dari request
         $parentPengajuanId = $request->input('parent_pengajuan_id');
         $prodiId = $request->input('prodi_id');
-        
+        $search = $request->input('search'); // Ambil nilai pencarian
+    
         // Ambil data berdasarkan parent_pengajuan_id dan prodi_id
         $pengajuan = Pengajuan::where('parent_pengajuan_id', $parentPengajuanId)
-                              ->where('prodi_id', $prodiId)
-                              ->get();
+                              ->where('prodi_id', $prodiId);
+    
+        // Filter berdasarkan pencarian jika ada
+        if ($search) {
+            $pengajuan = $pengajuan->where(function($query) use ($search) {
+                $query->where('isbn', 'like', '%' . $search . '%')
+                      ->orWhere('judul', 'like', '%' . $search . '%')
+                      ->orWhere('author', 'like', '%' . $search . '%')
+                      // Gunakan is_approve atau is_reject jika Anda ingin mencocokkan status
+                      ->orWhere('is_approve', 'like', '%' . $search . '%')   // Misalnya pencarian untuk status disetujui
+                      ->orWhere('is_reject', 'like', '%' . $search . '%');    // Misalnya pencarian untuk status ditolak
+            });
+        }
     
         // Ambil data prodi (misalnya, untuk ditampilkan di dropdown atau lainnya)
         $prodi = Prodi::all();
@@ -127,7 +140,12 @@ class HomeController extends Controller
 
     public function show(Pengajuan $pengajuan)
     {
-		return view('user.show', compact('pengajuan'));
+        $user = auth()->user();
+        
+        // Ambil ParentPengajuan yang sesuai dengan prodi yang dimiliki oleh user
+        $parentPengajuans = ParentPengajuan::where('prodi_id', $user->prodi_id)->get(); 
+
+		return view('user.show', compact('pengajuan', 'parentPengajuans'));
     }
     
     

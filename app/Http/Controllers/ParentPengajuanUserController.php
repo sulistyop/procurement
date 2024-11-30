@@ -6,6 +6,7 @@ use App\Models\Pengajuan;
 use Illuminate\Http\Request;
 use App\Models\ParentPengajuan;
 use Illuminate\Support\Facades\Auth;
+use App\Models\ApproveKeuanganParentPengajuan;
 
 class ParentPengajuanUserController extends Controller
 {
@@ -16,7 +17,9 @@ class ParentPengajuanUserController extends Controller
         
         // Ambil ParentPengajuan yang sesuai dengan prodi yang dimiliki oleh user
         $parentPengajuans = ParentPengajuan::where('prodi_id', $user->prodi_id)->get(); 
-
+        foreach ($parentPengajuans as $item) {
+            $item->canDelete = ApproveKeuanganParentPengajuan::where('parent_pengajuan_id', $item->id)->exists();
+        }
         return view('user.parent-pengajuan.index', compact('parentPengajuans'));
     }
 
@@ -73,7 +76,7 @@ class ParentPengajuanUserController extends Controller
         // Ambil prodi_id yang dimiliki oleh user
         $prodiId = auth()->user()->prodi_id; // Asumsi: user memiliki kolom prodi_id
     
-        return redirect()->route('home', [
+        return redirect()->route('home-index', [
             'parent_pengajuan_id' => $id,
             'prodi_id' => $prodiId
         ]);

@@ -20,6 +20,8 @@ class ParentPengajuan extends Model
     {
         return $this->belongsTo(Prodi::class, 'prodi_id');
     }
-
-
+    public function parents()
+    {
+        return $this->belongsToMany(ParentPengajuan::class, 'approve_keuangan_parent_pengajuan', 'approve_keuangan_id', 'parent_pengajuan_id');
+    }
 }

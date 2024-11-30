@@ -106,12 +106,13 @@ class PengajuanController extends Controller
 	
 		// Simpan pengajuan dengan parent_pengajuan_id
 		$pengajuan = Pengajuan::create($data);
-	
+
 		// Log activity
 		$this->setLogActivity('Membuat pengajuan', $pengajuan);
-	
-		// Redirect kembali ke halaman pengajuan dengan success
-		return redirect()->route('pengajuan.index')->with('success', 'Pengajuan berhasil ditambahkan.');
+
+		// Redirect kembali ke halaman pengajuan dengan success, tambahkan query string parent_pengajuan_id
+		return redirect()->route('pengajuan.index', ['parent_pengajuan_id' => $request->parent_pengajuan_id])
+						->with('success', 'Pengajuan berhasil ditambahkan.');
 	}
 	
     public function show(Pengajuan $pengajuan)
@@ -130,37 +131,51 @@ class PengajuanController extends Controller
         return view('admin.pengajuan.edit', compact('pengajuan'));
     }
 
-    public function update(Request $request, Pengajuan $pengajuan)
-    {
-        // Validasi input
-        $request->validate([
-            'prodi_id' => 'required|max:100',
-            'judul' => 'required|max:255',
-            'edisi' => 'nullable|max:50',
-            'penerbit' => 'nullable|max:100',
-            'author' => 'required|max:100',
-            'tahun' => 'nullable|integer|min:1900|max:' . date('Y'),
-            'eksemplar' => 'required|integer',
+	public function update(Request $request, Pengajuan $pengajuan)
+	{
+		// Validasi input
+		$request->validate([
+			'prodi_id' => 'required|max:100',
+			'judul' => 'required|max:255',
+			'edisi' => 'nullable|max:50',
+			'penerbit' => 'nullable|max:100',
+			'author' => 'required|max:100',
+			'tahun' => 'nullable|integer|min:1900|max:' . date('Y'),
+			'eksemplar' => 'required|integer',
 			'diterima' => 'nullable|integer',
 			'harga' => 'nullable|numeric|min:0', // Tambahkan validasi untuk harga
-        ]);
-
-        // Update data pengajuan
-        $pengajuan->update($request->all());
-		
+		]);
+	
+		// Update data pengajuan
+		$pengajuan->update($request->all());
+	
+		// Log aktivitas
 		$this->setLogActivity('Mengubah pengajuan', $pengajuan);
+	
+		// Redirect ke halaman pengajuan dengan parent_pengajuan_id
+		$parentPengajuanId = $request->parent_pengajuan_id ?? 1; // Default ke 1 jika tidak ada
+	
+		return redirect()->route('pengajuan.index', ['parent_pengajuan_id' => $parentPengajuanId])
+						 ->with('success', 'Pengajuan berhasil diupdate.');
+	}
+	
 
-        return redirect()->route('pengajuan.index')->with('success', 'Pengajuan berhasil diupdate.');
-    }
-
-    public function destroy(Pengajuan $pengajuan)
-    {
-        // Hapus data pengajuan
-	    $dump = $pengajuan;
-        $pengajuan->delete();
+	public function destroy(Request $request, Pengajuan $pengajuan)
+	{
+		// Hapus data pengajuan
+		$dump = $pengajuan;
+		$pengajuan->delete();
+		
+		// Ambil parent_pengajuan_id dari query string
+		$parentPengajuanId = $request->query('parent_pengajuan_id', 1); // Default ke 1 jika tidak ada
+	
 		$this->setLogActivity('Menghapus pengajuan', $dump);
-        return redirect()->route('pengajuan.index')->with('success', 'Pengajuan berhasil dihapus.');
-    }
+		
+		// Redirect dengan menambahkan parent_pengajuan_id ke URL
+		return redirect()->route('pengajuan.index', ['parent_pengajuan_id' => $parentPengajuanId])
+						 ->with('success', 'Pengajuan berhasil dihapus.');
+	}
+	
     public function approve($id)
     {
         $pengajuan = Pengajuan::findOrFail($id);
@@ -220,13 +235,17 @@ class PengajuanController extends Controller
 	public function import(Request $request)
 	{
 		try {
-			Excel::import(new PengajuanImport, $request->file('file'));
+			$parentPengajuanId = $request->get('parent_pengajuan_id');
+
+			Excel::import(new PengajuanImport($parentPengajuanId), $request->file('file'));
 			$this->setLogActivity('Import data pengajuan', new Pengajuan());
+	
 			return redirect()->back()->with('success', 'Import berhasil.');
 		} catch (\Exception $e) {
 			return redirect()->back()->with('error', 'Terjadi kesalahan saat import.');
 		}
-	}
+	}	
+	
 	public function proses(Request $request)
 	{    $parents = ParentPengajuan::all();
 		$prodi = Prodi::all();
@@ -261,32 +280,40 @@ class PengajuanController extends Controller
 	{
 		$parents = ParentPengajuan::all();
 		$prodi = Prodi::all();
-	
+	  
 		// Ambil parent_pengajuan_id dari query string
 		$idParent = $request->query('parent_pengajuan_id');
 		$selectedParent = ParentPengajuan::find($idParent); // Temukan ParentPengajuan berdasarkan ID jika ada
-	
+	  
 		if ($idParent && !$selectedParent) {
 			return redirect()->route('pengajuan.proses')->with('error', 'Parent tidak ditemukan.');
 		}
-	
+	  
 		// Filter tanggal (default ke tanggal sekarang)
 		$fromDate = $request->query('from_date', Carbon::now()->startOfDay()); // Tanggal mulai
 		$toDate = $request->query('to_date', Carbon::now()->endOfDay()); // Tanggal akhir
-	
+	  
+		// Pastikan fromDate dan toDate adalah objek Carbon
+		$fromDate = Carbon::parse($fromDate);
+		$toDate = Carbon::parse($toDate);
+	  
 		// Query untuk mengambil data Pengajuan sesuai dengan parent_pengajuan_id, is_approve = 0 dan is_reject = 1
 		$pengajuanQuery = Pengajuan::with('prodi')
 			->where('is_approve', 0) // Status Proses
-			->where('is_reject', 1) // Status Ditolak
-			->whereBetween('created_at', [$fromDate, $toDate]); // Filter berdasarkan tanggal
-	
+			->where('is_reject', 1); // Status Ditolak
+	  
+		// Filter berdasarkan Parent Pengajuan jika ada
 		if ($idParent) {
 			$pengajuanQuery->where('parent_pengajuan_id', $idParent);
 		}
-	
-		$pengajuan = $pengajuanQuery->get();
-	
-		return view('admin.pengajuan.proses', [
+	  
+		// Filter berdasarkan rentang tanggal
+		$pengajuanQuery->whereBetween('created_at', [$fromDate, $toDate]);
+	  
+		// Gunakan paginate (misalnya 10 per halaman)
+		$pengajuan = $pengajuanQuery->paginate(10);
+	  
+		return view('admin.pengajuan.tolak', [
 			'pengajuan' => $pengajuan,
 			'parentPengajuan' => $selectedParent,
 			'parents' => $parents,
@@ -296,4 +323,5 @@ class PengajuanController extends Controller
 			'toDate' => $toDate->format('Y-m-d'), // Kirim toDate ke view
 		]);
 	}
+	
 }

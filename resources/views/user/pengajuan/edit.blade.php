@@ -36,6 +36,7 @@
                         <small class="text-danger">{{ $message }}</small>
                         @enderror
                     </div>
+                    <input type="hidden" name="parent_pengajuan_id" value="{{ $idParent }}">     
                     <div class="form-group">
                         <label for="isbn">ISBN</label>
                         <input type="text" class="form-control" id="isbn" name="isbn" required>

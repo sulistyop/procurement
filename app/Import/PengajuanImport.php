@@ -1,4 +1,5 @@
 <?php
+
 namespace App\Import;
 
 use Exception;
@@ -17,53 +18,39 @@ class PengajuanImport implements ToModel, WithHeadingRow, WithValidation, SkipsO
 {
     use SkipsFailures;
 
+    protected $parentPengajuanId;
+
+    public function __construct($parentPengajuanId)
+    {
+        $this->parentPengajuanId = $parentPengajuanId; // Menyimpan parent_pengajuan_id
+    }
+
     public function model(array $row)
     {
-        // Ambil pengguna yang mengupload
+        // Ambil pengguna saat ini
         $userId = auth()->id();
-        $user = User::find($userId);
 
-        // Mendapatkan ParentPengajuan yang terkait dengan user yang sedang login
-        $parent = ParentPengajuan::where('user_id', $userId)->first();
+        // Ambil ParentPengajuan
+        $parentPengajuan = ParentPengajuan::find($this->parentPengajuanId);
 
-        // Pastikan ada ParentPengajuan yang ditemukan
-        if (!$parent) {
-            throw new Exception('Parent Pengajuan tidak ditemukan.');
-        }
+        // Tentukan Prodi berdasarkan ParentPengajuan atau nama pada file Excel
+        $prodi = $parentPengajuan->prodi ?? Prodi::firstOrCreate(
+            ['nama' => $row['prodi'] ?? 'Unknown'],
+            ['deskripsi' => '']
+        );
 
-        // Ambil Prodi dari ParentPengajuan
-        $prodi = $parent->prodi;
-
-        // Jika Prodi tidak ada, cari berdasarkan nama dari data yang diimpor
-        if (!$prodi && isset($row['prodi'])) {
-            $prodi = Prodi::where('nama', 'like', '%' . $row['prodi'] . '%')->first();
-        }
-
-        // Jika Prodi masih belum ditemukan, buat Prodi baru
-        if (!$prodi && isset($row['prodi'])) {
-            $prodi = Prodi::create([
-                'nama' => $row['prodi'],
-                'deskripsi' => '', // Deskripsi bisa dikosongkan atau diisi jika diperlukan
-            ]);
-        }
-
-        // Jika Prodi tidak ada, beri exception agar tidak ada data yang hilang
-        if (empty($row['prodi'])) {
-            throw new Exception('Nama Prodi tidak ditemukan di baris impor.');
-        }
-        
-
-        // Membuat record pengajuan
+        // Membuat record Pengajuan
         return new Pengajuan([
-            'prodi_id' => $prodi->id,
-            'judul' => $row['judul'],
-            'author' => $row['author'],
-            'tahun' => $row['tahun'] ?? null,
-            'eksemplar' => $row['eksemplar'],
-            'diterima' => $row['diterima'] ?? null,
-            'is_approve' => 0,
-            'approved_at' => now(),
-            'approved_by' => $userId,
+            'parent_pengajuan_id' => $this->parentPengajuanId, // Set parent_pengajuan_id
+            'prodi_id' => $prodi->id,                         // Prodi yang ditentukan
+            'judul' => $row['judul'],                         // Judul dari file Excel
+            'author' => $row['author'],                       // Penulis dari file Excel
+            'tahun' => $row['tahun'] ?? null,                 // Tahun (opsional)
+            'eksemplar' => $row['eksemplar'],                 // Eksemplar
+            'diterima' => $row['diterima'] ?? null,           // Diterima (opsional)
+            'is_approve' => 0,                                // Default tidak disetujui
+            'approved_at' => now(),                           // Waktu persetujuan
+            'approved_by' => $userId,                         // Disetujui oleh pengguna saat ini
         ]);
     }
 
@@ -72,18 +59,23 @@ class PengajuanImport implements ToModel, WithHeadingRow, WithValidation, SkipsO
         return [
             '*.judul' => 'required',
             '*.author' => 'required',
-            '*.eksemplar' => 'required',
+            '*.eksemplar' => 'required|numeric|min:1',
         ];
     }
 
     /**
-     * @throws Exception
+     * Tangani kegagalan validasi.
      */
     public function onFailure(Failure ...$failures)
     {
-        // Menangani kegagalan impor dengan menyimpan kegagalan pada session
+        // Log kegagalan
+        foreach ($failures as $failure) {
+            \Log::error("Import failed", [
+                'row' => $failure->row(),
+                'attribute' => $failure->attribute(),
+                'errors' => $failure->errors(),
+            ]);
+        }
         session()->flash('import_errors', $failures);
-        throw new Exception('Import failed');
     }
 }
-

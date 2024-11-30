@@ -26,10 +26,37 @@
 
     <!-- Custom CSS -->
     <link rel="stylesheet" href="{{ asset('css/style.css') }}">
+    <link rel="stylesheet" href="https://cdn.datatables.net/1.11.3/css/jquery.dataTables.min.css">
 
     @stack('style-page')
 
     <style>
+
+        /* Background utama */
+        /* body {
+            background-image: url('{{ asset('image/perpus.jpg') }}');
+            background-size: cover;
+            background-position: center;
+            background-attachment: fixed;
+            position: relative;
+        }
+
+        Lapisan transparan + blur 
+        body::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(252, 253, 253,); /* Warna putih transparan */
+            backdrop-filter: blur(8px); /* Efek blur 
+            z-index: -1; /* Di belakang konten 
+        } */
+
+        .header, .footer {
+            background-color: rgba(0, 51, 102, 0.9); /* Warna dengan transparansi */
+        }
         /* Global Layout */
         html, body {
             height: 100%;

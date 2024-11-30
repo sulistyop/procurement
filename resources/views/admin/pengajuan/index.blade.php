@@ -14,7 +14,11 @@
 
 @section('content')
     <div>
-        <h1>Daftar Pengajuan</h1>
+        <h1 class="mb-4 text-center text-primary font-weight-bold">
+            Daftar Pengajuan
+        </h1>
+        <hr class="my-4 border-top border-primary">
+        
         @if(session('import_errors'))
             <div class="alert alert-danger">
                 <ul>

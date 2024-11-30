@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use Carbon\Carbon;
 use App\Models\Prodi;
 use App\Models\Pengajuan;
 use Illuminate\Http\Request;
@@ -33,9 +34,9 @@ class RekapPengajuanController extends Controller
             $pengajuanQuery->whereYear('created_at', $request->year);
         }
     
-        // Filter berdasarkan tanggal jika ada, jika tidak, set tanggal default
-        $startDate = $request->start_date ?: '2001-01-01'; // Default tanggal mulai
-        $endDate = $request->end_date ?: '2001-01-01'; // Default tanggal akhir
+        // Filter berdasarkan tanggal jika ada
+        $startDate = $request->start_date ?: Carbon::now()->startOfDay(); // Default tanggal mulai
+        $endDate = $request->end_date ?: Carbon::now()->endOfDay(); // Default tanggal akhir
     
         $pengajuanQuery->whereDate('created_at', '>=', $startDate)
                        ->whereDate('created_at', '<=', $endDate);
@@ -45,11 +46,11 @@ class RekapPengajuanController extends Controller
             $pengajuanQuery->where('prodi_id', $request->prodi);
         }
     
-        // Ambil data pengajuan berdasarkan query yang sudah difilter
-        $pengajuan = $pengajuanQuery->get();
+        // Ambil data pengajuan dengan pagination
+        $pengajuan = $pengajuanQuery->paginate(10)->appends($request->except('page'));
     
-        // Mapping untuk menambahkan total eksemplar
-        $pengajuan = $pengajuan->map(function ($item) {
+        // Mapping untuk menambahkan total eksemplar setelah pagination
+        $pengajuan->getCollection()->transform(function ($item) {
             // Mendapatkan entry terbaru berdasarkan judul, isbn, penerbit, dan edisi
             $latestEntry = Pengajuan::where('judul', $item->judul)
                 ->where('is_approve', 1)
@@ -81,7 +82,7 @@ class RekapPengajuanController extends Controller
         }
     
         return view('admin.rekapPengajuan.index', compact('pengajuan', 'years', 'prodis'));
-    }    
+    }
     
     public function indexUser(Request $request)
     {
@@ -95,15 +96,27 @@ class RekapPengajuanController extends Controller
         // Ambil semua prodi untuk filter
         $prodis = Prodi::all();
     
+        // Default tanggal awal dan akhir adalah hari ini
+        $defaultStartDate = now()->startOfDay()->toDateString();
+        $defaultEndDate = now()->endOfDay()->toDateString();
+    
+        // Ambil rentang tanggal dari request, atau gunakan default
+        $startDate = $request->get('start_date', $defaultStartDate);
+        $endDate = $request->get('end_date', $defaultEndDate);
+    
+        // Ambil kata kunci pencarian dari request
+        $search = $request->get('search');
+    
         // Ambil semua pengajuan yang sudah disetujui
         $pengajuanQuery = Pengajuan::haveProdi()
             ->selectRaw('judul, isbn, penerbit, edisi, MAX(diterima) as diterima, MAX(created_at) as latest_created_at')
             ->where('is_approve', 1) // Filter approved records
-            ->groupBy('judul', 'isbn', 'penerbit', 'edisi'); // Pastikan semua kolom non-agregat ada di sini
+            ->whereBetween('created_at', [$startDate, $endDate]) // Filter rentang tanggal
+            ->groupBy('judul', 'isbn', 'penerbit', 'edisi');
     
         // Jika ada filter tahun, tambahkan kondisi
         if ($request->filled('year')) {
-            $pengajuanQuery->whereYear('created_at', $request->year); // Ubah ini juga
+            $pengajuanQuery->whereYear('created_at', $request->year);
         }
     
         // Jika ada filter prodi, tambahkan kondisi
@@ -111,32 +124,17 @@ class RekapPengajuanController extends Controller
             $pengajuanQuery->where('prodi_id', $request->prodi);
         }
     
-        $pengajuan = $pengajuanQuery->get();
+        // Jika ada pencarian berdasarkan judul, pengarang, atau ISBN, tambahkan kondisi
+        if ($search) {
+            $pengajuanQuery->where(function($q) use ($search) {
+                $q->where('judul', 'like', "%$search%")
+                  ->orWhere('author', 'like', "%$search%")
+                  ->orWhere('isbn', 'like', "%$search%");
+            });
+        }
     
-        // Mapping untuk menambahkan total eksemplar
-        $pengajuan = $pengajuan->map(function ($item) {
-            // Mendapatkan entry terbaru berdasarkan judul, isbn, penerbit, dan edisi
-            $latestEntry = Pengajuan::where('judul', $item->judul)
-                ->where('is_approve', 1)
-                ->where('isbn', $item->isbn)
-                ->where('penerbit', $item->penerbit)
-                ->where('edisi', $item->edisi)
-                ->orderBy('created_at', 'desc')
-                ->first();
-    
-            // Menjumlahkan eksemplar untuk entry terbaru
-            $summary = Pengajuan::where('judul', $item->judul)
-                ->where('is_approve', 1)
-                ->where('isbn', $item->isbn)
-                ->where('penerbit', $item->penerbit)
-                ->where('edisi', $item->edisi)
-                ->sum('diterima'); // Menghitung jumlah eksemplar
-    
-            // Menambahkan total eksemplar ke entry terbaru
-            $latestEntry->diterima = $summary;
-    
-            return $latestEntry;
-        });
+        // Ambil hasil pengajuan yang sudah difilter dengan pagination
+        $pengajuan = $pengajuanQuery->paginate(10); // Menampilkan 10 pengajuan per halaman
     
         // Export ke Excel jika diminta
         if ($request->has('export')) {
@@ -145,6 +143,7 @@ class RekapPengajuanController extends Controller
             return Excel::download($excelReport, $fileName);
         }
     
-        return view('user.rekap', compact('pengajuan', 'years', 'prodis'));
+        return view('user.rekap', compact('pengajuan', 'years', 'prodis', 'startDate', 'endDate', 'search'));
     }
+    
 }

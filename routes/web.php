@@ -8,6 +8,7 @@ use App\Http\Controllers\PenggunaController;
 use App\Http\Controllers\PengajuanController;
 use App\Http\Controllers\AssignRoleController;
 use App\Http\Controllers\Auth\RegisterController;
+use App\Http\Controllers\PengajuanUserController;
 use App\Http\Controllers\RolePermissionController;
 use App\Http\Controllers\ApproveKeuanganController;
 use App\Http\Controllers\ParentPengajuanController;
@@ -42,16 +43,17 @@ Route::middleware('auth')->group(function () {
     
     Route::get('/home', [HomeController::class, 'index'])->name('home');
     Route::get('parent-pengajuan/{id}/view', [ParentPengajuanUserController::class, 'view'])->name('user.parent-pengajuan.view');
-    Route::get('/create', [HomeController::class, 'create'])->name('home-create');
-    Route::post('/create', [HomeController::class, 'store'])->name('home-store');
+    
+    Route::get('/index', [PengajuanUserController::class, 'index'])->name('home-index');
+    Route::get('/create', [PengajuanUserController::class, 'create'])->name('home-create');
+    Route::post('/create', [PengajuanUserController::class, 'store'])->name('home-store');
+    Route::get('/{pengajuan}/edit', [PengajuanUserController::class, 'edit'])->name('home-edit');
+    Route::put('/{pengajuan}', [PengajuanUserController::class, 'update'])->name('home-update');
+    Route::get('/show/{pengajuan}', [PengajuanUserController::class, 'show'])->name('home-show');
+    Route::delete('/{pengajuan}', [PengajuanUserController::class, 'destroy'])->name('home-destroy');
+
     Route::get('/rekap', [App\Http\Controllers\RekapPengajuanController::class, 'indexUser'])->name('home-rekap');
     
-    // Pastikan route ini berada setelah route statis lainnya
-    Route::get('/{pengajuan}/edit', [HomeController::class, 'edit'])->name('home-edit');
-    Route::put('/{pengajuan}', [HomeController::class, 'update'])->name('home-update');
-    Route::get('/show/{pengajuan}', [HomeController::class, 'show'])->name('home-show');
-
-
     // Routes untuk roles dan assign-role-permission
     Route::post('/roles', [RoleController::class, 'createRole']);
     Route::post('/user/{userId}/assign-role-permission', [UserController::class, 'assignRole']);
@@ -98,10 +100,11 @@ Route::middleware(['auth', 'admin'])->group(function () {
 
     Route::group(['prefix' => 'approve-keuangan'], function () {
         Route::get('/', [ApproveKeuanganController::class, 'index'])->name('approve-keuangan.index');
+        Route::get('/approve-keuangan/{id}', [ApproveKeuanganController::class, 'index']);
         Route::get('/create', [ApproveKeuanganController::class, 'create'])->name('approve-keuangan.create');
         Route::post('/', [ApproveKeuanganController::class, 'store'])->name('approve-keuangan.store');
         Route::get('/{approveKeuangan}', [ApproveKeuanganController::class, 'show'])->name('approve-keuangan.show');
-        Route::get('/{approveKeuangan}/edit', [ApproveKeuanganController::class, 'edit'])->name('approve-keuangan.edit');
+        Route::get('/approve-keuangan/{id}/edit', [ApproveKeuanganController::class, 'edit'])->name('approve-keuangan.edit');
         Route::put('/{approveKeuangan}', [ApproveKeuanganController::class, 'update'])->name('approve-keuangan.update');
         Route::delete('/{approveKeuangan}', [ApproveKeuanganController::class, 'destroy'])->name('approve-keuangan.destroy');
     });

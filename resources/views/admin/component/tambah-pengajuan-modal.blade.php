@@ -36,7 +36,8 @@
                                     {{ $parent->nama }}
                                 </option>
                             @endforeach
-                        </select>                                               
+                        </select>      
+                        <input type="hidden" name="parent_pengajuan_id" value="{{ $idParent }}">                                         
                         @error('parent_pengajuan_id')
                             <div class="text-danger">{{ $message }}</div>
                         @enderror

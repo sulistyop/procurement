@@ -2,7 +2,11 @@
 
 @section('content')
     <div class="container">
-        <h1>Edit Pengguna</h1>
+        <h1 class="mb-4 text-primary font-weight-bold">
+            Edit Peran
+        </h1>
+        <hr class="my-4 border-top border-primary">
+        
         <form action="{{ route('user.update', $user->id) }}" method="POST">
             @csrf
             @method('PUT')

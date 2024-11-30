@@ -14,7 +14,6 @@
                             <div class="form-group">
                                 <label for="prodi_id">Prodi/Unit</label>
                                 <select class="form-control select2" id="prodi_id" name="prodi_id" required>
-                                    <option value="">Pilih Prodi/Unit</option>
                                     @foreach($prodi as $item)
                                         <option value="{{ $item->id }}">{{ $item->nama }}</option>
                                     @endforeach
@@ -23,7 +22,7 @@
                                     <small class="text-danger">{{ $message }}</small>
                                 @enderror
                             </div>
-                
+                            <input type="hidden" name="parent_pengajuan_id" value="{{ $idParent }}">  
                             <div class="form-group">
                                 <label for="judul">Judul</label>
                                 <input type="text" class="form-control" id="judul" name="judul" value="{{ old('judul') }}" required>
@@ -84,9 +83,9 @@
                                 <button type="submit" class="btn btn-save">
                                     <i class="fas fa-save"></i> Simpan
                                 </button>
-                                <a href="{{ route('home') }}" class="btn btn-back">
+                                <a href="{{ route('home-index', ['parent_pengajuan_id' => $idParent]) }}" class="btn btn-back">
                                     <i class="fas fa-arrow-left"></i> Kembali
-                                </a>
+                                </a>                                
                             </div>
                             
                         </form>

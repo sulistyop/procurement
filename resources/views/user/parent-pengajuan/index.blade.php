@@ -1,43 +1,157 @@
 @extends('user.layouts.app-user')
 
 @section('content')
-    <div class="container">
-        <h1>Parent Pengajuan</h1>
-        <a href="{{ route('user.parent-pengajuan.create') }}" class="btn btn-primary mb-3">Tambah Parent Pengajuan</a>
-
-        @if (session('success'))
-            <div class="alert alert-success">
-                {{ session('success') }}
-            </div>
-        @endif
-
-        <table class="table table-bordered">
-            <thead>
-                <tr>
-                    <th>No</th>
-                    <th>Nama</th>
-                    <th>Prodi/Unit</th>  <!-- Kolom Prodi/Unit -->
-                    <th>Aksi</th>
-                </tr>
-            </thead>
-            <tbody>
-                @foreach($parentPengajuans as $item)
-                <tr>
-                    <td>{{ $loop->iteration }}</td>
-                    <td>{{ $item->nama }}</td>
-                    <td>{{ $item->prodi->nama ?? 'Tidak ada Prodi' }}</td>  <!-- Menampilkan Prodi/Unit -->
-                    <td>
-                        <a href="{{ route('user.parent-pengajuan.view', $item->id) }}" class="btn btn-info btn-sm">Lihat Buku</a>
-                        <a href="{{ route('user.parent-pengajuan.edit', $item->id) }}" class="btn btn-warning btn-sm">Edit</a>
-                        <form action="{{ route('user.parent-pengajuan.destroy', $item->id) }}" method="POST" style="display:inline;">
-                            @csrf
-                            @method('DELETE')
-                            <button type="submit" class="btn btn-danger btn-sm" onclick="return confirm('Yakin ingin menghapus?')">Hapus</button>
-                        </form>
-                    </td>
-                </tr>
-                @endforeach
-            </tbody>
-        </table>
+<div class="container mt-5">
+    <!-- Title Section -->
+    <div class="text-center my-4">
+        <h1 class="rekap-title">Pengelolaan Pengajuan</h1>
     </div>
+
+    <!-- Add New Button -->
+    <div class="mb-4 text-end">
+        <a href="{{ route('user.parent-pengajuan.create') }}" class="btn btn-outline-primary">
+            <i class="fas fa-plus"></i> Tambah Rumah Pengajuan
+        </a>
+    </div>
+
+    <!-- Success Messages -->
+    @if(session('success'))
+        <div class="alert alert-success alert-dismissible fade show" role="alert">
+            <strong>Sukses!</strong> {{ session('success') }}
+            <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+        </div>
+    @endif
+
+    @if(session('error'))
+        <div class="alert alert-danger alert-dismissible fade show" role="alert">
+            <strong>Error!</strong> {{ session('error') }}
+            <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+        </div>
+    @endif
+
+    <!-- Cards Section -->
+    <div class="row">
+        @forelse($parentPengajuans as $item)
+            <div class="col-md-4">
+                <div class="card shadow-sm mb-4">
+                    <div class="card-body text-center">
+                        <div class="card-icon mb-3">
+                            <i class="fas fa-home fa-3x text-primary"></i>
+                        </div>
+                        <h5 class="card-title">{{ $item->nama }}</h5>
+                        <div class="d-flex justify-content-center align-items-center">
+                            <!-- Lihat Button -->
+                            <a href="{{ route('user.parent-pengajuan.view', $item->id) }}" 
+                               class="btn btn-info btn-sm mx-1" 
+                               data-bs-toggle="tooltip" 
+                               data-bs-placement="top" 
+                               title="Lihat">
+                                <i class="fas fa-eye"></i>
+                            </a>
+                            
+                            <!-- Edit Button -->
+                            <a href="{{ route('user.parent-pengajuan.edit', $item->id) }}" 
+                               class="btn btn-warning btn-sm mx-1" 
+                               data-bs-toggle="tooltip" 
+                               data-bs-placement="top" 
+                               title="Edit">
+                                <i class="fas fa-edit"></i>
+                            </a>
+                            
+                            <!-- Hapus Button -->
+                            @if($item->canDelete)
+                                <form action="{{ route('user.parent-pengajuan.destroy', $item->id) }}" method="POST" style="display:inline;">
+                                    @csrf
+                                    @method('DELETE')
+                                    <button type="submit" 
+                                            class="btn btn-danger btn-custom mx-1 btn-sm" onclick="return confirm('Yakin ingin menghapus?')" data-toggle="tooltip" data-placement="top" title="Delete">
+                                        <i class="fas fa-trash"></i>
+                                    </button>
+                                </form>
+                            @else
+                                <!-- Pesan atau tombol lain jika tidak bisa dihapus -->
+                                <button class="btn btn-danger btn-sm mx-1" disabled>
+                                    <i class="fas fa-trash"></i> approval
+                                </button>
+                            @endif
+                        </div>
+                    </div>
+                </div>
+            </div>
+        @empty
+            <div class="text-center">
+                <p>Belum ada data rumah pengajuan.</p>
+            </div>
+        @endforelse
+    </div>
+</div>
+@endsection
+
+@section('styles')
+<link href="https://cdn.jsdelivr.net/npm/@fortawesome/fontawesome-free/css/all.css" rel="stylesheet">
+<style>
+    .rekap-title {
+        font-size: 2rem;
+        font-weight: bold;
+        color: #2C3E50;
+    }
+
+    .card-icon i {
+        color: #3498DB;
+    }
+
+    .card {
+        border-radius: 12px;
+        transition: transform 0.3s, box-shadow 0.3s;
+    }
+
+    .card:hover {
+        transform: translateY(-10px);
+        box-shadow: 0 10px 20px rgba(0, 0, 0, 0.2);
+    }
+
+    .btn {
+        border-radius: 25px;
+        font-size: 14px;
+    }
+
+    .btn-sm {
+        padding: 5px 15px;
+    }
+
+    .d-flex > .btn {
+        margin-left: 5px;
+        margin-right: 5px;
+    }
+</style>
+@endsection
+
+@section('scripts')
+<script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+<script>
+    // Tooltip initialization
+    document.addEventListener('DOMContentLoaded', () => {
+        const tooltipTriggerList = [].slice.call(document.querySelectorAll('[data-bs-toggle="tooltip"]'));
+        tooltipTriggerList.map((tooltipTriggerEl) => new bootstrap.Tooltip(tooltipTriggerEl));
+    });
+
+    // SweetAlert for Delete Confirmation
+    document.querySelectorAll('.btn-delete').forEach(button => {
+        button.addEventListener('click', function () {
+            Swal.fire({
+                title: 'Yakin ingin menghapus?',
+                text: "Data yang dihapus tidak bisa dikembalikan!",
+                icon: 'warning',
+                showCancelButton: true,
+                confirmButtonText: 'Hapus',
+                cancelButtonText: 'Batal',
+                reverseButtons: true
+            }).then((result) => {
+                if (result.isConfirmed) {
+                    this.closest('form').submit();
+                }
+            });
+        });
+    });
+</script>
 @endsection

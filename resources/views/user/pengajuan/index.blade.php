@@ -103,7 +103,7 @@
                                                 <i class="fas fa-edit"></i>
                                             </a>
                                         
-                                            <form action="{{ route('pengajuan.destroy', $item->id) }}" method="POST" style="display:inline;">
+                                            <form action="{{ route('home-destroy', $item->id) }}" method="POST" style="display:inline;">
                                                 @csrf
                                                 @method('DELETE')
                                                 <button type="submit" class="btn btn-danger btn-custom mx-1 btn-sm" onclick="return confirm('Yakin ingin menghapus?')" data-toggle="tooltip" data-placement="top" title="Delete">

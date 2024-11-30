@@ -2,7 +2,11 @@
 
 @section('content')
     <div class="container">
-        <h1>Daftar Pengguna</h1>
+        <h1 class="mb-4 text-center text-primary font-weight-bold">
+            Daftar Pengguna
+        </h1>
+        <hr class="my-4 border-top border-primary">
+        
         <a href="{{ route('user.create') }}" class="btn btn-primary mb-3">Tambah Pengguna</a>
         <table class="table mt-3" id="user-table">
             <thead>

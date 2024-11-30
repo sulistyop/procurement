@@ -6,15 +6,31 @@ use App\Models\Prodi;
 use App\Models\Pengajuan;
 use Illuminate\Http\Request;
 use App\Models\ParentPengajuan;
+use App\Models\ApproveKeuanganParentPengajuan;
 
 class ParentPengajuanController extends Controller
 {
-    public function index()
+    public function index(Request $request)
     {
-        $parentPengajuans = ParentPengajuan::all();
-        return view('admin.parent-pengajuan.index', compact('parentPengajuans'));
+        // Ambil semua Prodi untuk dropdown filter
+        $prodis = Prodi::all();
+    
+        // Set default prodi ID ke 1 (Perpustakaan) jika tidak ada filter
+        $selectedProdi = $request->get('prodi', 1); // Default ke 1 (Perpustakaan)
+    
+        // Query untuk menampilkan Parent Pengajuan, filter berdasarkan Prodi jika ada
+        $parentPengajuans = ParentPengajuan::with('prodi') // Pastikan sudah ada relasi 'prodi'
+            ->when($selectedProdi, function($query) use ($selectedProdi) {
+                return $query->where('prodi_id', $selectedProdi);
+            })
+            ->get();
+            foreach ($parentPengajuans as $item) {
+                $item->canDelete = ApproveKeuanganParentPengajuan::where('parent_pengajuan_id', $item->id)->exists();
+            }
+        // Kirim data ke view
+        return view('admin.parent-pengajuan.index', compact('parentPengajuans', 'prodis'));
     }
-
+    
     public function create()
     {
         $prodis = Prodi::all(); // Ambil semua data Prodi

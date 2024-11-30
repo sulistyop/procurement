@@ -14,20 +14,24 @@
 
 @section('content')
     <div>
-        <h1>Laporan Keuangan</h1>
+        <h1 class="mb-4 text-center text-primary font-weight-bold">
+           LAPORAN KEUANGAN
+        </h1>
+        <hr class="my-4 border-top border-primary">
+        
         <div class="mb-2">
             <a class="btn btn-outline-primary" href="#" data-toggle="modal" data-target="#tambahApproveKeuanganModal">
                 Tambah Approvement
                 <i class="fas fa-plus"></i>
             </a>
         </div>
-
         <table class="table mt-4" id="customers">
             <thead>
             <tr>
                 <th rowspan="2" style="text-align: center; vertical-align: middle;">No</th>
                 <th colspan="2" class="text-center">Surat</th>
                 <th colspan="2" class="text-center">Bukti Transaksi</th>
+                <th colspan="2" class="text-center">Parent & Prodi</th>
                 <th colspan="2" class="text-center">Aksi</th>
             </tr>
             <tr>
@@ -35,6 +39,8 @@
                 <th>File</th>
                 <th>Nomor Bukti Transaksi</th>
                 <th>File</th>
+                <th>Parent</th>
+                <th>Prodi</th>
                 <th>Edit</th>
                 <th>Hapus</th>
             </tr>
@@ -46,31 +52,42 @@
                     <td>{{ $item->nomorSurat }}</td>
                     <td>
                         @if($item->surat)
-                            <a href="{{ asset('storage/' . $item->surat) }}" target="_blank">Lihat Surat</a>
+                        <a href="{{ asset('storage/' . $item->surat) }}" target="_blank">Lihat Surat</a>
                         @else
-                            -
+                            - 
                         @endif
                     </td>
                     <td>{{ $item->nomorBukti }}</td>
                     <td>
                         @if($item->buktiTransaksi)
-                            <a href="{{ asset('storage/' . $item->buktiTransaksi) }}" target="_blank">Lihat Bukti</a>
+                        <a href="{{ asset('storage/' . $item->buktiTransaksi) }}" target="_blank">Lihat Bukti Transaksi</a>
                         @else
-                            -
+                            - 
                         @endif
+                    </td>
+                    <td>
+                        @foreach($item->parents as $parent)
+                            <p>{{ $parent->nama }}</p>
+                        @endforeach
+                    </td>
+                    <td>
+                        @foreach($item->parents as $parent)
+                            <p>{{ $parent->prodi->nama }}</p>
+                        @endforeach
                     </td>
                     <td style="text-align: center;">
                         <a href="#" class="btn btn-warning btn-sm editApproveKeuangan" data-toggle="modal"
                            data-target="#editApproveKeuanganModal"
                            data-id="{{ $item->id }}"
-                           data-nomorSurat="{{ $item->nomorSurat }}"
+                           data-nomorsurat="{{ $item->nomorSurat }}"
+                           data-nomorbukti="{{ $item->nomorBukti }}"
                            data-surat="{{ $item->surat }}"
-                           data-nomorBukti="{{ $item->nomorBukti }}"
-                           data-buktiTransaksi="{{ $item->buktiTransaksi }}"
+                           data-buktitransaksi="{{ $item->buktiTransaksi }}"
+                           data-parentpengajuanids="{{ $item->parents->pluck('id')->join(',') }}" 
                            data-toggle="tooltip" data-placement="top" title="Edit">
                             <i class="fas fa-edit"></i>
                         </a>
-                    </td>
+                    </td>                    
                     <td style="text-align: center;">
                         <form action="{{ route('approve-keuangan.destroy', $item->id) }}" method="POST"
                               style="display:inline;">
@@ -105,39 +122,34 @@
                 "autoWidth": false,
             });
 
+            // Inisialisasi select2 pada modal edit
+            $('#editApproveKeuanganModal').on('shown.bs.modal', function () {
+                $('#parent_pengajuan').select2({
+                    placeholder: "Pilih Parent Pengajuan",
+                    allowClear: true,
+                    dropdownParent: $('#editApproveKeuanganModal')
+                });
+            });
+
             $(document).on('click', '.editApproveKeuangan', function () {
                 const id = $(this).data('id');
                 const nomorSurat = $(this).data('nomorsurat');
                 const nomorBukti = $(this).data('nomorbukti');
                 const surat = $(this).data('surat');
                 const buktiTransaksi = $(this).data('buktitransaksi');
+                const parentPengajuanIds = $(this).data('parentpengajuanids');
 
-                // Set the action URL for the form
+                // Set the action URL untuk form
                 $('#editApproveKeuanganForm').attr('action', '{{ route('approve-keuangan.update', ':id') }}'.replace(':id', id));
 
-                // Set the values in the modal
+                // Set nilai form di modal
                 $('#nomorSurat').val(nomorSurat);
                 $('#nomorBukti').val(nomorBukti);
-
-                // Set the current file links
                 $('#currentSurat').attr('href', `/storage/${surat}`);
                 $('#currentBukti').attr('href', `/storage/${buktiTransaksi}`);
-            });
 
-            $('#tambahApproveKeuanganModal').on('shown.bs.modal', function () {
-                $('.select2').select2({
-                    placeholder: "Pilih opsi",
-                    allowClear: true,
-                    dropdownParent: $('#tambahApproveKeuanganModal')
-                });
-            });
-
-            $('#editApproveKeuanganModal').on('shown.bs.modal', function () {
-                $('.select2').select2({
-                    placeholder: "Pilih opsi",
-                    allowClear: true,
-                    dropdownParent: $('#editApproveKeuanganModal')
-                });
+                // Set nilai untuk parent_pengajuan_id dalam select2
+                $('#parent_pengajuan').val(parentPengajuanIds.split(',')).trigger('change');
             });
         });
 

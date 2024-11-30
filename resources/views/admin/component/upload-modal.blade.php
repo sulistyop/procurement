@@ -8,13 +8,16 @@
                 </button>
             </div>
             <div class="modal-body">
-
                 <form id="uploadForm" action="{{ route('pengajuan.import') }}" method="POST" enctype="multipart/form-data">
                     @csrf
                     <div class="form-group">
-                        <label for="file">Format File Excel : judul - author - eksemplar</label>
+                        <label for="file">Format File Excel: judul - author - eksemplar</label>
                         <input type="file" class="form-control" id="file" name="file" required>
                     </div>
+
+                    <!-- Menambahkan input hidden untuk parent_pengajuan_id -->
+                    <input type="hidden" name="parent_pengajuan_id" value="{{ request()->get('parent_pengajuan_id') }}">
+
                     <button type="submit" class="btn btn-primary">Upload</button>
                 </form>
             </div>

@@ -2,7 +2,11 @@
 
 @section('content')
     <div>
-        <h1>Detail Pengajuan</h1>
+        <h1 class="mb-4 text-center text-primary font-weight-bold">
+            Detail Pengajuan
+        </h1>
+        <hr class="my-4 border-top border-primary">
+        
         <form action="{{ route('pengajuan.storeApproval', $pengajuan->id) }}" method="POST">
             @csrf
             @method('PUT')

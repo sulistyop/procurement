@@ -66,20 +66,14 @@
                         <tbody>
                         @foreach($pengajuan as $item)
                             <tr>
-                                <td>{{ $loop->iteration }}</td>
-                                <td>
-                                    @if($item->is_diajukan)
-                                        {{ $item->isbn }} <span class="badge badge-info">Pernah diajukan tahun {{ \Illuminate\Support\Carbon::parse($item->date_pernah_diajukan)->format('Y') }}</span>
-                                    @else
-                                        {{ $item->isbn }}
-                                    @endif
-                                </td>
+                                <td>{{ $loop->iteration + ($pengajuan->currentPage() - 1) * $pengajuan->perPage() }}</td>
+                                <td>{{ $item->isbn }}</td>
                                 <td>{{ $item->judul }}</td>
                                 <td>{{ $item->author }}</td>
-                                <td>{{ \Illuminate\Support\Carbon::parse($item->created_at)->setTimezone('Asia/Jakarta')->format('d-m-Y H:i:s') }}</td>
+                                <td>{{ $item->created_at->format('d-m-Y') }}</td>
                                 <td>
                                     @if($item->is_approve)
-                                        <span class="badge badge-success">Disetujui Perpustakaan</span>
+                                        <span class="badge badge-success">Disetujui</span>
                                     @elseif($item->is_reject)
                                         <span class="badge badge-danger">Ditolak</span>
                                     @else
@@ -93,16 +87,21 @@
                                         </a>
                                         
                                         @if(!$item->is_approve && !$item->is_reject)
-                                            <a href="#" class="btn btn-warning btn-custom mx-1 btn-sm" data-toggle="modal"
-                                               data-target="#editPengajuanModal" data-id="{{ $item->id }}"
-                                               data-prodi="{{ $item->prodi->id }}" data-judul="{{ $item->judul }}"
-                                               data-edisi="{{ $item->edisi }}" data-isbn="{{ $item->isbn }}"
-                                               data-penerbit="{{ $item->penerbit }}" data-author="{{ $item->author }}"
-                                               data-tahun="{{ $item->tahun }}" data-eksemplar="{{ $item->eksemplar }}"
-                                               data-toggle="tooltip" data-placement="top" title="Edit">
+                                            <a href="#" class="btn btn-warning btn-custom mx-1 btn-sm" 
+                                                data-toggle="modal" data-target="#editPengajuanModal"
+                                                data-id="{{ $item->id }}" 
+                                                data-prodi="{{ $item->prodi->id ?? '' }}"
+                                                data-judul="{{ $item->judul ?? '' }}" 
+                                                data-edisi="{{ $item->edisi ?? '' }}"
+                                                data-isbn="{{ $item->isbn ?? '' }}" 
+                                                data-penerbit="{{ $item->penerbit ?? '' }}"
+                                                data-author="{{ $item->author ?? '' }}" 
+                                                data-tahun="{{ $item->tahun ?? '' }}"
+                                                data-eksemplar="{{ $item->eksemplar ?? '' }}" 
+                                                title="Edit">
                                                 <i class="fas fa-edit"></i>
                                             </a>
-                                        
+                                            
                                             <form action="{{ route('home-destroy', $item->id) }}" method="POST" style="display:inline;">
                                                 @csrf
                                                 @method('DELETE')
@@ -113,12 +112,18 @@
                                         @endif
                                     </div>
                                 </td>
-                                
                             </tr>
                         @endforeach
                         </tbody>
                     </table>
                 </div>
+                
+                <div class="d-flex justify-content-center">
+                    <ul class="pagination pagination-sm">
+                        {{ $pengajuan->links('pagination::bootstrap-4') }}
+                    </ul>
+                </div>
+                
             </div>
         </div>
 
@@ -127,7 +132,44 @@
         @include('admin.component.upload-modal')
     </div>
 @endsection
+@push('styles')
+    <style>
+        /* Menyesuaikan ukuran tombol pagination */
+        .pagination-sm .page-link {
+            font-size: 0.875rem;  /* Ukuran font yang lebih kecil */
+            padding: 0.25rem 0.5rem;  /* Padding lebih kecil */
+        }
 
+        /* Menyesuaikan ukuran ikon (panah) */
+        .pagination-sm .page-link i {
+            font-size: 0.75rem;  /* Ukuran ikon yang lebih kecil */
+        }
+
+        /* Mengatur jarak antar item pagination */
+        .pagination-sm .page-item {
+            margin: 0 2px;  /* Mengurangi jarak antar tombol */
+        }
+
+        /* Mengatur margin untuk pagination */
+        .pagination-sm {
+            margin-top: 20px;  /* Memberikan sedikit jarak antara tabel dan pagination */
+        }
+
+        /* Styling khusus untuk pagination yang aktif */
+        .pagination-sm .page-item.active .page-link {
+            background-color: #007bff;  /* Warna background untuk item aktif */
+            border-color: #007bff;  /* Border warna aktif */
+            color: #fff;  /* Warna teks aktif */
+        }
+
+        /* Styling untuk hover pada page-link */
+        .pagination-sm .page-link:hover {
+            background-color: #f1f1f1;  /* Memberikan warna saat hover */
+            color: #007bff;  /* Warna teks saat hover */
+        }
+
+    </style>
+@endpush
 @push('script-page')
     <script type="text/javascript">
         $(document).ready(function () {

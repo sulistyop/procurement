@@ -51,7 +51,15 @@
                                     {{ $parent->nama }} - {{ $parent->prodi->nama }}
                                 </option>
                             @endforeach
-                        </select>                        
+                        </select>    
+                        {{-- <div class="form-group">
+                            <label for="parent_pengajuan">Pilih Parent Pengajuan:</label>
+                            <select id="parent_pengajuan" name="parent_pengajuan[]" class="form-control" multiple="multiple">
+                                @foreach($parents as $parent)
+                                    <option value="{{ $parent->id }}">{{ $parent->nama }}</option>
+                                @endforeach
+                            </select>                                              
+                        </div>                     --}}
                     </div>
 
                     <button type="submit" class="btn btn-primary">Update</button>

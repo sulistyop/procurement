@@ -159,13 +159,13 @@ class ApproveKeuanganController extends Controller
     
     public function destroy($id)
     {
-        // Find the entry to delete
+
         $approveKeuangan = ApproveKeuangan::findOrFail($id);
+    
+        $approveKeuangan->parents()->detach(); 
         
-        // Log activity before deletion
         $this->setLogActivity('Menghapus Approve Keuangan', $approveKeuangan);
         
-        // Delete the entry
         $approveKeuangan->delete();
         
         return redirect()->route('approve-keuangan.index')->with('success', 'Approve Keuangan berhasil dihapus.');

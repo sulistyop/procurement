@@ -10,6 +10,7 @@ use App\Import\PengajuanImport;
 use App\Models\ParentPengajuan;
 use App\Exports\PengajuanExport;
 use App\Services\PengajuanService;
+use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Log;
 use Illuminate\Support\Facades\Auth;
 use Maatwebsite\Excel\Facades\Excel;
@@ -159,29 +160,30 @@ class PengajuanController extends Controller
 						 ->with('success', 'Pengajuan berhasil diupdate.');
 	}
 	
-
 	public function destroy(Request $request, Pengajuan $pengajuan)
 	{
+		// Ambil parent_pengajuan_id sebelum data dihapus
+		$parentPengajuanId = $request->query('parent_pengajuan_id') ?? $pengajuan->parent_pengajuan_id ?? 1;
+	
+		// Validasi keberadaan parent_pengajuan_id
+		$isParentExists = DB::table('parent_pengajuan')->where('id', $parentPengajuanId)->exists();
+	
+		if (!$isParentExists) {
+			return redirect()->route('pengajuan.index')
+							 ->with('error', 'Parent pengajuan tidak ditemukan.');
+		}
+	
 		// Hapus data pengajuan
 		$dump = $pengajuan;
 		$pengajuan->delete();
-		
-		// Ambil parent_pengajuan_id dari query string
-		$parentPengajuanId = $request->query('parent_pengajuan_id', 1); // Default ke 1 jika tidak ada
 	
 		$this->setLogActivity('Menghapus pengajuan', $dump);
-		
+	
 		// Redirect dengan menambahkan parent_pengajuan_id ke URL
 		return redirect()->route('pengajuan.index', ['parent_pengajuan_id' => $parentPengajuanId])
 						 ->with('success', 'Pengajuan berhasil dihapus.');
 	}
 	
-    public function approve($id)
-    {
-        $pengajuan = Pengajuan::findOrFail($id);
-        return view('admin.pengajuan.approve', compact('pengajuan'));
-    }
-
 	public function storeApproval(Request $request, Pengajuan $pengajuan)
 	{
 		// Validasi input

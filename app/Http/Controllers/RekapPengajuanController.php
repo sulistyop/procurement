@@ -124,8 +124,7 @@ class RekapPengajuanController extends Controller
             $pengajuanQuery->where('prodi_id', $request->prodi);
         }
     
-        // Jika ada pencarian berdasarkan judul, pengarang, atau ISBN, tambahkan kondisi
-        if ($search) {
+               if ($search) {
             $pengajuanQuery->where(function($q) use ($search) {
                 $q->where('judul', 'like', "%$search%")
                   ->orWhere('author', 'like', "%$search%")

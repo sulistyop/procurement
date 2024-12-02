@@ -13,11 +13,9 @@ class DashboardController extends Controller
     {
         $userProdiId = Auth::user()->prodi_id;
         
-        // Filter parameters
         $filterYear = $request->input('year');
         $filterProdi = $request->input('prodi');
         
-        // Monthly statistics for books from January to December (1 Year)
         $monthlyBooks = Pengajuan::selectRaw('EXTRACT(MONTH FROM created_at) as month, SUM(diterima) as total')
             ->when($userProdiId, function ($query) use ($userProdiId) {
                 return $query->where('prodi_id', $userProdiId);
@@ -30,15 +28,12 @@ class DashboardController extends Controller
             })
             ->groupBy('month')
             ->get()
-            ->keyBy('month'); // To index by month
-        
-        // Initialize array for all 12 months (January to December)
+            ->keyBy('month'); 
         $monthlyData = [];
         for ($month = 1; $month <= 12; $month++) {
-            $monthlyData[$month] = $monthlyBooks->get($month)->total ?? 0; // Default to 0 if no data for that month
+            $monthlyData[$month] = $monthlyBooks->get($month)->total ?? 0; 
         }
-        
-        // Statistics per Prodi
+
         $booksPerProdi = Pengajuan::selectRaw('prodi_id, SUM(diterima) as total')
             ->when($userProdiId, function ($query) use ($userProdiId) {
                 return $query->where('prodi_id', $userProdiId);
@@ -59,7 +54,6 @@ class DashboardController extends Controller
                 ];
             });
         
-        // Other existing statistics
         $totalBooks = Pengajuan::when($userProdiId, function ($query) use ($userProdiId) {
             return $query->where('prodi_id', $userProdiId);
         })
@@ -114,7 +108,6 @@ class DashboardController extends Controller
             ->pluck('year')
             ->sort();
         
-        // Ambil semua prodi untuk filter
         $prodis = Prodi::all();
         
         return view('admin.dashboard.index', compact('totalBooks', 'acceptedBooks', 'pendingBooks', 'rejectBooks', 'monthlyData', 'booksPerProdi', 'years', 'prodis'));

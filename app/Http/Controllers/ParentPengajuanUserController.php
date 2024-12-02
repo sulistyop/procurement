@@ -12,22 +12,18 @@ class ParentPengajuanUserController extends Controller
 {
     public function index()
     {
-        // Ambil user yang sedang login
         $user = auth()->user();
-        
-        // Ambil ParentPengajuan yang sesuai dengan prodi yang dimiliki oleh user
         $parentPengajuans = ParentPengajuan::where('prodi_id', $user->prodi_id)->get(); 
         foreach ($parentPengajuans as $item) {
-            $item->canDelete = ApproveKeuanganParentPengajuan::where('parent_pengajuan_id', $item->id)->exists();
+            $item->canDelete = !ApproveKeuanganParentPengajuan::where('parent_pengajuan_id', $item->id)->exists();
         }
         return view('user.parent-pengajuan.index', compact('parentPengajuans'));
     }
 
     public function create()
     {
-        // Ambil Prodi berdasarkan prodi_id milik user yang sedang login
-        $user = auth()->user();  // Ambil user yang sedang login
-        $prodi = Prodi::where('id', $user->prodi_id)->get();  // Ambil Prodi yang sesuai dengan prodi_id user
+        $user = auth()->user(); 
+        $prodi = Prodi::where('id', $user->prodi_id)->get();  
 
         return view('user.parent-pengajuan.create', compact('prodi'));
     }
@@ -36,12 +32,12 @@ class ParentPengajuanUserController extends Controller
     {
         $request->validate([
             'nama' => 'required',
-            'prodi_id' => 'required|exists:prodi,id', // Validasi Prodi ID
+            'prodi_id' => 'required|exists:prodi,id', 
         ]);
     
         ParentPengajuan::create([
             'nama' => $request->nama,
-            'prodi_id' => $request->prodi_id, // Menyimpan prodi_id
+            'prodi_id' => $request->prodi_id, 
         ]);
     
         return redirect()->route('user.parent-pengajuan.index')->with('success', 'Parent Pengajuan berhasil disimpan.');
@@ -65,12 +61,39 @@ class ParentPengajuanUserController extends Controller
         return redirect()->route('user.parent-pengajuan.index')->with('success', 'Data berhasil diubah.');
     }
 
+    // public function destroy($id)
+    // {
+    //     ParentPengajuan::findOrFail($id)->delete();
+    //     return redirect()->route('user.parent-pengajuan.index')->with('success', 'Data berhasil dihapus.');
+    // }
     public function destroy($id)
     {
-        ParentPengajuan::findOrFail($id)->delete();
-        return redirect()->route('user.parent-pengajuan.index')->with('success', 'Data berhasil dihapus.');
+        $parentPengajuan = ParentPengajuan::findOrFail($id);
+    
+        // Ambil prodi_id dari ParentPengajuan
+        $prodiId = $parentPengajuan->prodi_id;
+    
+        // Periksa apakah ada pengajuan yang terkait dengan ParentPengajuan dan Prodi yang sudah di-approve
+        $approvedPengajuan = Pengajuan::where('parent_pengajuan_id', $id)
+                                       ->where('prodi_id', $prodiId)
+                                       ->where('is_approve', '1') 
+                                       ->exists();
+        if ($approvedPengajuan) {
+            return redirect()->route('user.parent-pengajuan.index')
+                             ->with('error', 'Tidak bisa menghapus, karena ada pengajuan yang sudah di-approve.');
+        }
+    
+        // Hapus semua pengajuan yang terkait dengan parent_pengajuan_id dan prodi_id ini
+        Pengajuan::where('parent_pengajuan_id', $id)
+                 ->where('prodi_id', $prodiId) // Pastikan pengajuan yang dihapus sesuai dengan prodi_id
+                 ->delete();
+    
+        // Hapus ParentPengajuan itu sendiri
+        $parentPengajuan->delete();
+    
+        return redirect()->route('user.parent-pengajuan.index')->with('success', 'Data Parent Pengajuan beserta Pengajuannya berhasil dihapus.');
     }
-
+    
     public function view($id)
     {
         // Ambil prodi_id yang dimiliki oleh user

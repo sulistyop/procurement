@@ -78,7 +78,7 @@
                                     <i class="fa fa-pencil-alt"></i> Edit
                                 </a>
                                 @if($item->canDelete)
-                                    <form action="{{ route('user.parent-pengajuan.destroy', $item->id) }}" method="POST" style="display:inline;">
+                                    <form action="{{ route('admin.parent-pengajuan.destroy', $item->id) }}" method="POST" style="display:inline;">
                                         @csrf
                                         @method('DELETE')
                                         <button type="submit" class="btn btn-danger btn-custom mx-1 btn-sm" onclick="return confirm('Yakin ingin menghapus?')" data-toggle="tooltip" data-placement="top" title="Delete">

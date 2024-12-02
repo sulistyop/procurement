@@ -101,7 +101,7 @@
                                                 title="Edit">
                                                 <i class="fas fa-edit"></i>
                                             </a>
-                                            
+                                        
                                             <form action="{{ route('home-destroy', $item->id) }}" method="POST" style="display:inline;">
                                                 @csrf
                                                 @method('DELETE')
@@ -132,44 +132,7 @@
         @include('admin.component.upload-modal')
     </div>
 @endsection
-@push('styles')
-    <style>
-        /* Menyesuaikan ukuran tombol pagination */
-        .pagination-sm .page-link {
-            font-size: 0.875rem;  /* Ukuran font yang lebih kecil */
-            padding: 0.25rem 0.5rem;  /* Padding lebih kecil */
-        }
 
-        /* Menyesuaikan ukuran ikon (panah) */
-        .pagination-sm .page-link i {
-            font-size: 0.75rem;  /* Ukuran ikon yang lebih kecil */
-        }
-
-        /* Mengatur jarak antar item pagination */
-        .pagination-sm .page-item {
-            margin: 0 2px;  /* Mengurangi jarak antar tombol */
-        }
-
-        /* Mengatur margin untuk pagination */
-        .pagination-sm {
-            margin-top: 20px;  /* Memberikan sedikit jarak antara tabel dan pagination */
-        }
-
-        /* Styling khusus untuk pagination yang aktif */
-        .pagination-sm .page-item.active .page-link {
-            background-color: #007bff;  /* Warna background untuk item aktif */
-            border-color: #007bff;  /* Border warna aktif */
-            color: #fff;  /* Warna teks aktif */
-        }
-
-        /* Styling untuk hover pada page-link */
-        .pagination-sm .page-link:hover {
-            background-color: #f1f1f1;  /* Memberikan warna saat hover */
-            color: #007bff;  /* Warna teks saat hover */
-        }
-
-    </style>
-@endpush
 @push('script-page')
     <script type="text/javascript">
         $(document).ready(function () {
@@ -198,7 +161,7 @@
         });
 
         $('#editPengajuanModal').on('show.bs.modal', function (event) {
-            var button = $(event.relatedTarget);
+            var button = $(event.relatedTarget); // Tombol yang membuka modal
             var id = button.data('id');
             var prodi = button.data('prodi');
             var judul = button.data('judul');
@@ -208,10 +171,13 @@
             var author = button.data('author');
             var tahun = button.data('tahun');
             var eksemplar = button.data('eksemplar');
+            console.log('Data diterima:', { id, prodi, judul, edisi, isbn, penerbit, author, tahun, eksemplar });
+
             var modal = $(this);
             var form = modal.find('#editPengajuanForm');
             var actionUrl = '{{ route('home-update', ':id') }}'.replace(':id', id);
             form.attr('action', actionUrl);
+
             modal.find('.modal-body #prodi').val(prodi);
             modal.find('.modal-body #judul').val(judul);
             modal.find('.modal-body #edisi').val(edisi);

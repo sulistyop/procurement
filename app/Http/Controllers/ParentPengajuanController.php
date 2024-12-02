@@ -14,19 +14,21 @@ class ParentPengajuanController extends Controller
     {
         // Ambil semua Prodi untuk dropdown filter
         $prodis = Prodi::all();
-    
+        
         // Set default prodi ID ke 1 (Perpustakaan) jika tidak ada filter
         $selectedProdi = $request->get('prodi', 1); // Default ke 1 (Perpustakaan)
-    
+        
         // Query untuk menampilkan Parent Pengajuan, filter berdasarkan Prodi jika ada
         $parentPengajuans = ParentPengajuan::with('prodi') // Pastikan sudah ada relasi 'prodi'
             ->when($selectedProdi, function($query) use ($selectedProdi) {
                 return $query->where('prodi_id', $selectedProdi);
             })
             ->get();
-            foreach ($parentPengajuans as $item) {
-                $item->canDelete = ApproveKeuanganParentPengajuan::where('parent_pengajuan_id', $item->id)->exists();
-            }
+    
+        foreach ($parentPengajuans as $item) {
+            $item->canDelete = !ApproveKeuanganParentPengajuan::where('parent_pengajuan_id', $item->id)->exists();
+        }
+        
         // Kirim data ke view
         return view('admin.parent-pengajuan.index', compact('parentPengajuans', 'prodis'));
     }
@@ -73,9 +75,32 @@ class ParentPengajuanController extends Controller
 
     public function destroy($id)
     {
-        ParentPengajuan::findOrFail($id)->delete();
-        return redirect()->route('admin.parent-pengajuan.index')->with('success', 'Data berhasil dihapus.');
+        $parentPengajuan = ParentPengajuan::findOrFail($id);
+    
+        // Ambil prodi_id dari ParentPengajuan
+        $prodiId = $parentPengajuan->prodi_id;
+    
+        // Periksa apakah ada pengajuan yang terkait dengan ParentPengajuan dan Prodi yang sudah di-approve
+        $approvedPengajuan = Pengajuan::where('parent_pengajuan_id', $id)
+                                       ->where('prodi_id', $prodiId)
+                                       ->where('is_approve', '1') 
+                                       ->exists();
+        if ($approvedPengajuan) {
+            return redirect()->route('admin.parent-pengajuan.index')
+                             ->with('error', 'Tidak bisa menghapus, karena ada pengajuan yang sudah di-approve.');
+        }
+    
+        // Hapus semua pengajuan yang terkait dengan parent_pengajuan_id dan prodi_id ini
+        Pengajuan::where('parent_pengajuan_id', $id)
+                 ->where('prodi_id', $prodiId) // Pastikan pengajuan yang dihapus sesuai dengan prodi_id
+                 ->delete();
+    
+        // Hapus ParentPengajuan itu sendiri
+        $parentPengajuan->delete();
+    
+        return redirect()->route('admin.parent-pengajuan.index')->with('success', 'Data Parent Pengajuan beserta Pengajuannya berhasil dihapus.');
     }
+    
     // Di dalam ParentPengajuanController.php
     public function view($id)
     {

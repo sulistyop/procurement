@@ -20,36 +20,29 @@ class HomeController extends Controller
     }
     public function index(Request $request)
     {
-        // Ambil nilai parent_pengajuan_id dan prodi_id dari request
         $parentPengajuanId = $request->input('parent_pengajuan_id');
         $prodiId = $request->input('prodi_id');
-        $search = $request->input('search'); // Ambil nilai pencarian
+        $search = $request->input('search'); 
     
-        // Ambil data berdasarkan parent_pengajuan_id dan prodi_id
         $pengajuan = Pengajuan::where('parent_pengajuan_id', $parentPengajuanId)
                               ->where('prodi_id', $prodiId);
     
-        // Filter berdasarkan pencarian jika ada
         if ($search) {
             $pengajuan = $pengajuan->where(function($query) use ($search) {
                 $query->where('isbn', 'like', '%' . $search . '%')
                       ->orWhere('judul', 'like', '%' . $search . '%')
                       ->orWhere('author', 'like', '%' . $search . '%')
-                      // Gunakan is_approve atau is_reject jika Anda ingin mencocokkan status
-                      ->orWhere('is_approve', 'like', '%' . $search . '%')   // Misalnya pencarian untuk status disetujui
-                      ->orWhere('is_reject', 'like', '%' . $search . '%');    // Misalnya pencarian untuk status ditolak
+                      ->orWhere('is_approve', 'like', '%' . $search . '%')   
+                      ->orWhere('is_reject', 'like', '%' . $search . '%');    
             });
         }
-    
-        // Ambil data prodi (misalnya, untuk ditampilkan di dropdown atau lainnya)
+
         $prodi = Prodi::all();
-    
-        // Cek apakah ingin melakukan ekspor
+
         if ($request->has('export')) {
             return $this->pengajuanService->exportPengajuan($pengajuan);
         }
-    
-        // Kirim data ke view
+   
         return view('home', compact('pengajuan', 'prodi'));
     }
     
@@ -66,7 +59,6 @@ class HomeController extends Controller
 
     public function store(Request $request)
     {
-        // Validasi input
 	    $request->validate([
 		    'prodi_id' => 'required|exists:prodi,id',
 		    'judul' => 'required|max:255',
@@ -77,7 +69,7 @@ class HomeController extends Controller
 		    'tahun' => 'nullable|integer|min:1900|max:' . date('Y'),
 		    'eksemplar' => 'required|integer',
 			'diterima' => 'nullable|integer',
-			'harga' => 'nullable|numeric|min:0', // Tambahkan validasi untuk harga
+			'harga' => 'nullable|numeric|min:0', 
 	    ], [], [
 		    'prodi_id' => 'Prodi',
 		    'judul' => 'Judul',
@@ -91,7 +83,6 @@ class HomeController extends Controller
 			'harga' => 'Harga',
 	    ]);
 
-        // Simpan data pengajuan
 	    $pengajuan = Pengajuan::create($request->all());
 	    
 	    $this->setLogActivity('Membuat pengajuan', $pengajuan);
@@ -102,13 +93,11 @@ class HomeController extends Controller
 
     public function edit(Pengajuan $pengajuan)
     {
-        // Menampilkan form untuk mengedit pengajuan
         return view('home', compact('pengajuan'));
     }
 
     public function update(Request $request, Pengajuan $pengajuan)
     {
-        // Validasi input
         $request->validate([
             'prodi_id' => 'required|max:100',
             'judul' => 'required|max:255',
@@ -118,10 +107,9 @@ class HomeController extends Controller
             'tahun' => 'nullable|integer|min:1900|max:' . date('Y'),
             'eksemplar' => 'required|integer',
 			'diterima' => 'nullable|integer',
-			'harga' => 'nullable|numeric|min:0', // Tambahkan validasi untuk harga
+			'harga' => 'nullable|numeric|min:0', 
         ]);
 
-        // Update data pengajuan
         $pengajuan->update($request->all());
 		
 		$this->setLogActivity('Mengubah pengajuan', $pengajuan);
@@ -131,7 +119,6 @@ class HomeController extends Controller
 
     public function destroy(Pengajuan $pengajuan)
     {
-        // Hapus data pengajuan
 	    $dump = $pengajuan;
         $pengajuan->delete();
 		$this->setLogActivity('Menghapus pengajuan', $dump);
@@ -141,8 +128,7 @@ class HomeController extends Controller
     public function show(Pengajuan $pengajuan)
     {
         $user = auth()->user();
-        
-        // Ambil ParentPengajuan yang sesuai dengan prodi yang dimiliki oleh user
+
         $parentPengajuans = ParentPengajuan::where('prodi_id', $user->prodi_id)->get(); 
 
 		return view('user.show', compact('pengajuan', 'parentPengajuans'));

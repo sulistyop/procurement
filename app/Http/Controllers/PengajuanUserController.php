@@ -20,36 +20,36 @@ class PengajuanUserController extends Controller
         $this->middleware('auth');
     }
 
-    public function index(Request $request)
-    {
-        $idParent = $request->query('parent_pengajuan_id');
-        $selectedParent = ParentPengajuan::find($idParent);
+	public function index(Request $request)
+	{
+		$idParent = $request->query('parent_pengajuan_id');
+		$selectedParent = ParentPengajuan::find($idParent); 
+		
+		if ($idParent && !$selectedParent) {
+			return redirect()->route('pengajuan.index')->with('error', 'Parent tidak ditemukan.');
+		}
 
-        if ($idParent && !$selectedParent) {
-            return redirect()->route('pengajuan.index')->with('error', 'Parent tidak ditemukan.');
-        }
-
-        $prodi = Prodi::when($selectedParent, function($query) use ($selectedParent) {
-            return $query->where('id', $selectedParent->prodi_id);
-        })->get();
-
-        $pengajuanQuery = Pengajuan::with('prodi');
-
-        if ($idParent) {
-            $pengajuanQuery->where('parent_pengajuan_id', $idParent);
-        }
-
-        $pengajuan = $pengajuanQuery->paginate(10);
-
-        return view('user.pengajuan.index', [
-            'pengajuan' => $pengajuan,
-            'parentPengajuan' => $selectedParent,
-            'parents' => ParentPengajuan::all(),
-            'prodi' => $prodi,
-            'idParent' => $idParent,
-        ]);
-    }
-
+		$prodi = Prodi::when($selectedParent, function($query) use ($selectedParent) {
+			return $query->where('id', $selectedParent->prodi_id); 
+		})->get();
+	
+		$pengajuanQuery = Pengajuan::with('prodi');
+		
+		if ($idParent) {
+			$pengajuanQuery->where('parent_pengajuan_id', $idParent);
+		}
+		
+		$pengajuan = $pengajuanQuery->get();
+		
+		return view('user.pengajuan.index', [
+			'pengajuan' => $pengajuan,
+			'parentPengajuan' => $selectedParent,
+			'parents' => ParentPengajuan::all(),
+			'prodi' => $prodi,
+			'idParent' => $idParent, 
+		]);
+	}
+	
     public function create(Request $request)
     {
         $user = Auth::user();

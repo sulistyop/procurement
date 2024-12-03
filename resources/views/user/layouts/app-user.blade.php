@@ -31,29 +31,6 @@
     @stack('style-page')
 
     <style>
-
-        /* Background utama */
-        /* body {
-            background-image: url('{{ asset('image/perpus.jpg') }}');
-            background-size: cover;
-            background-position: center;
-            background-attachment: fixed;
-            position: relative;
-        }
-
-        Lapisan transparan + blur 
-        body::before {
-            content: '';
-            position: absolute;
-            top: 0;
-            left: 0;
-            width: 100%;
-            height: 100%;
-            background: rgba(252, 253, 253,); /* Warna putih transparan */
-            backdrop-filter: blur(8px); /* Efek blur 
-            z-index: -1; /* Di belakang konten 
-        } */
-
         .header, .footer {
             background-color: rgba(0, 51, 102, 0.9); /* Warna dengan transparansi */
         }
@@ -65,6 +42,9 @@
         body {
             display: flex;
             flex-direction: column;
+            background-color: #f4f7fa;
+            font-family: 'Arial', sans-serif;
+            color: #333;
             background-color: #f4f7fa;
             font-family: 'Arial', sans-serif;
             color: #333;
@@ -102,13 +82,6 @@
             color: white;
             font-size: 14px;
             border-top: 3px solid #003366;
-        }
-
-        /* Body Style */
-        body {
-            background-color: #f4f7fa;
-            font-family: 'Arial', sans-serif;
-            color: #333;
         }
 
         /* Menu Navigation Styles */
@@ -229,6 +202,7 @@
             margin-right: 8px;
         }
     </style>
+     @vite(['resources/sass/app.scss', 'resources/js/app.js'])
 </head>
 <body>
 <div class="header">
@@ -310,7 +284,23 @@
 <script src="https://cdn.datatables.net/1.10.21/js/jquery.dataTables.min.js"></script>
 <script src="https://cdn.datatables.net/1.10.21/js/dataTables.bootstrap4.min.js"></script>
 
-@stack('scripts')
+<script type="text/javascript">
+    $(document).ready(function() {
+        $.extend(true, $.fn.dataTable.defaults, {
+
+            "language": {
+                "url": "https://cdn.datatables.net/plug-ins/1.10.21/i18n/Indonesian.json"
+            }
+        });
+    });
+    $(document).ready(function() {
+        $('#customers tbody').on('click', 'tr', function() {
+            $('#customers tr').removeClass('highlighted-row');
+            $(this).addClass('highlighted-row');
+        });
+    });
+</script>
+@stack('script-page')
 
 </body>
 </html>

@@ -31,21 +31,21 @@
         @endif
 
 
-<div class="d-flex justify-content-between align-items-center mb-3">
-    <div>
-        <button type="button" class="btn btn-outline-primary" data-toggle="modal" data-target="#tambahPengajuanModal">
-            <i class="fas fa-plus"></i> Tambah Pengajuan
-        </button>
-        <a type="button" class="btn btn-outline-success" data-toggle="modal" data-target="#uploadModal">
-            <i class="fa fa-upload"></i> Upload Excel
-        </a>
-    </div>
-    <div class="ml-auto">
-        <a type="button" class="btn btn-outline-info" href="{{ route('home').'?export=true' }}">
-            <i class="fa fa-download"></i> Download Excel
-        </a>
-    </div>
-</div>
+        <div class="d-flex justify-content-between align-items-center mb-3">
+            <div>
+                <button type="button" class="btn btn-outline-primary" data-toggle="modal" data-target="#tambahPengajuanModal">
+                    <i class="fas fa-plus"></i> Tambah Pengajuan
+                </button>
+                <a type="button" class="btn btn-outline-success" data-toggle="modal" data-target="#uploadModal">
+                    <i class="fa fa-upload"></i> Upload Excel
+                </a>
+            </div>
+            <div class="ml-auto">
+                <a type="button" class="btn btn-outline-info" href="{{ route('home').'?export=true' }}">
+                    <i class="fa fa-download"></i> Download Excel
+                </a>
+            </div>
+        </div>
 
 
         <div class="card">
@@ -66,7 +66,7 @@
                         <tbody>
                         @foreach($pengajuan as $item)
                             <tr>
-                                <td>{{ $loop->iteration + ($pengajuan->currentPage() - 1) * $pengajuan->perPage() }}</td>
+                                <td>{{ $loop->iteration }}</td>
                                 <td>{{ $item->isbn }}</td>
                                 <td>{{ $item->judul }}</td>
                                 <td>{{ $item->author }}</td>
@@ -117,13 +117,6 @@
                         </tbody>
                     </table>
                 </div>
-                
-                <div class="d-flex justify-content-center">
-                    <ul class="pagination pagination-sm">
-                        {{ $pengajuan->links('pagination::bootstrap-4') }}
-                    </ul>
-                </div>
-                
             </div>
         </div>
 
@@ -137,27 +130,13 @@
     <script type="text/javascript">
         $(document).ready(function () {
             $('#customers').DataTable({
-                "paging": true,
-                "lengthChange": true,
+                // "paging": true,
+                // "lengthChange": true,
                 "searching": true,
-                "ordering": true,
-                "info": true,
-                "autoWidth": false,
+                // "ordering": true,
+                // "info": true,
+                // "autoWidth": false,
             });
-        });
-
-        $('#approveModal').on('show.bs.modal', function (event) {
-            var button = $(event.relatedTarget);
-            var id = button.data('id');
-            var allData = button.data('all');
-            var modal = $(this);
-            var form = modal.find('#approveForm');
-            var actionUrl = '{{ route('pengajuan.storeApproval', ':id') }}'.replace(':id', id);
-            form.attr('action', actionUrl);
-
-            modal.find('.modal-body #nama_prodi').val(allData.nama_prodi);
-            modal.find('.modal-body #isbn').val(allData.isbn);
-            modal.find('.modal-body #jumlah').val(allData.eksemplar);
         });
 
         $('#editPengajuanModal').on('show.bs.modal', function (event) {

@@ -32,21 +32,22 @@
     <!-- Cards Section -->
     <div class="row">
         @forelse($parentPengajuans as $item)
-            <div class="col-md-4">
-                <div class="card shadow-sm mb-4">
+            <div class="col-md-4 mb-4"> <!-- Kolom lebih responsif dengan margin bawah -->
+                <div class="card shadow-sm h-100">
                     <div class="card-body text-center">
                         <div class="card-icon mb-3">
                             <i class="fas fa-home fa-3x text-primary"></i>
                         </div>
-                        <h5 class="card-title">{{ $item->nama }}</h5>
-                        <div class="d-flex justify-content-center align-items-center">
+                        <h5 class="card-title mb-2">{{ $item->nama }}</h5>
+                        <p class="card-text text-muted">{{ $item->created_at->format('d M Y') }}</p> <!-- Ganti <td> menjadi <p> untuk teks yang lebih rapi -->
+                        <div class="d-flex justify-content-center align-items-center mt-3">
                             <!-- Lihat Button -->
                             <a href="{{ route('user.parent-pengajuan.view', $item->id) }}" 
                                class="btn btn-info btn-sm mx-1" 
                                data-bs-toggle="tooltip" 
                                data-bs-placement="top" 
                                title="Lihat">
-                                <i class="fas fa-eye"></i>
+                                <i class="fas fa-eye"></i> Lihat
                             </a>
                             
                             <!-- Edit Button -->
@@ -55,7 +56,7 @@
                                data-bs-toggle="tooltip" 
                                data-bs-placement="top" 
                                title="Edit">
-                                <i class="fas fa-edit"></i>
+                                <i class="fas fa-edit"></i> Edit
                             </a>
                             
                             <!-- Hapus Button -->
@@ -64,14 +65,18 @@
                                     @csrf
                                     @method('DELETE')
                                     <button type="submit" 
-                                            class="btn btn-danger btn-custom mx-1 btn-sm" onclick="return confirm('Yakin ingin menghapus?')" data-toggle="tooltip" data-placement="top" title="Delete">
-                                        <i class="fas fa-trash"></i>
+                                            class="btn btn-danger btn-sm mx-1" 
+                                            onclick="return confirm('Yakin ingin menghapus?')" 
+                                            data-bs-toggle="tooltip" 
+                                            data-bs-placement="top" 
+                                            title="Hapus">
+                                        <i class="fas fa-trash"></i> Hapus
                                     </button>
                                 </form>
                             @else
                                 <!-- Pesan atau tombol lain jika tidak bisa dihapus -->
                                 <button class="btn btn-danger btn-sm mx-1" disabled>
-                                    <i class="fas fa-trash"></i> approval
+                                    <i class="fas fa-trash"></i> Approval
                                 </button>
                             @endif
                         </div>
@@ -79,11 +84,12 @@
                 </div>
             </div>
         @empty
-            <div class="text-center">
-                <p>Belum ada data rumah pengajuan.</p>
+            <div class="col-12 text-center">
+                <p class="text-muted">Belum ada data rumah pengajuan.</p>
             </div>
         @endforelse
     </div>
+    
 </div>
 @endsection
 

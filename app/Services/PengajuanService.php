@@ -2,9 +2,9 @@
 	
 namespace App\Services;
 
-use App\Exports\PengajuanExport;
-use App\Models\Pengajuan;
 use App\Models\Prodi;
+use App\Models\Pengajuan;
+use App\Exports\PengajuanExport;
 use Illuminate\Support\Facades\Auth;
 use Maatwebsite\Excel\Facades\Excel;
 
@@ -45,8 +45,12 @@ class PengajuanService
 	
 	public function exportPengajuan($pengajuan)
 	{
+		$pengajuan = Pengajuan::all(); 
+
 		$excelReport = new PengajuanExport($pengajuan);
+	
 		$fileName = 'daftar_pengajuan_' . date('Y-m-d_H-i-s') . '.xlsx';
+
 		return Excel::download($excelReport, $fileName);
 	}
 }

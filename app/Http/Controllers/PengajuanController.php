@@ -45,6 +45,11 @@ class PengajuanController extends Controller
 		
 		$pengajuan = $pengajuanQuery->get();
 		
+		if ($request->has('export')) {
+            $excelReport = new PengajuanExport($pengajuan);
+            $fileName = 'pengajuan_' . date('Y-m-d_H-i-s') . '.xlsx';
+            return Excel::download($excelReport, $fileName);
+        }
 		return view('admin.pengajuan.index', [
 			'pengajuan' => $pengajuan,
 			'parentPengajuan' => $selectedParent,
@@ -105,15 +110,26 @@ class PengajuanController extends Controller
 						->with('success', 'Pengajuan berhasil ditambahkan.');
 	}
 	
-    public function show(Pengajuan $pengajuan)
-    {
-		if(Auth::user()->can('view pengajuan')) {
-
-	        return view('admin.pengajuan.show', compact('pengajuan'));
-		}else{
-			return redirect()->route('pengajuan.index')->with('error', 'Anda tidak memiliki akses untuk melihat detail pengajuan.');
+	public function show(Pengajuan $pengajuan)
+	{
+		$user = auth()->user();
+	
+		// Mencari ParentPengajuan berdasarkan kriteria
+		$parentPengajuan = ParentPengajuan::where('id', $pengajuan->parent_pengajuan_id)
+										  ->where('prodi_id', $pengajuan->prodi_id)
+										  ->first();
+	
+		// Jika ParentPengajuan tidak ditemukan, bisa redirect atau menampilkan pesan error
+		if (!$parentPengajuan) {
+			return redirect()->route('pengajuan.index')->with('error', 'Parent Pengajuan tidak ditemukan.');
 		}
-    }
+	
+		return view('admin.pengajuan.show', [
+			'pengajuan' => $pengajuan,
+			'parentPengajuan' => $parentPengajuan,
+		]);
+	}
+	
 
     public function edit(Pengajuan $pengajuan)
     {
@@ -221,6 +237,7 @@ class PengajuanController extends Controller
 			return redirect()->back()->with('error', 'Terjadi kesalahan saat import.');
 		}
 	}	
+
 	
 	public function proses(Request $request)
 	{    $parents = ParentPengajuan::all();
@@ -279,7 +296,12 @@ class PengajuanController extends Controller
 		$pengajuanQuery->whereBetween('created_at', [$fromDate, $toDate]);
 
 		$pengajuan = $pengajuanQuery->paginate(10);
-	  
+		
+		if ($request->has('export')) {
+            $excelReport = new PengajuanExport($pengajuan);
+            $fileName = 'pengajuan_tolak_' . date('Y-m-d_H-i-s') . '.xlsx';
+            return Excel::download($excelReport, $fileName);
+        }
 		return view('admin.pengajuan.tolak', [
 			'pengajuan' => $pengajuan,
 			'parentPengajuan' => $selectedParent,

@@ -6,9 +6,11 @@ use App\Models\Prodi;
 use App\Models\Pengajuan;
 use Illuminate\Http\Request;
 use App\Models\ParentPengajuan;
+use App\Exports\PengajuanExport;
 use App\Services\PengajuanService;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Auth;
+use Maatwebsite\Excel\Facades\Excel;
 
 class PengajuanUserController extends Controller
 {
@@ -40,7 +42,12 @@ class PengajuanUserController extends Controller
 		}
 		
 		$pengajuan = $pengajuanQuery->get();
-		
+        if ($request->has('export')) {
+            $pengajuan = Pengajuan::all();
+            $excelReport = new PengajuanExport($pengajuan);
+            $fileName = 'pengajuan_' . date('Y-m-d_H-i-s') . '.xlsx';
+            return Excel::download($excelReport, $fileName);
+        }
 		return view('user.pengajuan.index', [
 			'pengajuan' => $pengajuan,
 			'parentPengajuan' => $selectedParent,

@@ -15,7 +15,7 @@ use Maatwebsite\Excel\Concerns\WithColumnFormatting;
 class PengajuanExport implements FromCollection, WithHeadings, WithStyles, WithEvents, WithColumnFormatting
 {
 	protected $pengajuan;
-	public function __construct(Collection $pengajuan)
+	public function __construct(iterable $pengajuan)
 	{
 		$this->pengajuan = $pengajuan;
 	}

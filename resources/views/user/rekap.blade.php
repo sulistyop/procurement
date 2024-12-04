@@ -32,7 +32,7 @@ Realisasi
     
             <!-- Export Button -->
             <div>
-                <a type="button" class="btn btn-outline-info" href="{{ route('rekap-pengajuan.index', array_merge(request()->query(), ['export' => true])) }}">
+                <a type="button" class="btn btn-outline-info" href="{{ route('home-rekap', array_merge(request()->query(), ['export' => true])) }}">
                     Export Excel
                     <i class="fa fa-download"></i>
                 </a>

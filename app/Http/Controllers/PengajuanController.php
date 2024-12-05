@@ -274,7 +274,8 @@ class PengajuanController extends Controller
 
 		$idParent = $request->query('parent_pengajuan_id');
 		$selectedParent = ParentPengajuan::find($idParent); 
-	  
+
+		$prodiId = $request->query('prodi_id'); 
 		if ($idParent && !$selectedParent) {
 			return redirect()->route('pengajuan.proses')->with('error', 'Parent tidak ditemukan.');
 		}
@@ -292,7 +293,9 @@ class PengajuanController extends Controller
 		if ($idParent) {
 			$pengajuanQuery->where('parent_pengajuan_id', $idParent);
 		}
-
+		if ($prodiId) {
+			$pengajuanQuery->where('prodi_id', $prodiId);
+		}
 		$pengajuanQuery->whereBetween('created_at', [$fromDate, $toDate]);
 
 		$pengajuan = $pengajuanQuery->paginate(10);

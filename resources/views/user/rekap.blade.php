@@ -38,19 +38,11 @@ Realisasi
                 </a>
             </div>
         </div>
-    
-        <!-- Search Field Below the Export Button -->
-        <div class="mt-3">
-            <div class="form-group">
-                <label for="search-input">Pencarian:</label>
-                <input type="text" id="search-input" class="form-control" name="search" placeholder="Cari berdasarkan judul, pengarang, ISBN" value="{{ request('search') }}">
-            </div>
-        </div>
     </form>
     
     @if($pengajuan->isEmpty())
         <div class="alert alert-warning text-center" role="alert">
-            Tidak ada rekap yang ditemukan. Silakan pilih filter tanggal atau kata kunci pencarian yang lain.
+            Tidak ada rekap yang ditemukan. Silakan pilih filter tanggal.
         </div>
     @else
         <!-- Tabel Data -->
@@ -92,3 +84,24 @@ Realisasi
     @endif
 
 @endsection
+@push('script-page')
+    <script type="text/javascript">
+        $(document).ready(function () {
+            $('#customers').DataTable({
+                // "paging": true,
+                // "lengthChange": true,
+                "searching": true,
+                // "ordering": true,
+                // "info": true,
+                // "autoWidth": false,
+            });
+        });
+
+        $(document).ready(function() {
+            $('#customers tbody').on('click', 'tr', function() {
+                $('#customers tr').removeClass('highlighted-row');
+                $(this).addClass('highlighted-row');
+            });
+        });
+    </script>
+@endpush

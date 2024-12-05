@@ -22,9 +22,9 @@ class RekapPengajuanController extends Controller
         $prodis = Prodi::all();
     
         $pengajuanQuery = Pengajuan::haveProdi()
-            ->selectRaw('judul, isbn, penerbit, edisi, MAX(diterima) as diterima, MAX(created_at) as latest_created_at')
+            ->selectRaw('prodi_id, judul, isbn, penerbit, edisi, MAX(diterima) as diterima, MAX(created_at) as latest_created_at')
             ->where('is_approve', 1)
-            ->groupBy('judul', 'isbn', 'penerbit', 'edisi');
+            ->groupBy('prodi_id','judul', 'isbn', 'penerbit', 'edisi');
     
         if ($request->filled('year')) {
             $pengajuanQuery->whereYear('created_at', $request->year);
@@ -91,10 +91,10 @@ class RekapPengajuanController extends Controller
         $search = $request->get('search');
     
         $pengajuanQuery = Pengajuan::haveProdi()
-            ->selectRaw('judul, isbn, penerbit, edisi, MAX(diterima) as diterima, MAX(created_at) as latest_created_at')
+            ->selectRaw('prodi_id, judul, isbn, penerbit, edisi, MAX(diterima) as diterima, MAX(created_at) as latest_created_at')
             ->where('is_approve', 1)
             ->whereBetween('created_at', [$startDate, $endDate])
-            ->groupBy('judul', 'isbn', 'penerbit', 'edisi');
+            ->groupBy('prodi_id', 'judul', 'isbn', 'penerbit', 'edisi');
     
         if ($request->filled('year')) {
             $pengajuanQuery->whereYear('created_at', $request->year);
@@ -112,7 +112,7 @@ class RekapPengajuanController extends Controller
             });
         }
     
-        $pengajuan = $pengajuanQuery->paginate(10);
+        $pengajuan = $pengajuanQuery->get();
     
         if ($request->has('export')) {
             $excelReport = new PengajuanExport($pengajuan);

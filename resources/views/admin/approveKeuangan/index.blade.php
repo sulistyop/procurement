@@ -25,6 +25,21 @@
                 <i class="fas fa-plus"></i>
             </a>
         </div>
+        <div class="mb-4">
+            <form method="GET" action="{{ route('approve-keuangan.index') }}" class="form-inline">
+                <div class="form-group mx-2">
+                    <label for="tanggal_dari" class="mr-2">Dari</label>
+                    <input type="date" class="form-control" id="tanggal_dari" name="tanggal_dari" value="{{ request('tanggal_dari') }}">
+                </div>
+                <div class="form-group mx-2">
+                    <label for="tanggal_sampai" class="mr-2">Sampai</label>
+                    <input type="date" class="form-control" id="tanggal_sampai" name="tanggal_sampai" value="{{ request('tanggal_sampai') }}">
+                </div>
+                <button type="submit" class="btn btn-primary mx-2">
+                    Filter <i class="fas fa-filter"></i>
+                </button>
+            </form>
+        </div>       
         <table class="table mt-4" id="customers">
             <thead>
             <tr>

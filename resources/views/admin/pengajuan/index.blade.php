@@ -182,6 +182,8 @@
             modal.find('.modal-body #isbn').val(allData.isbn);
             modal.find('.modal-body #judul').val(allData.judul);
             modal.find('.modal-body #penerbit').val(allData.penerbit);
+            modal.find('.modal-body #author').val(allData.author);
+            modal.find('.modal-body #edisi').val(allData.edisi);
             modal.find('.modal-body #tahun').val(allData.tahun);
             modal.find('.modal-body #eksemplar').val(allData.eksemplar);
         });

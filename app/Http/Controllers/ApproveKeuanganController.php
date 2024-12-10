@@ -10,15 +10,31 @@ use Illuminate\Support\Facades\Auth;
 
 class ApproveKeuanganController extends Controller
 {
-    public function index()
+    public function index(Request $request)
     {
+        $today = now()->toDateString();
+
         $existingParentPengajuanIds = DB::table('approve_keuangan_parent_pengajuan')
                                         ->pluck('parent_pengajuan_id')
                                         ->toArray();
-        $approveKeuangan = ApproveKeuangan::all();
+    
+        $query = ApproveKeuangan::with(['parents', 'parents.prodi']);
+    
+        $tanggalDari = $request->input('tanggal_dari', $today);
+        $tanggalSampai = $request->input('tanggal_sampai', $today);
+    
+        $query->whereBetween('created_at', [
+            $tanggalDari . ' 00:00:00',
+            $tanggalSampai . ' 23:59:59'
+        ]);
+    
+        $approveKeuangan = $query->get();
+
         $parents = ParentPengajuan::all();
-        return view('admin.approveKeuangan.index', compact('approveKeuangan', 'parents', 'existingParentPengajuanIds'));
+    
+        return view('admin.approveKeuangan.index', compact('approveKeuangan', 'parents', 'existingParentPengajuanIds', 'tanggalDari', 'tanggalSampai'));
     }
+    
     
     public function create()
     {

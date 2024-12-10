@@ -6,7 +6,7 @@
 
 @section('content')
     <div>
-        <div class="d-flex">
+        <div class="d-flex mb-4">
             <div class="form-group mr-2">
                 <select id="filter-tahun" class="form-select select2" onchange="filterByYear()">
                     <option value="">Semua Tahun</option>
@@ -17,7 +17,6 @@
             </div>
             @if(auth()->user()->hasRole('admin'))
                 <div class="form-group">
-                    <label for="filter-prodi">Filter Prodi</label>
                     <select id="filter-prodi" class="form-select select2" onchange="filterByProdi()">
                         <option value="">Semua Prodi</option>
                         @foreach($prodis as $prodi)
@@ -27,62 +26,43 @@
                 </div>
             @endif
         </div>
+
         <div class="container-fluid">
             <div class="row">
                 <!-- Cards Section -->
-                <div class="col-md-3 col-sm-6 mb-3">
-                    <div class="card text-white bg-primary">
-                        <div class="card-header text-center">Total Buku Terdaftar</div>
-                        <div class="card-body text-center">
-                            <h5 class="card-title">{{ $totalBooks }}</h5>
-                            <p class="card-text">Semua Pengajuan</p>
-                            <a href="{{ route('pengajuan.index') }}" class="btn btn-light btn-sm">Lihat Detail</a>
+                @php
+                    $cards = [
+                        ['color' => 'primary', 'icon' => 'fas fa-book', 'title' => 'Total Buku Terdaftar', 'count' => $totalBooks, 'route' => route('pengajuan.index'), 'text' => 'Semua Pengajuan'],
+                        ['color' => 'success', 'icon' => 'fas fa-check-circle', 'title' => 'Total Buku Diterima', 'count' => $acceptedBooks, 'route' => route('rekap-pengajuan.index'), 'text' => 'Jumlah buku diterima.'],
+                        ['color' => 'danger', 'icon' => 'fas fa-times-circle', 'title' => 'Total Buku Ditolak', 'count' => $rejectBooks, 'route' => route('pengajuan.tolak'), 'text' => 'Jumlah buku yang ditolak.'],
+                        ['color' => 'warning', 'icon' => 'fas fa-clock', 'title' => 'Buku Pending', 'count' => $pendingBooks, 'route' => route('pengajuan.proses'), 'text' => 'Buku belum diproses.']
+                    ];
+                @endphp
+                @foreach ($cards as $card)
+                    <div class="col-md-3 col-sm-6 mb-4">
+                        <div class="card text-white bg-{{ $card['color'] }} shadow h-100">
+                            <div class="card-header text-center">
+                                <i class="{{ $card['icon'] }} fa-2x"></i>
+                                <h5 class="mt-2">{{ $card['title'] }}</h5>
+                            </div>
+                            <div class="card-body text-center">
+                                <h2 class="card-title font-weight-bold">{{ $card['count'] }}</h2>
+                                <p class="card-text">{{ $card['text'] }}</p>
+                                <a href="{{ $card['route'] }}" class="btn btn-light btn-sm">Lihat Detail</a>
+                            </div>
                         </div>
                     </div>
-                </div>
-
-                <div class="col-md-3 col-sm-6 mb-3">
-                    <div class="card text-white bg-success">
-                        <div class="card-header text-center">Total Buku Diterima</div>
-                        <div class="card-body text-center">
-                            <h5 class="card-title">{{ $acceptedBooks }}</h5>
-                            <p class="card-text">Jumlah buku diterima.</p>
-                            <a href="{{ route('rekap-pengajuan.index') }}" class="btn btn-light btn-sm">Lihat Detail</a>
-                        </div>
-                    </div>
-                </div>
-
-                <div class="col-md-3 col-sm-6 mb-3">
-                    <div class="card text-white bg-danger">
-                        <div class="card-header text-center">Total Buku Ditolak</div>
-                        <div class="card-body text-center">
-                            <h5 class="card-title">{{ $rejectBooks }}</h5>
-                            <p class="card-text">Jumlah buku yang ditolak.</p>
-                            <a href="{{ route('pengajuan.tolak') }}" class="btn btn-light btn-sm">Lihat Detail</a>
-                        </div>
-                    </div>
-                </div>
-
-                <div class="col-md-3 col-sm-6 mb-3">
-                    <div class="card text-white bg-warning">
-                        <div class="card-header text-center">Buku Pending</div>
-                        <div class="card-body text-center">
-                            <h5 class="card-title">{{ $pendingBooks }}</h5>
-                            <p class="card-text">Buku belum diproses.</p>
-                            <a href="{{ route('pengajuan.proses') }}" class="btn btn-light btn-sm">Lihat Detail</a>
-                        </div>
-                    </div>
-                </div>
+                @endforeach
             </div>
-
         </div>
+
         <div class="row">
             <div class="col-6">
                 <!-- Chart Section for Monthly Statistics -->
                 <div class="row mt-4">
                     <div class="col-md-12">
-                        <div class="card">
-                            <div class="card-header">Statistik Buku Bulanan (1 Tahun)</div>
+                        <div class="card shadow">
+                            <div class="card-header bg-info text-white">📊 Statistik Buku Bulanan (1 Tahun)</div>
                             <div class="card-body">
                                 <canvas id="monthlyBooksChart"></canvas>
                             </div>
@@ -91,23 +71,36 @@
                 </div>
             </div>
             @if(auth()->user()->hasRole('admin'))
-            <div class="col-6">
-                <!-- Chart Section for Books per Prodi -->
-                <div class="row mt-4">
-                    <div class="col-md-12">
-                        <div class="card">
-                            <div class="card-header">Rekap Buku per Prodi/Unit</div>
-                            <div class="card-body">
-                                <canvas id="booksPerProdiChart"></canvas>
+                <div class="col-6">
+                    <!-- Chart Section for Books per Prodi -->
+                    <div class="row mt-4">
+                        <div class="col-md-12">
+                            <div class="card shadow">
+                                <div class="card-header bg-secondary text-white">📈 Rekap Buku per Prodi/Unit</div>
+                                <div class="card-body">
+                                    <canvas id="booksPerProdiChart"></canvas>
+                                </div>
                             </div>
                         </div>
                     </div>
                 </div>
-            </div>
             @endif
         </div>
     </div>
 @endsection
+
+@push('style')
+    <style>
+        .card:hover {
+            transform: scale(1.05);
+            transition: all 0.3s ease;
+        }
+        .card-header i {
+            display: block;
+            margin-bottom: 10px;
+        }
+    </style>
+@endpush
 
 @push('script-page')
     <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>

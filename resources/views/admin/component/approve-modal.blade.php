@@ -12,15 +12,23 @@
                 <div class="modal-body">
                     <div class="form-group">
                         <label for="nama_prodi">Prodi</label>
-                        <input type="text" name="nama_prodi" id="nama_prodi" class="form-control" readonly>
+                        <select class="form-control select2" id="prodi" name="prodi_id" value="{{ old('prodi_id') }}" required>
+                            @foreach($prodi as $item)
+                                <option value="{{ $item->id }}" @selected(old('prodi', ) == $item->id)>{{ $item->nama }}</option>
+                            @endforeach
+                        </select>
+                    </div>
+                    <div class="form-group">
+                        <label for="judul">Judul</label>
+                        <input type="text" name="judul" id="judul" class="form-control">
                     </div>
                     <div class="form-group">
                         <label for="isbn">ISBN</label>
                         <input type="text" name="isbn" id="isbn" class="form-control">
                     </div>
                     <div class="form-group">
-                        <label for="judul">Judul</label>
-                        <input type="text" name="judul" id="judul" class="form-control">
+                        <label for="author">Penulis</label>
+                        <input type="text" id="author" name="author" class="form-control">
                     </div>
                     <div class="form-group">
                         <label for="edisi">Edisi</label>

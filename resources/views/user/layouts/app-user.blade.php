@@ -270,7 +270,7 @@
 </main>
 
 <div class="footer">
-    <p>ASP &copy; {{ date('Y') }} . Perpustakaan Universitas Ahmad Dahlan.</p>
+    <p>ASP &copy; 2024 . Perpustakaan Universitas Ahmad Dahlan.</p>
 </div>
 
 <!-- Scripts -->

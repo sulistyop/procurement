@@ -26,30 +26,66 @@ class PengajuanController extends Controller
 	
 	public function index(Request $request)
 	{
+		// Mendapatkan parent_pengajuan_id dari query parameter
 		$idParent = $request->query('parent_pengajuan_id');
-		$selectedParent = ParentPengajuan::find($idParent); 
 		
+		// Mencari parent_pengajuan yang sesuai dengan idParent
+		$selectedParent = ParentPengajuan::find($idParent); 
+	
+		// Jika parent tidak ditemukan, redirect ke halaman pengajuan
 		if ($idParent && !$selectedParent) {
 			return redirect()->route('pengajuan.index')->with('error', 'Parent tidak ditemukan.');
 		}
-
+	
+		// Mengambil data prodi berdasarkan selectedParent jika ada
 		$prodi = Prodi::when($selectedParent, function($query) use ($selectedParent) {
 			return $query->where('id', $selectedParent->prodi_id); 
 		})->get();
 	
+		// Query untuk mengambil data pengajuan
 		$pengajuanQuery = Pengajuan::with('prodi');
 		
+		// Jika ada idParent, filter pengajuan berdasarkan parent_pengajuan_id
 		if ($idParent) {
 			$pengajuanQuery->where('parent_pengajuan_id', $idParent);
 		}
 		
+		// Ambil data pengajuan berdasarkan query
 		$pengajuan = $pengajuanQuery->get();
-		
+	
+		// Mapping untuk menambahkan detail dan menandai apakah sudah diajukan
+		$pengajuan = $pengajuan->map(function ($item) {
+			// Menandai apakah ISBN pernah diajukan
+			$item->is_diajukan = Pengajuan::where('isbn', $item->isbn)
+				->where('isbn', '!=', null)
+				->where('isbn', '!=', '-')
+				->where('isbn', '!=', ' ')
+				->where('prodi_id', $item->prodi_id)
+				->count() > 1;
+	
+			// Jika sudah diajukan, ambil tanggal pengajuan terakhir
+			if ($item->is_diajukan) {
+				$item->date_pernah_diajukan = Pengajuan::where('isbn', $item->isbn)
+					->orderBy('created_at', 'desc')
+					->first()
+					->created_at ?? null;
+			}
+	
+			// Menambahkan informasi prodi ke setiap item
+			$item->nama_prodi = $item->prodi->nama;
+			$item->prodi_id = $item->prodi->id;
+			
+			return $item;
+		});
+	
+		// Mengecek apakah ada permintaan untuk export
 		if ($request->has('export')) {
-            $excelReport = new PengajuanExport($pengajuan);
-            $fileName = 'pengajuan_' . date('Y-m-d_H-i-s') . '.xlsx';
-            return Excel::download($excelReport, $fileName);
-        }
+			$excelReport = new PengajuanExport($pengajuan);
+			$fileName = 'pengajuan_' . date('Y-m-d_H-i-s') . '.xlsx';
+			return Excel::download($excelReport, $fileName);
+		}
+	
+		// Kembalikan tampilan dengan data pengajuan dan lainnya
 		return view('admin.pengajuan.index', [
 			'pengajuan' => $pengajuan,
 			'parentPengajuan' => $selectedParent,
@@ -57,7 +93,7 @@ class PengajuanController extends Controller
 			'prodi' => $prodi,
 			'idParent' => $idParent, 
 		]);
-	}
+	}	
 	
 	public function create(Request $request)
 	{
@@ -158,7 +194,7 @@ class PengajuanController extends Controller
 	
 		return redirect()->route('pengajuan.index', ['parent_pengajuan_id' => $parentPengajuanId])
 						 ->with('success', 'Pengajuan berhasil diupdate.');
-	}
+	} 
 	
 	public function destroy(Request $request, Pengajuan $pengajuan)
 	{

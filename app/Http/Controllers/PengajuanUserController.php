@@ -42,6 +42,30 @@ class PengajuanUserController extends Controller
 		}
 		
 		$pengajuan = $pengajuanQuery->get();
+        		// Mapping untuk menambahkan detail dan menandai apakah sudah diajukan
+		$pengajuan = $pengajuan->map(function ($item) {
+			// Menandai apakah ISBN pernah diajukan
+			$item->is_diajukan = Pengajuan::where('isbn', $item->isbn)
+				->where('isbn', '!=', null)
+				->where('isbn', '!=', '-')
+				->where('isbn', '!=', ' ')
+				->where('prodi_id', $item->prodi_id)
+				->count() > 1;
+	
+			// Jika sudah diajukan, ambil tanggal pengajuan terakhir
+			if ($item->is_diajukan) {
+				$item->date_pernah_diajukan = Pengajuan::where('isbn', $item->isbn)
+					->orderBy('created_at', 'desc')
+					->first()
+					->created_at ?? null;
+			}
+	
+			// Menambahkan informasi prodi ke setiap item
+			$item->nama_prodi = $item->prodi->nama;
+			$item->prodi_id = $item->prodi->id;
+			
+			return $item;
+		});
         if ($request->has('export')) {
             $pengajuan = Pengajuan::all();
             $excelReport = new PengajuanExport($pengajuan);

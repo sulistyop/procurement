@@ -67,7 +67,15 @@
                         @foreach($pengajuan as $item)
                             <tr>
                                 <td>{{ $loop->iteration }}</td>
-                                <td>{{ $item->isbn }}</td>
+                                <td>
+                                    {{--data ini pernah diajukan di tahun --}}
+                                    @if($item->is_diajukan)
+                                        {{ $item->isbn }} <span
+                                                class="badge badge-info">Pernah diajukan tahun  {{ \Illuminate\Support\Carbon::parse($item->date_pernah_diajukan)->format('d-m-Y')  }}</span>
+                                    @else
+                                        {{ $item->isbn }}
+                                    @endif
+                                </td>
                                 <td>{{ $item->judul }}</td>
                                 <td>{{ $item->author }}</td>
                                 <td>{{ $item->created_at->format('d-m-Y') }}</td>

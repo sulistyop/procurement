@@ -32,10 +32,10 @@
                 <!-- Cards Section -->
                 @php
                     $cards = [
-                        ['color' => 'primary', 'icon' => 'fas fa-book', 'title' => 'Total Buku Terdaftar', 'count' => $totalBooks, 'route' => route('pengajuan.index'), 'text' => 'Semua Pengajuan'],
-                        ['color' => 'success', 'icon' => 'fas fa-check-circle', 'title' => 'Total Buku Diterima', 'count' => $acceptedBooks, 'route' => route('rekap-pengajuan.index'), 'text' => 'Jumlah buku diterima.'],
-                        ['color' => 'danger', 'icon' => 'fas fa-times-circle', 'title' => 'Total Buku Ditolak', 'count' => $rejectBooks, 'route' => route('pengajuan.tolak'), 'text' => 'Jumlah buku yang ditolak.'],
-                        ['color' => 'warning', 'icon' => 'fas fa-clock', 'title' => 'Buku Pending', 'count' => $pendingBooks, 'route' => route('pengajuan.proses'), 'text' => 'Buku belum diproses.']
+                        ['color' => 'primary', 'icon' => 'fas fa-book',  'count' => $totalBooks, 'route' => route('pengajuan.index'), 'text' => 'Semua Pengajuan'],
+                        ['color' => 'success', 'icon' => 'fas fa-check-circle', 'count' => $acceptedBooks, 'route' => route('rekap-pengajuan.index'), 'text' => 'Jumlah Judul diterima.'],
+                        ['color' => 'danger', 'icon' => 'fas fa-times-circle',  'count' => $rejectBooks, 'route' => route('pengajuan.tolak'), 'text' => 'Jumlah Judul yang ditolak.'],
+                        ['color' => 'warning', 'icon' => 'fas fa-clock', 'count' => $pendingBooks, 'route' => route('pengajuan.proses'), 'text' => 'Buku belum diproses.']
                     ];
                 @endphp
                 @foreach ($cards as $card)
@@ -43,7 +43,7 @@
                         <div class="card text-white bg-{{ $card['color'] }} shadow h-100">
                             <div class="card-header text-center">
                                 <i class="{{ $card['icon'] }} fa-2x"></i>
-                                <h5 class="mt-2">{{ $card['title'] }}</h5>
+                                {{-- <h5 class="mt-2">{{ $card['title'] }}</h5> --}}
                             </div>
                             <div class="card-body text-center">
                                 <h2 class="card-title font-weight-bold">{{ $card['count'] }}</h2>

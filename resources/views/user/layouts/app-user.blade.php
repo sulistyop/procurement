@@ -29,9 +29,6 @@
     @stack('style-page')
 
     <style>
-        .header, .footer {
-            background-color: rgba(0, 51, 102, 0.9); /* Warna dengan transparansi */
-        }
         /* Global Layout */
         html, body {
             height: 100%;

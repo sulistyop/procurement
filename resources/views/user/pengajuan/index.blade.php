@@ -7,6 +7,7 @@
 @section('content')
     <div class="container-fluid text-center my-4">
         <h1 class="rekap-title">Pengajuan Buku</h1>
+        <hr class="my-4 border-top border-primary">
     </div>
     <div class="container-fluid">
         @if(session('import_errors'))

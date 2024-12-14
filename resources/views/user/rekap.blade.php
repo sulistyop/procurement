@@ -7,6 +7,7 @@ Realisasi
 @section('content')
     <div class="container-fluid my-4">
         <h1 class="rekap-title text-center">Rekap Realisasi</h1>
+        <hr class="my-4 border-top border-primary">
     </div>
 
     <form method="get" action="{{ route('home-rekap') }}">

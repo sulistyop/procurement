@@ -5,6 +5,7 @@
     <!-- Title Section -->
     <div class="text-center my-4">
         <h1 class="rekap-title">Pengelolaan Pengajuan</h1>
+        <hr class="my-4 border-top border-primary">
     </div>
 
     <!-- Add New Button -->

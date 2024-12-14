@@ -95,7 +95,7 @@
                                 </a>
                             @endif
                             @can('delete pengajuan')
-                                <form action="{{ route('pengajuan.destroy', $item->id) }}" method="POST"
+                                <form action="{{ route('pengajuan.destroydas', $item->id) }}" method="POST"
                                       style="display:inline;">
                                     @csrf
                                     @method('DELETE')
@@ -122,12 +122,8 @@
         </table>
 
         @include('admin.component.edit-modal')
-        <!-- Include the Modal Component -->
-        @include('admin.component.tambah-pengajuan-modal')
         <!-- Single Approve Modal -->
         @include('admin.component.approve-modal')
-        <!-- Upload Modal -->
-        @include('admin.component.upload-modal')
     </div>
 @endsection
 
@@ -150,13 +146,14 @@
             var allData = button.data('all');
             var modal = $(this);
             var form = modal.find('#approveForm');
-            var actionUrl = '{{ route('pengajuan.storeApproval', ':id') }}'.replace(':id', id);
+            var actionUrl = '{{ route('pengajuan.storeApprovalDas', ':id') }}'.replace(':id', id);
             form.attr('action', actionUrl);
 
             modal.find('.modal-body #nama_prodi').val(allData.nama_prodi);
             modal.find('.modal-body #isbn').val(allData.isbn);
             modal.find('.modal-body #judul').val(allData.judul);
             modal.find('.modal-body #penerbit').val(allData.penerbit);
+            modal.find('.modal-body #author').val(allData.author);
             modal.find('.modal-body #tahun').val(allData.tahun);
             modal.find('.modal-body #eksemplar').val(allData.eksemplar);
         });
@@ -220,7 +217,7 @@
             var eksemplar = button.data('eksemplar');
             var modal = $(this);
             var form = modal.find('#editPengajuanForm');
-            var actionUrl = '{{ route('pengajuan.update', ':id') }}'.replace(':id', id);
+            var actionUrl = '{{ route('pengajuan.updatedas', ':id') }}'.replace(':id', id);
             form.attr('action', actionUrl);
             modal.find('.modal-body #prodi').val(prodi);
             modal.find('.modal-body #judul').val(judul);

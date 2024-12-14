@@ -97,6 +97,11 @@ Route::middleware(['auth', 'admin'])->group(function () {
         // Rute approval
         Route::get('/{pengajuan}/approve', [PengajuanController::class, 'approve'])->name('pengajuan.approve');
         Route::post('/{pengajuan}/approve', [PengajuanController::class, 'storeApproval'])->name('pengajuan.storeApproval');
+        
+        Route::post('/{pengajuan}/approve', [PengajuanController::class, 'storeApprovalDas'])->name('pengajuan.storeApprovalDas');
+        Route::get('/{pengajuan}/edit', [PengajuanController::class, 'editdas'])->name('pengajuan.editdas');
+        Route::put('/{pengajuan}', [PengajuanController::class, 'updatedas'])->name('pengajuan.updatedas');
+        Route::delete('/{pengajuan}', [PengajuanController::class, 'destroydas'])->name('pengajuan.destroydas');
     });
 
     Route::group(['prefix' => 'approve-keuangan'], function () {

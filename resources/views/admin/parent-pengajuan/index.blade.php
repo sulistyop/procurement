@@ -7,6 +7,7 @@
             <div class="col-md-12 text-center">
                 <!-- Stylish Title with Shadow -->
                 <h1 class="display-4 text-primary font-weight-bold text-shadow">Parent Pengajuan</h1>
+                <hr class="my-4 border-top border-primary">
                 <p class="lead text-muted">Kelola data pengajuan dengan mudah dan terstruktur.</p>
             </div>
         </div>
@@ -15,7 +16,7 @@
         <div class="row mb-4">
             <div class="col-md-12 text-right">
                 <!-- Button placed apart from the title for better focus -->
-                <a href="{{ route('admin.parent-pengajuan.create') }}" class="btn btn-lg btn-success">
+                <a href="{{ route('admin.parent-pengajuan.create') }}" class="btn btn-success">
                     <i class="fa fa-plus-circle"></i> Tambah Rumah Pengajuan
                 </a>
             </div>

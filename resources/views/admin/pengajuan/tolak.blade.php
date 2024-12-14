@@ -56,7 +56,7 @@
                     <div class="form-group mr-2">
                         <label for="filter-prodi">Prodi:</label>
                         <select id="filter-prodi" name="prodi" class="form-control" onchange="filterByProdi()">
-                            <option value="">Pilih Prodi</option>
+                            <option value="">Semua Prodi</option>
                             @foreach($prodi as $prodiItem)
                                 <option value="{{ $prodiItem->id }}" {{ request('prodi') == $prodiItem->id ? 'selected' : '' }}>{{ $prodiItem->nama }}</option>
                             @endforeach

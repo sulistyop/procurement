@@ -93,7 +93,8 @@ class PengajuanController extends Controller
 			'prodi' => $prodi,
 			'idParent' => $idParent, 
 		]);
-	}	
+	}
+	
 	
 	public function create(Request $request)
 	{
@@ -294,7 +295,29 @@ class PengajuanController extends Controller
 		}
 		
 		$pengajuan = $pengajuanQuery->get();
-		
+		$pengajuan = $pengajuan->map(function ($item) {
+			// Menandai apakah ISBN pernah diajukan
+			$item->is_diajukan = Pengajuan::where('isbn', $item->isbn)
+				->where('isbn', '!=', null)
+				->where('isbn', '!=', '-')
+				->where('isbn', '!=', ' ')
+				->where('prodi_id', $item->prodi_id)
+				->count() > 1;
+	
+			// Jika sudah diajukan, ambil tanggal pengajuan terakhir
+			if ($item->is_diajukan) {
+				$item->date_pernah_diajukan = Pengajuan::where('isbn', $item->isbn)
+					->orderBy('created_at', 'desc')
+					->first()
+					->created_at ?? null;
+			}
+	
+			// Menambahkan informasi prodi ke setiap item
+			$item->nama_prodi = $item->prodi->nama;
+			$item->prodi_id = $item->prodi->id;
+			
+			return $item;
+		});
 		return view('admin.pengajuan.proses', [
 			'pengajuan' => $pengajuan,
 			'parentPengajuan' => $selectedParent,
@@ -351,5 +374,86 @@ class PengajuanController extends Controller
 			'toDate' => $toDate->format('Y-m-d'), 
 		]);
 	}
+	//dashboard
+	public function updatedas(Request $request, Pengajuan $pengajuan)
+	{
+		$request->validate([
+			'prodi_id' => 'required|max:100',
+			'judul' => 'required|max:255',
+			'edisi' => 'nullable|max:50',
+			'penerbit' => 'nullable|max:100',
+			'author' => 'required|max:100',
+			'tahun' => 'nullable|integer|min:1900|max:' . date('Y'),
+			'eksemplar' => 'required|integer',
+			'diterima' => 'nullable|integer',
+			'harga' => 'nullable|numeric|min:0', 
+		]);
+
+		$pengajuan->update($request->all());
+
+		$this->setLogActivity('Mengubah pengajuan', $pengajuan);
+
+		$parentPengajuanId = $request->parent_pengajuan_id ?? 1; 
+
+		return redirect()->route('pengajuan.proses')
+						->with('success', 'Pengajuan berhasil diupdate.');
+	} 
+	public function destroydas(Request $request, Pengajuan $pengajuan)
+	{
+		$parentPengajuanId = $request->query('parent_pengajuan_id') ?? $pengajuan->parent_pengajuan_id ?? 1;
+
+		$isParentExists = DB::table('parent_pengajuan')->where('id', $parentPengajuanId)->exists();
 	
+		if (!$isParentExists) {
+			return redirect()->route('pengajuan.proses')
+							 ->with('error', 'Parent pengajuan tidak ditemukan.');
+		}
+
+		$dump = $pengajuan;
+		$pengajuan->delete();
+	
+		$this->setLogActivity('Menghapus pengajuan', $dump);
+
+		return redirect()->route('pengajuan.proses')
+						 ->with('success', 'Pengajuan berhasil dihapus.');
+	}
+	
+	public function storeApprovalDas(Request $request, Pengajuan $pengajuan)
+	{
+		$request->validate([
+			'harga' => 'required_if:action,approve|numeric',
+			'reason' => 'required_if:action,reject|max:255', 
+			'isbn' => 'nullable|max:20',
+			'judul' => 'nullable|max:255', 
+			'edisi' => 'nullable|max:50', 
+			'penerbit' => 'nullable|max:100', 
+			'author' => 'nullable|max:100', 
+			'tahun' => 'nullable|integer|min:1900|max:' . date('Y'), 
+			'eksemplar' => 'nullable|integer', 
+			'diterima' => 'nullable|integer',
+		]);
+	
+		$data = [
+			'is_approve' => $request->action === 'approve',
+			'is_reject' => $request->action === 'reject',
+			'diterima' => $request->action === 'approve' ? (int)$request->diterima : 0,
+			'approved_by' => $request->action === 'approve' ? (Auth::user() ? Auth::user()->id : 0) : null,
+			'rejected_by' => $request->action === 'reject' ? (Auth::user() ? Auth::user()->id : 0) : null,
+			'reason' => $request->action === 'reject' ? $request->reason : null,
+		];
+
+		if ($request->action === 'approve') {
+			$data['approved_at'] = now();
+			$data['harga'] = $request->harga; 
+		} 
+		elseif ($request->action === 'reject') {
+			$data['rejected_at'] = now(); 
+		}
+
+		$pengajuan->update(array_merge($data, $request->only(['judul', 'isbn', 'edisi', 'penerbit', 'author', 'tahun', 'eksemplar'. 'diterima'])));
+
+		$this->setLogActivity($request->action === 'approve' ? 'Menyetujui pengajuan' : 'Menolak pengajuan', $pengajuan);
+		
+		return response()->json(['message' => $request->action === 'approve' ? 'Pengajuan berhasil disetujui!' : 'Pengajuan berhasil ditolak!']);
+	}
 }

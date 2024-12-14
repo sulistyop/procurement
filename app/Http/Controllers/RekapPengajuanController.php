@@ -91,10 +91,10 @@ class RekapPengajuanController extends Controller
         $search = $request->get('search');
     
         $pengajuanQuery = Pengajuan::haveProdi()
-            ->selectRaw('prodi_id, judul, isbn, penerbit, edisi, MAX(diterima) as diterima, MAX(created_at) as latest_created_at')
+            ->selectRaw('prodi_id, judul, author, tahun, eksemplar, isbn, penerbit, edisi, MAX(diterima) as diterima, MAX(created_at) as latest_created_at')
             ->where('is_approve', 1)
             ->whereBetween('created_at', [$startDate, $endDate])
-            ->groupBy('prodi_id', 'judul', 'isbn', 'penerbit', 'edisi');
+            ->groupBy('prodi_id', 'judul', 'author', 'tahun', 'eksemplar', 'isbn', 'penerbit', 'edisi');
     
         if ($request->filled('year')) {
             $pengajuanQuery->whereYear('created_at', $request->year);
@@ -102,14 +102,6 @@ class RekapPengajuanController extends Controller
     
         if ($request->filled('prodi')) {
             $pengajuanQuery->where('prodi_id', $request->prodi);
-        }
-    
-        if ($search) {
-            $pengajuanQuery->where(function($q) use ($search) {
-                $q->where('judul', 'like', "%$search%")
-                  ->orWhere('author', 'like', "%$search%")
-                  ->orWhere('isbn', 'like', "%$search%");
-            });
         }
     
         $pengajuan = $pengajuanQuery->get();

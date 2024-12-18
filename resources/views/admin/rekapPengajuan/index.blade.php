@@ -7,7 +7,7 @@
 @section('content')
     <div>
         <h1 class="mb-4 text-center text-primary font-weight-bold">
-            REKAP RALISASI DITERIMA
+            REKAP REALISASI DITERIMA
         </h1>
         <hr class="my-4 border-top border-primary">
         

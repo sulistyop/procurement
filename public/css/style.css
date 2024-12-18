@@ -84,7 +84,7 @@ body {
 .navbar {
   display: flex; /* Menggunakan Flexbox */
   justify-content: space-between; /* Menjaga elemen di ujung */
-  background-color: #0e2742;
+  background-color: #0e2742; /*003366*/
   background-size: contain; /* atau cover */
   background-repeat: no-repeat;
 }

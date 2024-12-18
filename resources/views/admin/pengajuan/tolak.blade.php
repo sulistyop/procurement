@@ -50,9 +50,6 @@
                         <label for="to_date">Sampai Tanggal:</label>
                         <input type="date" id="to_date" name="to_date" class="form-control" value="{{ request('to_date') }}">
                     </div>
-                </div>
-                <!-- Filter Prodi -->
-                <div class="d-flex">
                     <div class="form-group mr-2">
                         <label for="filter-prodi">Prodi:</label>
                         <select id="filter-prodi" name="prodi" class="form-control" onchange="filterByProdi()">

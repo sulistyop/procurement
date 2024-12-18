@@ -30,7 +30,7 @@
 
     <style>
         /* Global Layout */
-        html, body {
+        /* html, body {
             height: 100%;
         }
 
@@ -43,15 +43,73 @@
             background-color: #f4f7fa;
             font-family: 'Arial', sans-serif;
             color: #333;
-        }
-
-        /* Content Section */
+        } */
+/* 
         main {
             flex: 1;
+        } */
+        Reset CSS
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box; /* Pastikan padding tidak mempengaruhi ukuran elemen */
         }
 
+        /* Global Layout */
+        html, body {
+            height: 100%;
+            margin: 0;
+            padding: 0;
+            background-image: url('{{ asset('image/bg.png') }}'); /* Tambahkan gambar sebagai background */
+            background-size: cover; /* Menyesuaikan gambar agar memenuhi layar */
+            background-repeat: no-repeat;
+            background-attachment: fixed; /* Membuat background tetap saat scrolling */
+            font-family: 'Arial', sans-serif;
+            color: #333;
+            display: flex;
+            flex-direction: column;
+        }
+
+        /* Main Content */
+        main {
+            flex: 1;
+            background-color: rgba(255, 255, 255, 0.9); /* Transparansi untuk memperjelas konten */
+            border-radius: 10px;
+            box-shadow: 0 4px 10px rgba(0, 0, 0, 0.2);
+            padding: 30px; /* Padding untuk memberi jarak pada konten */
+            margin: 40px auto; /* Memberi margin atas dan bawah */
+            max-width: 1800px; /* Membatasi lebar maksimum */
+            width: 95%; /* Lebar responsif untuk perangkat kecil */
+        }
+
+        /* Footer */
+        .footer {
+            background-color: #003366;
+            color: white;
+            text-align: center;
+            padding: 15px 10px;
+            font-size: 14px;
+            border-top: 3px solid #002244;
+        }
+
+        /* Responsive Design */
+        @media (max-width: 768px) {
+            main {
+                margin: 20px auto;
+                padding: 15px;
+                width: 100%; /* Memaksimalkan lebar pada perangkat kecil */
+                border-radius: 5px;
+            }
+
+            .footer {
+                font-size: 12px; /* Mengecilkan ukuran font footer */
+                padding: 10px 5px;
+            }
+        }
+
+
         /* Header and Footer */
-        .header, .footer {
+        .header {
             background-color: #003366;
             color: white;
             text-align: center;
@@ -67,7 +125,7 @@
             font-size: 26px;
             font-weight: 500;
         }
-
+        /* 
         .footer {
             padding: 10px;
             position: relative;
@@ -77,7 +135,7 @@
             color: white;
             font-size: 14px;
             border-top: 3px solid #003366;
-        }
+        } */
 
         /* Menu Navigation Styles */
         .menu-nav {
@@ -203,7 +261,7 @@
 <div class="header">
     <div class="container-fluid d-flex justify-content-between align-items-center">
         <img src="{{ asset('image/img.png') }}" alt="UAD Logo">
-        <nav class="navbar navbar-expand-md navbar-light shadow-sm">
+        <nav class="navbar navbar-expand-md  shadow-sm">
             <div class="container">
                 <ul class="navbar-nav ml-auto">
                     @guest

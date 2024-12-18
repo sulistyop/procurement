@@ -59,7 +59,7 @@
             </a>
         </div>       
         @if(isset($parentPengajuan))
-        <h3>Pengajuan untuk Parent: {{ $parentPengajuan->nama }}</h3>
+        <h3>Pengajuan untuk rumah : {{ $parentPengajuan->nama }}</h3>
         @endif
 
         <table class="table mt-4" id="customers">

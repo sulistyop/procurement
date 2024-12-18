@@ -32,33 +32,6 @@ class AdminUserSeeder extends Seeder
             $adminUser->assignRole($adminRole);
         }
 
-        $adminSeleksiPenyediaRole = Role::firstOrCreate(['name' => 'adminSeleksiPenyedia']);
-		$adminSeleksiPenyediaUser = User::updateOrCreate(
-			['email' => 'adminSeleksiPenyedia@gmail.com'],
-			[
-				'name' => 'Admin Pengadaan', // Anda mungkin ingin menyesuaikan nama ini
-				'password' => Hash::make('password'), // Ganti dengan password yang lebih aman
-			]
-		);
-
-		if ($adminSeleksiPenyediaUser->wasRecentlyCreated) {
-			$adminSeleksiPenyediaUser->assignRole($adminSeleksiPenyediaRole);
-		}
- 
-
-        $keuanganRole = Role::firstOrCreate(['name' => 'keuangan']);
-        $keuanganUser = User::updateOrCreate(
-            ['email' => 'bka@gmail.com'],
-            [
-                'name' => 'Keuangan',
-                'password' => Hash::make('password'),
-            ]
-        );
-        
-        if ($keuanganUser->wasRecentlyCreated) {
-            $keuanganUser->assignRole($keuanganRole);
-        }
-
         $userRole = Role::firstOrCreate(['name' => 'user']);
         $user = User::updateOrCreate(
             ['email' => 'user@gmail.com'],

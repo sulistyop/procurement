@@ -85,12 +85,6 @@
                 @endforelse
             </tbody>
         </table>
-
-        <!-- Pagination Links -->
-        <div class="d-flex justify-content-center">
-            {{ $pengajuan->links() }}
-        </div>
-
     </div>
 @endsection
 

@@ -151,3 +151,24 @@
     });
 </script>
 @endsection
+@push('script-page')
+    <script type="text/javascript">
+        $(document).ready(function () {
+            $('#customers').DataTable({
+                // "paging": true,
+                // "lengthChange": true,
+                "searching": true,
+                // "ordering": true,
+                // "info": true,
+                // "autoWidth": false,
+            });
+        });
+
+        $(document).ready(function() {
+            $('#customers tbody').on('click', 'tr', function() {
+                $('#customers tr').removeClass('highlighted-row');
+                $(this).addClass('highlighted-row');
+            });
+        });
+    </script>
+@endpush

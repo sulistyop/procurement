@@ -34,7 +34,7 @@
     <!-- Cards Section -->
     <div class="row g-4">
         @forelse($parentPengajuans as $item)
-            <div class="col-lg-4 col-md-6 col-sm-12">
+            <div class="col-lg-4 col-md-6 col-sm-12 my-3">
                 <div class="card shadow-lg border-0 h-100 rounded-4">
                     <div class="card-body text-center p-4">
                         <div class="mb-4">

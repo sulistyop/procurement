@@ -87,7 +87,7 @@
             background-color: #003366;
             color: white;
             text-align: center;
-            padding: 15px 10px;
+            padding: 2px 2px;
             font-size: 14px;
             border-top: 3px solid #002244;
         }
@@ -106,14 +106,16 @@
                 padding: 10px 5px;
             }
         }
-
+        .navbar {
+            background-color: #003366;
+            }
 
         /* Header and Footer */
         .header {
             background-color: #003366;
             color: white;
             text-align: center;
-            padding: 20px;
+            padding: 2px;
         }
 
         .header img {
@@ -140,16 +142,24 @@
         /* Menu Navigation Styles */
         .menu-nav {
             background-color: #c4ced8;
-            padding: 5px 0;
+            margin: 0;
+            padding: 5px;
             width: 100%;
+            margin-top: 0;
+            background-image: url('{{ asset('image/menu.png') }}'); 
+            background-size: cover; 
+            background-repeat: no-repeat; 
+            background-position: center;
         }
 
         .menu-nav .nav-link {
-            margin: 0 15px;
-            padding: 10px;
+            margin: 0;
+            /* padding: 1px 1px; */
+            padding: 0 1px;
             font-size: 14px;
             color: #444c61;
             transition: color 0.3s;
+            letter-spacing: 0.5px;
         }
 
         .menu-nav .nav-link:hover {
@@ -164,6 +174,11 @@
 
         .menu-nav .navbar {
             justify-content: flex-end;
+        }
+        .menu-nav .nav-pills {
+            margin: 1px; 
+            padding: 1px; 
+            letter-spacing: 0.5px;
         }
 
         /* Table Styles */

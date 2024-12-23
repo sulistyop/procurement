@@ -26,34 +26,39 @@
         <div class="row mb-4">
             <div class="col-md-12">
                 <form method="get" action="{{ route('admin.parent-pengajuan.index') }}">
-                    <div class="d-flex justify-content-between">
-                        <div class="input-group mr-3">
-                            <select id="prodi-filter" name="prodi" class="form-control custom-select select2" onchange="this.form.submit()">
-                                <option value="">Semua Prodi/Unit</option>
-                                @foreach($prodis as $prodi)
-                                    <option value="{{ $prodi->id }}" 
-                                        {{ request('prodi') == $prodi->id ? 'selected' : '' }}>
-                                        {{ $prodi->nama }}
-                                    </option>
-                                @endforeach
-                            </select>
+                    <div class="row">
+                        <div class="col-md-6">
+                            <label for="prodi-filter" class="form-label">Prodi/Unit:</label>
+                            <div class="input-group">
+                                <select id="prodi-filter" name="prodi" class="form-control custom-select select2" onchange="this.form.submit()">
+                                    <option value="">Semua Prodi/Unit</option>
+                                    @foreach($prodis as $prodi)
+                                        <option value="{{ $prodi->id }}" 
+                                            {{ request('prodi') == $prodi->id ? 'selected' : '' }}>
+                                            {{ $prodi->nama }}
+                                        </option>
+                                    @endforeach
+                                </select>
+                            </div>
                         </div>
-                        <div class="input-group">
-                            <select id="tahun-filter" name="tahun" class="form-control custom-select select2" onchange="this.form.submit()">
-                                <option value="">Semua Tahun</option>
-                                @foreach(range(date('Y'), 2024) as $year)
-                                    <option value="{{ $year }}" 
-                                        {{ request('tahun') == $year ? 'selected' : '' }}>
-                                        {{ $year }}
-                                    </option>
-                                @endforeach
-                            </select>
+                        <div class="col-md-6">
+                            <label for="tahun-filter" class="form-label">Tahun:</label>
+                            <div class="input-group">
+                                <select id="tahun-filter" name="tahun" class="form-control custom-select select2" onchange="this.form.submit()">
+                                    <option value="">Semua Tahun</option>
+                                    @foreach(range(date('Y'), 2024) as $year)
+                                        <option value="{{ $year }}" 
+                                            {{ request('tahun') == $year ? 'selected' : '' }}>
+                                            {{ $year }}
+                                        </option>
+                                    @endforeach
+                                </select>
+                            </div>
                         </div>
                     </div>
                 </form>
             </div>
         </div>
-        
         
         <!-- Success Message -->
         @if (session('success'))

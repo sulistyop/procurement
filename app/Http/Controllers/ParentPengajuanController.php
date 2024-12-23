@@ -57,7 +57,7 @@ class ParentPengajuanController extends Controller
             'prodi_id' => $request->prodi_id, // Pastikan ini disimpan
         ]);
     
-        return redirect()->route('admin.parent-pengajuan.index')->with('success', 'Parent Pengajuan berhasil disimpan.');
+        return redirect()->route('admin.parent-pengajuan.index')->with('success', 'Pengajuan berhasil disimpan.');
     }
     
 
@@ -104,7 +104,7 @@ class ParentPengajuanController extends Controller
         // Hapus ParentPengajuan itu sendiri
         $parentPengajuan->delete();
     
-        return redirect()->route('admin.parent-pengajuan.index')->with('success', 'Data Parent Pengajuan beserta Pengajuannya berhasil dihapus.');
+        return redirect()->route('admin.parent-pengajuan.index')->with('success', 'Data Pengajuan beserta Pengajuannya berhasil dihapus.');
     }
     
     // Di dalam ParentPengajuanController.php

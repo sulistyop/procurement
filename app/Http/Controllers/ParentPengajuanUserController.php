@@ -40,7 +40,7 @@ class ParentPengajuanUserController extends Controller
             'prodi_id' => $request->prodi_id, 
         ]);
     
-        return redirect()->route('user.parent-pengajuan.index')->with('success', 'Parent Pengajuan berhasil disimpan.');
+        return redirect()->route('user.parent-pengajuan.index')->with('success', 'Pengajuan berhasil disimpan.');
     }
 
     public function edit($id)
@@ -91,7 +91,7 @@ class ParentPengajuanUserController extends Controller
         // Hapus ParentPengajuan itu sendiri
         $parentPengajuan->delete();
     
-        return redirect()->route('user.parent-pengajuan.index')->with('success', 'Data Parent Pengajuan beserta Pengajuannya berhasil dihapus.');
+        return redirect()->route('user.parent-pengajuan.index')->with('success', 'Data Pengajuan beserta usulan buku berhasil dihapus.');
     }
     
     public function view($id)

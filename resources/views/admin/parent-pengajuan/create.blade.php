@@ -2,21 +2,21 @@
 
 @section('content')
     <div class="container mt-5">
-        <h1 class="display-4 text-center text-primary mb-4">Tambah Parent Pengajuan</h1>
+        <h1 class="display-4 text-center text-primary mb-4">Tambah Pengajuan</h1>
 
         <form action="{{ route('admin.parent-pengajuan.store') }}" method="POST">
             @csrf
 
             <div class="form-group">
-                <label for="nama" class="font-weight-bold">Nama</label>
+                <label for="nama" class="font-weight-bold">Nama Pengajuan</label>
                 <input type="text" name="nama" id="nama" class="form-control custom-input" required>
             </div>
 
             <!-- Dropdown untuk memilih Prodi -->
             <div class="form-group">
-                <label for="prodi_id" class="font-weight-bold">Prodi</label>
-                <select name="prodi_id" id="prodi_id" class="form-control custom-input" required>
-                    <option value="">Pilih Prodi</option>
+                <label for="prodi_id" class="font-weight-bold">Prodi/Unit</label>
+                <select name="prodi_id" id="prodi_id" class="form-control custom-input select2" required>
+                    <option value="">Pilih Prodi/Unit</option>
                     @foreach($prodis as $prodi)
                         <option value="{{ $prodi->id }}">{{ $prodi->nama }}</option>
                     @endforeach

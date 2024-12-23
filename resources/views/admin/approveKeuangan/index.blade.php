@@ -4,14 +4,6 @@
     Keuangan
 @endsection
 
-@push('style-page')
-    <style>
-        .custom-select {
-            width: 70px !important;
-        }
-    </style>
-@endpush
-
 @section('content')
     <div>
         <h1 class="mb-4 text-center text-primary font-weight-bold">
@@ -50,7 +42,7 @@
                 <th rowspan="2" style="text-align: center; vertical-align: middle;">No</th>
                 <th colspan="2" class="text-center">Surat</th>
                 <th colspan="2" class="text-center">Bukti Transaksi</th>
-                <th colspan="2" class="text-center">Parent & Prodi</th>
+                <th colspan="2" class="text-center">Pengajuan</th>
                 <th colspan="2" class="text-center">Aksi</th>
             </tr>
             <tr>
@@ -58,7 +50,7 @@
                 <th>File</th>
                 <th>Nomor Bukti Transaksi</th>
                 <th>File</th>
-                <th>Parent</th>
+                <th>Pengajuan</th>
                 <th>Prodi</th>
                 <th>Edit</th>
                 <th>Hapus</th>
@@ -84,14 +76,14 @@
                             - 
                         @endif
                     </td>
-                    <td>
+                    <td class="same-width">
                         @foreach($item->parents as $parent)
-                            <p>{{ $parent->nama }}</p>
+                            <p class="bordered-item">{{ $parent->nama }}</p>
                         @endforeach
                     </td>
-                    <td>
+                    <td class="same-width">
                         @foreach($item->parents as $parent)
-                            <p>{{ $parent->prodi->nama }}</p>
+                            <p class="bordered-item">{{ $parent->prodi->nama }}</p>
                         @endforeach
                     </td>
                     <td style="text-align: center;">

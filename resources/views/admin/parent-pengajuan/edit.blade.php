@@ -2,14 +2,14 @@
 
 @section('content')
     <div class="container mt-5">
-        <h1 class="display-4 text-center text-primary mb-4">Edit Parent Pengajuan</h1>
+        <h1 class="display-4 text-center text-primary mb-4">Edit Pengajuan</h1>
 
         <form action="{{ route('admin.parent-pengajuan.update', $parentPengajuan->id) }}" method="POST">
             @csrf
             @method('PUT')
             
             <div class="form-group">
-                <label for="nama" class="font-weight-bold">Nama</label>
+                <label for="nama" class="font-weight-bold">Nama Pengajuan</label>
                 <input type="text" name="nama" id="nama" class="form-control custom-input" value="{{ $parentPengajuan->nama }}" required>
             </div>
 

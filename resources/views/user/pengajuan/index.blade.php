@@ -35,7 +35,7 @@
         <div class="d-flex justify-content-between align-items-center mb-3">
             <div>
                 <button type="button" class="btn btn-outline-primary" data-toggle="modal" data-target="#tambahPengajuanModal">
-                    <i class="fas fa-plus"></i> Tambah Pengajuan
+                    <i class="fas fa-plus"></i> Tambah
                 </button>
                 <a type="button" class="btn btn-outline-success" data-toggle="modal" data-target="#uploadModal">
                     <i class="fa fa-upload"></i> Upload Excel

@@ -1,3 +1,30 @@
+select {
+  -webkit-appearance: none;
+  -moz-appearance: none;
+  appearance: none;
+  width: 100%;
+}
+#customerspar {
+  font-family: Arial, Helvetica, sans-serif;
+  border-collapse: collapse;
+  width: 100%;
+}
+#customerspar td {
+  border: 1px solid #ddd;
+  padding: 8px;
+  font-size: 12px;
+}
+
+#customerspar tr:hover {
+  background-color: rgba(152, 226, 245, 0.993);
+}
+#customerspar th {
+  padding-top: 12px;
+  padding-bottom: 12px;
+  text-align: center;
+  background-color: #0a2c36;
+  color: white;
+}
 #customers {
   font-family: Arial, Helvetica, sans-serif;
   border-collapse: collapse;
@@ -22,10 +49,19 @@
   padding-top: 12px;
   padding-bottom: 12px;
   text-align: center;
-  background-color: #2f9cbd;
+  background-color: #1e8bac;
   color: white;
+  border: 1px solid #ddd; 
+}
+.bordered-item {
+  margin: 0; 
+  padding: 5px 0; 
+  border-bottom: 1px solid #ddd; 
 }
 
+.bordered-item:last-child {
+  border-bottom: none;
+}
 #app {
   display: flex;
   transition: margin-left 0.3s; /* Animasi saat sidebar dibuka/tutup */
@@ -130,22 +166,6 @@ body {
   border-radius: 5px; /* Sudut membulat saat hover */
   box-shadow: 0 4px 8px rgba(0, 123, 255, 0.4);
 }
-
-@media (max-width: 768px) {
-  .sidebar {
-    width: 200px; /* Lebar sidebar lebih kecil di perangkat kecil */
-    box-shadow: 0 4px 8px rgba(104, 163, 226, 0.822);
-  }
-
-  .content {
-    margin-left: 200px; /* Konten memiliki margin saat sidebar terbuka */
-  }
-
-  .sidebar.active + .content {
-    margin-left: 0; /* Konten tanpa margin saat sidebar tertutup */
-  }
-}
-
 .sidebar {
   width: 250px;
   position: fixed;
@@ -169,9 +189,10 @@ body {
 #sidebar .nav-link {
   display: flex;
   align-items: center;
+  text-align: left !important;
   color: #ffffff;
-  padding: 15px 20px;
-  font-size: 16px;
+  padding: 10px 10px;
+  font-size: 14px;
 }
 
 #sidebar .nav-link .fas {
@@ -182,6 +203,20 @@ body {
   display: none;
 }
 
+@media (max-width: 768px) {
+  .sidebar {
+    width: 200px; /* Lebar sidebar lebih kecil di perangkat kecil */
+    box-shadow: 0 4px 8px rgba(104, 163, 226, 0.822);
+  }
+
+  .content {
+    margin-left: 200px; /* Konten memiliki margin saat sidebar terbuka */
+  }
+
+  .sidebar.active + .content {
+    margin-left: 0; /* Konten tanpa margin saat sidebar tertutup */
+  }
+}
 .nav-link.active {
   background-color: #007bff;
   color: white;
@@ -326,8 +361,9 @@ body {
 .sidebar .copyright {
   position: absolute;
   bottom: 10px;
-  width: 100%;
   font-size: 12px;
   color: #777;
   text-align: center;
 }
+
+

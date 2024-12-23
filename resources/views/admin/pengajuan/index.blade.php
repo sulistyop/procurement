@@ -41,7 +41,7 @@
         @endif
         <div class="mb-2">
             <a class="btn btn-outline-primary" href="#" data-toggle="modal" data-target="#tambahPengajuanModal">
-                Tambah Pengajuan
+                Tambah
                 <i class="fas fa-plus"></i>
             </a>
             {{-- @foreach($parents as $parent)
@@ -59,7 +59,10 @@
             </a>
         </div>       
         @if(isset($parentPengajuan))
-        <h3>Pengajuan untuk rumah : {{ $parentPengajuan->nama }}</h3>
+        <h5 class="text-info font-weight-bold mt-4">
+            Pengajuan untuk : <span class="text-primary">{{ $parentPengajuan->nama }}</span>
+        </h5>
+        
         @endif
 
         <table class="table mt-4" id="customers">

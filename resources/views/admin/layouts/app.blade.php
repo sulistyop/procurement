@@ -23,6 +23,7 @@
     <link rel="stylesheet" href="{{ asset('css/style.css') }}">
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/sweetalert2@11/dist/sweetalert2.min.css">
     <link href="https://cdn.jsdelivr.net/npm/select2@4.1.0-rc.0/dist/css/select2.min.css" rel="stylesheet" />
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/normalize.css@8.0.1/normalize.min.css">
 
     @stack('style-page')
     <!-- Scripts -->
@@ -142,6 +143,7 @@
 
     <!-- Scripts -->
     <script src="https://code.jquery.com/jquery-3.5.1.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
     <script src="https://cdn.jsdelivr.net/npm/select2@4.1.0-rc.0/dist/js/select2.min.js"></script>
     <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.bundle.min.js"></script>
     <script src="https://cdn.datatables.net/1.10.21/js/jquery.dataTables.min.js"></script>
@@ -180,13 +182,11 @@
 
         $(document).ready(function() {
             $('.select2').select2({
-                theme: 'bootstrap4',
-                width: '100%'
+                placeholder: "Pilih opsi",
+                allowClear: true
             });
         });
-    </script>
-    <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
-    <script type="text/javascript">
+        
         $(document).ready(function() {
             $.extend(true, $.fn.dataTable.defaults, {
 
@@ -198,6 +198,12 @@
         $(document).ready(function() {
             $('#customers tbody').on('click', 'tr', function() {
                 $('#customers tr').removeClass('highlighted-row');
+                $(this).addClass('highlighted-row');
+            });
+        });
+        $(document).ready(function() {
+            $('#customerspar tbody').on('click', 'tr', function() {
+                $('#customerspar tr').removeClass('highlighted-row');
                 $(this).addClass('highlighted-row');
             });
         });

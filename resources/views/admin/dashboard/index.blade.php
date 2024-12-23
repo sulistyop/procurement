@@ -7,7 +7,8 @@
     <!-- Filter Section -->
     <div class="d-flex mb-4 justify-content-between align-items-center">
         <div class="form-group mr-2">
-            <select id="filter-tahun" class="form-select filter-input" onchange="filterByYear()">
+            Tahun
+            <select id="filter-tahun" class="form-select filter-input select2" onchange="filterByYear()">
                 <option value="">Semua Tahun</option>
                 @foreach($years as $year)
                     <option value="{{ $year }}" {{ request('year') == $year ? 'selected' : '' }}>{{ $year }}</option>
@@ -15,17 +16,17 @@
             </select>
         </div>
         @if(auth()->user()->hasRole('admin'))
-            <div class="form-group">
-                <select id="filter-prodi" class="form-select filter-input" onchange="filterByProdi()">
-                    <option value="">Semua Prodi</option>
-                    @foreach($prodis as $prodi)
-                        <option value="{{ $prodi->id }}" {{ request('prodi') == $prodi->id ? 'selected' : '' }}>{{ $prodi->nama }}</option>
-                    @endforeach
-                </select>
-            </div>
+        <div class="form-group">
+            Prodi/Unit
+            <select id="filter-prodi" class="form-select filter-input select2" onchange="filterByProdi()">
+                <option value="">Semua Prodi</option>
+                @foreach($prodis as $prodi)
+                    <option value="{{ $prodi->id }}" {{ request('prodi') == $prodi->id ? 'selected' : '' }}>{{ $prodi->nama }}</option>
+                @endforeach
+            </select>
+        </div>
         @endif
     </div>
-
     <!-- Card Section -->
     <div class="container-fluid">
         <div class="row">
@@ -136,5 +137,49 @@
             options: { responsive: true }
         });
     });
+    function filterByYear() {
+        const year = document.getElementById('filter-tahun').value;
+        const prodi = document.getElementById('filter-prodi').value;
+        const url = new URL(window.location.href);
+        let params = new URLSearchParams(url.search);
+
+        if (year) {
+            params.set('year', year);
+        } else {
+            params.delete('year');
+        }
+
+        if (prodi) {
+            params.set('prodi', prodi);
+        } else {
+            params.delete('prodi');
+        }
+
+        url.search = params.toString(); // Update URL
+        window.location.href = url.toString(); // Reload page with updated parameters
+    }
+
+    function filterByProdi() {
+        const prodi = document.getElementById('filter-prodi').value;
+        const year = document.getElementById('filter-tahun').value;
+        const url = new URL(window.location.href);
+        let params = new URLSearchParams(url.search);
+
+        if (prodi) {
+            params.set('prodi', prodi);
+        } else {
+            params.delete('prodi');
+        }
+
+        if (year) {
+            params.set('year', year);
+        } else {
+            params.delete('year');
+        }
+
+        url.search = params.toString(); // Update URL
+        window.location.href = url.toString(); // Reload page with updated parameters
+    }
+
 </script>
 @endpush

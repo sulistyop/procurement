@@ -161,6 +161,13 @@
             transition: color 0.3s;
             letter-spacing: 0.5px;
         }
+        .menu-nav .nav-item {
+            margin-left: 20px; /* Memberikan jarak antar menu */
+        }
+
+        .menu-nav .nav-pills {
+            margin-bottom: 0; /* Menghilangkan jarak bawah pada ul */
+        }
 
         .menu-nav .nav-link:hover {
             color: #0056b3;

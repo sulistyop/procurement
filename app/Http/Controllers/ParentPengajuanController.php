@@ -14,23 +14,29 @@ class ParentPengajuanController extends Controller
     {
         // Ambil semua Prodi untuk dropdown filter
         $prodis = Prodi::all();
-        
-        // Set default prodi ID ke 1 (Perpustakaan) jika tidak ada filter
-        $selectedProdi = $request->get('prodi', 1); // Default ke 1 (Perpustakaan)
-        
-        // Query untuk menampilkan Parent Pengajuan, filter berdasarkan Prodi jika ada
-        $parentPengajuans = ParentPengajuan::with('prodi') // Pastikan sudah ada relasi 'prodi'
-            ->when($selectedProdi, function($query) use ($selectedProdi) {
-                return $query->where('prodi_id', $selectedProdi);
+    
+        // Ambil daftar tahun yang ada berdasarkan data 'created_at' dari ParentPengajuan
+        $years = ParentPengajuan::selectRaw('DISTINCT YEAR(created_at) as year')
+                                ->orderByDesc('year')
+                                ->pluck('year');
+    
+        // Ambil data ParentPengajuan dengan filter berdasarkan tahun dan prodi
+        $parentPengajuans = ParentPengajuan::with('prodi')
+            ->when($request->has('tahun') && $request->tahun != '', function($query) use ($request) {
+                return $query->whereYear('created_at', $request->tahun);
+            })
+            ->when($request->has('prodi') && $request->prodi != '', function($query) use ($request) {
+                return $query->where('prodi_id', $request->prodi);
             })
             ->get();
     
+        // Cek apakah data bisa dihapus
         foreach ($parentPengajuans as $item) {
             $item->canDelete = !ApproveKeuanganParentPengajuan::where('parent_pengajuan_id', $item->id)->exists();
         }
         
         // Kirim data ke view
-        return view('admin.parent-pengajuan.index', compact('parentPengajuans', 'prodis'));
+        return view('admin.parent-pengajuan.index', compact('parentPengajuans', 'prodis', 'years'));
     }
     
     public function create()

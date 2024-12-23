@@ -5,14 +5,14 @@
     <!-- Title Section -->
     <div class="text-center mb-5">
         <h1 class="rekap-title text-primary">Pengelolaan Pengajuan</h1>
-        <p class="text-muted">Kelola semua rumah pengajuan dengan lebih mudah dan efisien</p>
+        <p class="text-muted">Kelola semua pengajuan dengan lebih mudah dan efisien</p>
         <hr class="w-50 mx-auto border-primary">
     </div>
 
     <!-- Add New Button -->
     <div class="d-flex justify-content-end mb-4">
         <a href="{{ route('user.parent-pengajuan.create') }}" class="btn btn-outline-primary shadow-sm rounded-pill">
-            <i class="fas fa-plus me-2"></i> Tambah Rumah Pengajuan
+            <i class="fas fa-plus me-2"></i> Tambah Pengajuan
         </a>
     </div>
 

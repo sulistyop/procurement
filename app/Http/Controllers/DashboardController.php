@@ -12,10 +12,10 @@ class DashboardController extends Controller
     public function index(Request $request)
     {
         $userProdiId = Auth::user()->prodi_id;
-        
+        $prodis = Prodi::all();
         $filterYear = $request->input('year');
         $filterProdi = $request->input('prodi');
-        
+ 
         $monthlyBooks = Pengajuan::selectRaw('EXTRACT(MONTH FROM created_at) as month, SUM(diterima) as total')
             ->when($userProdiId, function ($query) use ($userProdiId) {
                 return $query->where('prodi_id', $userProdiId);

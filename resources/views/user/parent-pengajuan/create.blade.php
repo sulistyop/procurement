@@ -4,8 +4,8 @@
 <div class="container mt-5">
     <!-- Title Section -->
     <div class="text-center mb-4">
-        <h1 class="text-primary fw-bold">Tambah Parent Pengajuan</h1>
-        <p class="text-muted">Masukkan nama untuk rumah pengajuan</p>
+        <h1 class="text-primary fw-bold">Tambah Pengajuan</h1>
+        <p class="text-muted">Masukkan nama untuk pengajuan</p>
         <hr class="w-50 mx-auto border-primary">
     </div>
 
@@ -23,7 +23,7 @@
 
                         <!-- Input Field: Nama -->
                         <div class="form-group mb-4">
-                            <label for="nama" class="form-label fw-bold">Nama Rumah Pengajuan</label>
+                            <label for="nama" class="form-label fw-bold">Nama Pengajuan</label>
                             <input type="text" name="nama" id="nama" 
                                    class="form-control shadow-sm @error('nama') is-invalid @enderror" 
                                    placeholder="Masukkan nama" required>

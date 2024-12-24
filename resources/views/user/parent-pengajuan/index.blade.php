@@ -47,13 +47,13 @@
                             <a href="{{ route('user.parent-pengajuan.view', $item->id) }}" 
                                class="btn btn-outline-info btn-sm rounded-pill" 
                                title="Lihat Detail">
-                                <i class="fas fa-eye"></i> Lihat
+                                <i class="fas fa-eye"></i>
                             </a>
                             <!-- Edit Button -->
                             <a href="{{ route('user.parent-pengajuan.edit', $item->id) }}" 
                                class="btn btn-outline-warning btn-sm rounded-pill" 
                                title="Edit Data">
-                                <i class="fas fa-edit"></i> Edit
+                                <i class="fas fa-edit"></i>
                             </a>
                             <!-- Delete Button -->
                             @if($item->canDelete)
@@ -64,12 +64,12 @@
                                             class="btn btn-outline-danger btn-sm rounded-pill" 
                                             onclick="return confirm('Yakin ingin menghapus?')" 
                                             title="Hapus Data">
-                                        <i class="fas fa-trash"></i> Hapus
+                                        <i class="fas fa-trash"></i>
                                     </button>
                                 </form>
                             @else
-                                <button class="btn btn-outline-danger btn-sm rounded-pill" disabled>
-                                    <i class="fas fa-ban"></i> Approval
+                                <button class="btn btn-outline-danger btn-sm rounded-pill" title="Approval" disabled>
+                                    <i class="fas fa-ban"></i>
                                 </button>
                             @endif
                         </div>

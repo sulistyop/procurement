@@ -36,6 +36,7 @@ class AdminUserSeeder extends Seeder
         $user = User::updateOrCreate(
             ['email' => 'user@gmail.com'],
             [
+                'prodi_id' => '1',
                 'name' => 'User',
                 'password' => Hash::make('password'),
             ]

@@ -93,7 +93,7 @@
                 </li>
             </ul>
             <div class="copyright text-center mt-4">
-                <p>ASP &copy; 2024. Perpustakaan UAD</p>
+                <p> &copy;ASP 2024. Perpustakaan UAD</p>
             </div>
         </div>
 

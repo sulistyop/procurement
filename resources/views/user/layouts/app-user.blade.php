@@ -347,7 +347,7 @@
 </main>
 
 <div class="footer">
-    <p>ASP &copy; 2024 . Perpustakaan Universitas Ahmad Dahlan.</p>
+    <p> &copy;ASP 2024 . Perpustakaan Universitas Ahmad Dahlan.</p>
 </div>
 
 <!-- Scripts -->

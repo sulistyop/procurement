@@ -44,20 +44,20 @@
                         <p class="card-text text-muted mb-3">{{ $item->created_at->format('d M Y') }}</p>
                         <div class="d-flex justify-content-center gap-2">
                             <!-- View Button -->
-                            <a href="{{ route('user.parent-pengajuan.view', $item->id) }}" 
+                            <a href="{{ route('user.parent-pengajuan.view', $item->hashId) }}" 
                                class="btn btn-outline-info btn-sm rounded-pill" 
                                title="Lihat Detail">
                                 <i class="fas fa-eye"></i>
                             </a>
                             <!-- Edit Button -->
-                            <a href="{{ route('user.parent-pengajuan.edit', $item->id) }}" 
+                            <a href="{{ route('user.parent-pengajuan.edit', $item->hashId) }}" 
                                class="btn btn-outline-warning btn-sm rounded-pill" 
                                title="Edit Data">
                                 <i class="fas fa-edit"></i>
                             </a>
                             <!-- Delete Button -->
                             @if($item->canDelete)
-                                <form action="{{ route('user.parent-pengajuan.destroy', $item->id) }}" method="POST" style="display:inline;">
+                                <form action="{{ route('user.parent-pengajuan.destroy', $item->hashId) }}" method="POST" style="display:inline;">
                                     @csrf
                                     @method('DELETE')
                                     <button type="submit" 

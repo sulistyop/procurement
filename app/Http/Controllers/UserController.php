@@ -60,9 +60,6 @@ class UserController extends Controller
 		]);
 		
 		$user->syncRoles($request->roles);
-		if ($request->permissions) {
-			$user->syncPermissions($request->permissions); // Sinkronisasi izin jika ada
-		}
 
 		return redirect()->route('user.index')->with('success', 'User berhasil dibuat.');
 	}

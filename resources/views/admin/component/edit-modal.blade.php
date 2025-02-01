@@ -72,6 +72,7 @@
                         <small class="text-danger">{{ $message }}</small>
                         @enderror
                     </div>
+                    <input name="parent_pengajuan_id" id="parent_pengajuan_id" hidden/>
                     <button type="submit" class="btn btn-primary">Update</button>
                 </form>
             </div>

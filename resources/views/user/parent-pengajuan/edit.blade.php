@@ -18,7 +18,7 @@
                     <h5 class="mb-4 text-center text-dark fw-bold">Form Edit Data</h5>
 
                     <!-- Form -->
-                    <form action="{{ route('user.parent-pengajuan.update', $parentPengajuan->id) }}" method="POST">
+                    <form action="{{ route('user.parent-pengajuan.update', $parentPengajuan->hashId) }}" method="POST">
                         @csrf
                         @method('PUT')
 

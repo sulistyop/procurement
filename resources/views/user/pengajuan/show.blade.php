@@ -69,7 +69,7 @@
                     @endif
                 </table>
                 <div class="d-flex justify-content-between mt-4">
-                    <a href="{{ route('user.parent-pengajuan.view', $parentPengajuan->id) }}" class="btn btn-secondary btn-sm">
+                    <a href="{{ route('user.parent-pengajuan.view', $parentPengajuan->hashId) }}" class="btn btn-secondary btn-sm">
                         <i class="fas fa-arrow-left"></i> Kembali
                     </a>
                 </div>                

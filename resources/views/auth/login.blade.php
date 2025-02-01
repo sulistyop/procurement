@@ -33,6 +33,15 @@
                             @enderror
                         </div>
 
+                        <div class="mb-4">
+                            {!! app('captcha')->display() !!} <!-- Menampilkan reCAPTCHA -->
+                            @error('g-recaptcha-response')
+                                <div class="invalid-feedback d-block">
+                                    <strong>{{ $message }}</strong>
+                                </div>
+                            @enderror
+                        </div>
+                        
                         <div class="mb-4 form-check">
                             <input class="form-check-input" type="checkbox" name="remember" id="remember" {{ old('remember') ? 'checked' : '' }}>
                             <label class="form-check-label" for="remember">
@@ -44,12 +53,6 @@
                             <button type="submit" class="btn btn-primary btn-lg">
                                 {{ __('Login') }}
                             </button>
-
-                            @if (Route::has('password.request'))
-                                <a class="btn btn-link" href="{{ route('password.request') }}">
-                                    {{ __('Forgot Your Password?') }}
-                                </a>
-                            @endif
                         </div>
                     </form>
                 </div>
@@ -57,6 +60,8 @@
         </div>
     </div>
 </div>
+<script src="https://www.google.com/recaptcha/api.js" async defer></script>
+
 @endsection
 
 @push('style-page')

@@ -42,15 +42,15 @@ Route::middleware('auth')->group(function () {
     });
     
     Route::get('/home', [HomeController::class, 'index'])->name('home');
-    Route::get('parent-pengajuan/{id}/view', [ParentPengajuanUserController::class, 'view'])->name('user.parent-pengajuan.view');
+    Route::get('parent-pengajuan/{hashId}/view', [ParentPengajuanUserController::class, 'view'])->name('user.parent-pengajuan.view');
     
     Route::get('/index', [PengajuanUserController::class, 'index'])->name('home-index');
     Route::get('/create', [PengajuanUserController::class, 'create'])->name('home-create');
     Route::post('/create', [PengajuanUserController::class, 'store'])->name('home-store');
-    Route::get('/{pengajuan}/edit', [PengajuanUserController::class, 'edit'])->name('home-edit');
-    Route::put('/{pengajuan}', [PengajuanUserController::class, 'update'])->name('home-update');
-    Route::get('/show/{pengajuan}', [PengajuanUserController::class, 'show'])->name('home-show');
-    Route::delete('/{pengajuan}', [PengajuanUserController::class, 'destroy'])->name('home-destroy');
+    Route::get('/{hashId}/edit', [PengajuanUserController::class, 'edit'])->name('home-edit');
+    Route::put('/{hashId}', [PengajuanUserController::class, 'update'])->name('home-update');
+    Route::get('/show/{hashId}', [PengajuanUserController::class, 'show'])->name('home-show');
+    Route::delete('/{hashId}', [PengajuanUserController::class, 'destroy'])->name('home-destroy');
 
     Route::get('/rekap', [App\Http\Controllers\RekapPengajuanController::class, 'indexUser'])->name('home-rekap');
     
@@ -87,18 +87,17 @@ Route::middleware(['auth', 'admin'])->group(function () {
         Route::get('/', [PengajuanController::class, 'index'])->name('pengajuan.index');
         Route::get('/create', [PengajuanController::class, 'create'])->name('pengajuan.create');
         Route::post('/', [PengajuanController::class, 'store'])->name('pengajuan.store');
-        Route::get('/{pengajuan}', [PengajuanController::class, 'show'])->name('pengajuan.show');
-        Route::get('/{pengajuan}/edit', [PengajuanController::class, 'edit'])->name('pengajuan.edit');
-        Route::put('/{pengajuan}', [PengajuanController::class, 'update'])->name('pengajuan.update');
-        Route::delete('/{pengajuan}', [PengajuanController::class, 'destroy'])->name('pengajuan.destroy');
+        Route::get('/{hashId}', [PengajuanController::class, 'show'])->name('pengajuan.show');
+        // Route::get('/{hashId}/edit', [PengajuanController::class, 'edit'])->name('pengajuan.edit');
+        Route::put('/{hashId}', [PengajuanController::class, 'update'])->name('pengajuan.update');
+        Route::delete('/{hashId}', [PengajuanController::class, 'destroy'])->name('pengajuan.destroy');
         Route::get('/pengajuan/proses', [PengajuanController::class, 'proses'])->name('pengajuan.proses');
         Route::get('/pengajuan/tolak', [PengajuanController::class, 'tolak'])->name('pengajuan.tolak');
 
         // Rute approval
-        Route::get('/{pengajuan}/approve', [PengajuanController::class, 'approve'])->name('pengajuan.approve');
-        Route::post('/{pengajuan}/approve', [PengajuanController::class, 'storeApproval'])->name('pengajuan.storeApproval');
+        Route::post('/{hashId}/approve', [PengajuanController::class, 'storeApproval'])->name('pengajuan.storeApproval');
         
-        Route::post('pengajuan/{pengajuan}/approve', [PengajuanController::class, 'storeApprovalDas'])->name('pengajuan.storeApprovalDas');
+        Route::post('hashId/{hashId}/approve', [PengajuanController::class, 'storeApprovalDas'])->name('pengajuan.storeApprovalDas');
         Route::get('pengajuan/{pengajuan}/edit', [PengajuanController::class, 'editdas'])->name('pengajuan.editdas');
         Route::put('pengajuan/{pengajuan}', [PengajuanController::class, 'updatedas'])->name('pengajuan.updatedas');
         Route::delete('delete/{pengajuan}', [PengajuanController::class, 'destroydas'])->name('pengajuan.destroydas');

@@ -105,7 +105,7 @@
                     @endif
                     <td>
                         @can('view pengajuan')
-                            <a href="{{ route('pengajuan.show', $item->id) }}" class="btn btn-info btn-sm"
+                            <a href="{{ route('pengajuan.show', $item->hashId) }}" class="btn btn-info btn-sm"
                                data-toggle="tooltip" data-placement="top" title="View">
                                  <i class="fas fa-binoculars"></i>
                             </a>
@@ -113,20 +113,24 @@
                         @if(!$item->is_approve && !$item->is_reject)
                             @can('edit pengajuan')
                                 <a href="#" class="btn btn-warning btn-sm" data-toggle="modal"
-                                   data-target="#editPengajuanModal" data-id="{{ $item->id }}"
+                                   data-target="#editPengajuanModal" data-id="{{ $item->hashId }}"
                                    data-prodi="{{ $item->prodi->id }}" data-judul="{{ $item->judul }}"
                                    data-edisi="{{ $item->edisi }}" data-isbn="{{ $item->isbn }}"
                                    data-penerbit="{{ $item->penerbit }}" data-author="{{ $item->author }}"
                                    data-tahun="{{ $item->tahun }}" data-eksemplar="{{ $item->eksemplar }}"
+                                   data-parent_pengajuan_id="{{ $item->parent_pengajuan_id }}"
                                    data-toggle="tooltip" data-placement="top" title="Edit">
                                     <i class="fas fa-edit"></i>
                                 </a>
                             @endif
                             @can('delete pengajuan')
-                                <form action="{{ route('pengajuan.destroy', $item->id) }}" method="POST"
+                                <form action="{{ route('pengajuan.destroy', $item->hashId) }}" method="POST"
                                       style="display:inline;">
                                     @csrf
                                     @method('DELETE')
+
+                                    <input name="parent_pengajuan_id" id="parent_pengajuan_id" value="{{ $item->parent_pengajuan_id }}" hidden/>
+
                                     <button type="submit" class="btn btn-danger btn-sm"
                                             onclick="return confirm('Yakin ingin menghapus?')" data-toggle="tooltip"
                                             data-placement="top" title="Delete">
@@ -136,7 +140,7 @@
                             @endcan
                             @can('approve pengajuan')
                                 <button type="button" class="btn btn-success btn-sm" data-toggle="modal"
-                                        data-target="#approveModal" data-all="{{ $item }}" data-id="{{ $item->id }}"
+                                        data-target="#approveModal" data-all="{{ $item }}" data-id="{{ $item->hashId }}"
                                         data-jumlah="{{ $item->eksemplar }}" data-toggle="tooltip" data-placement="top"
                                         title="Approve">
                                     <i class="fas fa-check"></i>
@@ -238,28 +242,43 @@
         });
 
         $('#editPengajuanModal').on('show.bs.modal', function (event) {
-            var button = $(event.relatedTarget);
-            var id = button.data('id');
-            var prodi = button.data('prodi');
-            var judul = button.data('judul');
-            var edisi = button.data('edisi');
-            var isbn = button.data('isbn');
-            var penerbit = button.data('penerbit');
-            var author = button.data('author');
-            var tahun = button.data('tahun');
-            var eksemplar = button.data('eksemplar');
-            var modal = $(this);
-            var form = modal.find('#editPengajuanForm');
-            var actionUrl = '{{ route('pengajuan.update', ':id') }}'.replace(':id', id);
-            form.attr('action', actionUrl);
-            modal.find('.modal-body #prodi').val(prodi);
-            modal.find('.modal-body #judul').val(judul);
-            modal.find('.modal-body #edisi').val(edisi);
-            modal.find('.modal-body #isbn').val(isbn);
-            modal.find('.modal-body #penerbit').val(penerbit);
-            modal.find('.modal-body #author').val(author);
-            modal.find('.modal-body #tahun').val(tahun);
-            modal.find('.modal-body #eksemplar').val(eksemplar);
+            try {
+                var button = $(event.relatedTarget);
+                if (!button.length) throw new Error("Element pemicu modal tidak ditemukan.");
+
+                var id = button.data('id');
+                var prodi = button.data('prodi');
+                var judul = button.data('judul');
+                var edisi = button.data('edisi');
+                var isbn = button.data('isbn');
+                var penerbit = button.data('penerbit');
+                var author = button.data('author');
+                var tahun = button.data('tahun');
+                var eksemplar = button.data('eksemplar');
+                var parent_pengajuan_id = button.data('parent_pengajuan_id');
+
+                var modal = $(this)
+                var form = modal.find('#editPengajuanForm');
+
+                if (!form.length) throw new Error("Form di dalam modal tidak ditemukan.");
+
+                var actionUrl = '{{ route('pengajuan.update', ':id') }}'.replace(':id', id);
+                form.attr('action', actionUrl);
+
+                modal.find('.modal-body #prodi').val(prodi);
+                modal.find('.modal-body #judul').val(judul);
+                modal.find('.modal-body #edisi').val(edisi);
+                modal.find('.modal-body #isbn').val(isbn);
+                modal.find('.modal-body #penerbit').val(penerbit);
+                modal.find('.modal-body #author').val(author);
+                modal.find('.modal-body #tahun').val(tahun);
+                modal.find('.modal-body #eksemplar').val(eksemplar);
+                modal.find('.modal-body #parent_pengajuan_id').val(parent_pengajuan_id);
+
+            } catch (error) {
+                console.error("Terjadi kesalahan saat menampilkan modal edit pengajuan:", error);
+                alert("Terjadi kesalahan! Silakan coba lagi atau hubungi administrator.");
+            }
         });
 
         document.addEventListener('DOMContentLoaded', function () {

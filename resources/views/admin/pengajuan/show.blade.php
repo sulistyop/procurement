@@ -76,7 +76,7 @@
                 </tr>
                 @endif
             </table>
-            <a href="{{ route('pengajuan.index', array_merge(request()->query(), ['parent_pengajuan_id' => $parentPengajuan->id])) }}" class="btn btn-secondary">Kembali</a>
+            <a href="{{ route('admin.parent-pengajuan.view', $parentPengajuan->hashParentId) }}" class="btn btn-secondary">Kembali</a>
         </form>
 
 

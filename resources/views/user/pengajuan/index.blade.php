@@ -91,14 +91,14 @@
                                 </td>
                                 <td>
                                     <div class="d-flex justify-content-center">
-                                        <a href="{{ route('home-show', $item->id) }}" class="btn btn-info btn-custom mx-1 btn-sm" data-toggle="tooltip" data-placement="top" title="View">
+                                        <a href="{{ route('home-show', $item->hashId) }}" class="btn btn-info btn-custom mx-1 btn-sm" data-toggle="tooltip" data-placement="top" title="View">
                                             <i class="fas fa-binoculars"></i>
                                         </a>
                                         
                                         @if(!$item->is_approve && !$item->is_reject)
                                             <a href="#" class="btn btn-warning btn-custom mx-1 btn-sm" 
                                                 data-toggle="modal" data-target="#editPengajuanModal"
-                                                data-id="{{ $item->id }}" 
+                                                data-id="{{ $item->hashId }}" 
                                                 data-prodi="{{ $item->prodi->id ?? '' }}"
                                                 data-judul="{{ $item->judul ?? '' }}" 
                                                 data-edisi="{{ $item->edisi ?? '' }}"
@@ -107,11 +107,12 @@
                                                 data-author="{{ $item->author ?? '' }}" 
                                                 data-tahun="{{ $item->tahun ?? '' }}"
                                                 data-eksemplar="{{ $item->eksemplar ?? '' }}" 
+                                                data-parent_pengajuan_id="{{ $item->parent_pengajuan_id }}"
                                                 title="Edit">
                                                 <i class="fas fa-edit"></i>
                                             </a>
                                         
-                                            <form action="{{ route('home-destroy', $item->id) }}" method="POST" style="display:inline;">
+                                            <form action="{{ route('home-destroy', $item->hashId) }}" method="POST" style="display:inline;">
                                                 @csrf
                                                 @method('DELETE')
                                                 <button type="submit" class="btn btn-danger btn-custom mx-1 btn-sm" onclick="return confirm('Yakin ingin menghapus?')" data-toggle="tooltip" data-placement="top" title="Delete">
@@ -159,6 +160,7 @@
             var author = button.data('author');
             var tahun = button.data('tahun');
             var eksemplar = button.data('eksemplar');
+            var parent_pengajuan_id = button.data('parent_pengajuan_id');
             console.log('Data diterima:', { id, prodi, judul, edisi, isbn, penerbit, author, tahun, eksemplar });
 
             var modal = $(this);
@@ -174,6 +176,7 @@
             modal.find('.modal-body #author').val(author);
             modal.find('.modal-body #tahun').val(tahun);
             modal.find('.modal-body #eksemplar').val(eksemplar);
+            modal.find('.modal-body #parent_pengajuan_id').val(parent_pengajuan_id);
         });
 
         $(document).ready(function() {

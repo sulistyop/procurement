@@ -6,6 +6,7 @@
     "license": "MIT",
     "require": {
         "php": "^8.1",
+        "anhskohbo/no-captcha": "^3.6",
         "guzzlehttp/guzzle": "^7.2",
         "laravel/framework": "^10.0",
         "laravel/sanctum": "^3.2",
@@ -14,6 +15,7 @@
         "maatwebsite/excel": "^3.1",
         "nesbot/carbon": "2.67",
         "spatie/laravel-permission": "^6.9",
+        "vinkla/hashids": "^11.0",
         "yajra/laravel-datatables-oracle": "^10.11"
     },
     "require-dev": {

@@ -14,6 +14,7 @@ use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Log;
 use Illuminate\Support\Facades\Auth;
 use Maatwebsite\Excel\Facades\Excel;
+use Vinkla\Hashids\Facades\Hashids;
 
 class PengajuanController extends Controller
 {
@@ -76,8 +77,11 @@ class PengajuanController extends Controller
 			$item->prodi_id = $item->prodi->id;
 			
 			return $item;
+		})->map(function(Pengajuan $item){
+			$item->hashId = Hashids::encode($item->id);
+			return $item;
 		});
-	
+
 		// Mengecek apakah ada permintaan untuk export
 		if ($request->has('export')) {
 			$excelReport = new PengajuanExport($pengajuan);
@@ -147,14 +151,18 @@ class PengajuanController extends Controller
 						->with('success', 'Pengajuan berhasil ditambahkan.');
 	}
 	
-	public function show(Pengajuan $pengajuan)
+	public function show($hashId)
 	{
-		$user = auth()->user();
+		$id = Hashids::decode($hashId)[0];
+
+		$pengajuan = Pengajuan::find($id);
 	
 		// Mencari ParentPengajuan berdasarkan kriteria
 		$parentPengajuan = ParentPengajuan::where('id', $pengajuan->parent_pengajuan_id)
-										  ->where('prodi_id', $pengajuan->prodi_id)
-										  ->first();
+			->where('prodi_id', $pengajuan->prodi_id)
+			->first();
+
+		$parentPengajuan->hashParentId = Hashids::encode($parentPengajuan->id);
 	
 		// Jika ParentPengajuan tidak ditemukan, bisa redirect atau menampilkan pesan error
 		if (!$parentPengajuan) {
@@ -173,7 +181,7 @@ class PengajuanController extends Controller
         return view('admin.pengajuan.edit', compact('pengajuan'));
     }
 
-	public function update(Request $request, Pengajuan $pengajuan)
+	public function update(Request $request, $hashId)
 	{
 		$request->validate([
 			'prodi_id' => 'required|max:100',
@@ -187,21 +195,31 @@ class PengajuanController extends Controller
 			'harga' => 'nullable|numeric|min:0', 
 		]);
 
+		// 1. Decrypt Hash Id menjadi -> id
+		$idPengajuan = Hashids::decode($hashId)[0];
+		
+		// 2. Query ke model dengan id yang sudah didekrip
+		$pengajuan = Pengajuan::find($idPengajuan);
+
 		$pengajuan->update($request->all());
 
 		$this->setLogActivity('Mengubah pengajuan', $pengajuan);
 
-		$parentPengajuanId = $request->parent_pengajuan_id ?? 1; 
+		$parentPengajuanId = Hashids::encode($request->parent_pengajuan_id) ?? 1; 
 	
-		return redirect()->route('pengajuan.index', ['parent_pengajuan_id' => $parentPengajuanId])
-						 ->with('success', 'Pengajuan berhasil diupdate.');
-	} 
+		return $this->redirectSuccess('admin.parent-pengajuan.view', 'Pengajuan berhasil diupdate' ,$parentPengajuanId);
+	}
 	
-	public function destroy(Request $request, Pengajuan $pengajuan)
+	public function destroy(Request $request, $hashId)
 	{
+		$idPengajuan = Hashids::decode($hashId)[0];
+		$pengajuan = Pengajuan::find($idPengajuan);
+
 		$parentPengajuanId = $request->query('parent_pengajuan_id') ?? $pengajuan->parent_pengajuan_id ?? 1;
 
 		$isParentExists = DB::table('parent_pengajuan')->where('id', $parentPengajuanId)->exists();
+	
+		$parentPengajuanId = Hashids::encode($parentPengajuanId);
 	
 		if (!$isParentExists) {
 			return redirect()->route('pengajuan.index')
@@ -213,11 +231,10 @@ class PengajuanController extends Controller
 	
 		$this->setLogActivity('Menghapus pengajuan', $dump);
 
-		return redirect()->route('pengajuan.index', ['parent_pengajuan_id' => $parentPengajuanId])
-						 ->with('success', 'Pengajuan berhasil dihapus.');
+		return $this->redirectSuccess('admin.parent-pengajuan.view', 'Pengajuan berhasil dihapus', $parentPengajuanId);
 	}
 	
-	public function storeApproval(Request $request, Pengajuan $pengajuan)
+	public function storeApproval(Request $request, $hashId)
 	{
 		$request->validate([
 			'harga' => 'required_if:action,approve|numeric',
@@ -248,6 +265,8 @@ class PengajuanController extends Controller
 		elseif ($request->action === 'reject') {
 			$data['rejected_at'] = now(); 
 		}
+		$idPengajuan = Hashids::decode($hashId)[0];
+		$pengajuan = Pengajuan::find($idPengajuan);
 
 		$pengajuan->update(array_merge($data, $request->only(['judul', 'isbn', 'edisi', 'penerbit', 'author', 'tahun', 'eksemplar'. 'diterima'])));
 
@@ -418,7 +437,7 @@ class PengajuanController extends Controller
 						 ->with('success', 'Pengajuan berhasil dihapus.');
 	}
 	
-	public function storeApprovalDas(Request $request, Pengajuan $pengajuan)
+	public function storeApprovalDas(Request $request, $hashId)
 	{
 		$request->validate([
 			'harga' => 'required_if:action,approve|numeric',
@@ -449,11 +468,20 @@ class PengajuanController extends Controller
 		elseif ($request->action === 'reject') {
 			$data['rejected_at'] = now(); 
 		}
-
+		$idPengajuan = Hashids::decode($hashId)[0];
+		$pengajuan = Pengajuan::find($idPengajuan);
+		
 		$pengajuan->update(array_merge($data, $request->only(['judul', 'isbn', 'edisi', 'penerbit', 'author', 'tahun', 'eksemplar'. 'diterima'])));
 
 		$this->setLogActivity($request->action === 'approve' ? 'Menyetujui pengajuan' : 'Menolak pengajuan', $pengajuan);
 		
 		return response()->json(['message' => $request->action === 'approve' ? 'Pengajuan berhasil disetujui!' : 'Pengajuan berhasil ditolak!']);
+	}
+
+	private function redirectSuccess($route, string $messages = null, $id = null)
+	{
+		return redirect()
+			->route($route,	$id)
+			->with('success', $messages);
 	}
 }

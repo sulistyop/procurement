@@ -7,6 +7,9 @@ use App\Models\Pengajuan;
 use Illuminate\Http\Request;
 use App\Models\ParentPengajuan;
 use App\Models\ApproveKeuanganParentPengajuan;
+use Illuminate\Support\Facades\Crypt;
+use Illuminate\Support\Facades\Log;
+use Vinkla\Hashids\Facades\Hashids;
 
 class ParentPengajuanController extends Controller
 {
@@ -28,13 +31,13 @@ class ParentPengajuanController extends Controller
             ->when($request->has('prodi') && $request->prodi != '', function($query) use ($request) {
                 return $query->where('prodi_id', $request->prodi);
             })
-            ->get();
+            ->get()
+            ->map(function(ParentPengajuan$item){
+                $item->hashId = Hashids::encode($item->id);
+                $item->canDelete = !ApproveKeuanganParentPengajuan::where('parent_pengajuan_id', $item->id)->exists();
+                return $item;
+            });
     
-        // Cek apakah data bisa dihapus
-        foreach ($parentPengajuans as $item) {
-            $item->canDelete = !ApproveKeuanganParentPengajuan::where('parent_pengajuan_id', $item->id)->exists();
-        }
-        
         // Kirim data ke view
         return view('admin.parent-pengajuan.index', compact('parentPengajuans', 'prodis', 'years'));
     }
@@ -63,7 +66,12 @@ class ParentPengajuanController extends Controller
 
     public function edit($id)
     {
+        $id = Hashids::decode($id)[0];
         $parentPengajuan = ParentPengajuan::findOrFail($id);
+
+        if($parentPengajuan){
+            $parentPengajuan = $parentPengajuan->first();
+        }
         return view('admin.parent-pengajuan.edit', compact('parentPengajuan'));
     }
 
@@ -72,22 +80,27 @@ class ParentPengajuanController extends Controller
         $request->validate([
             'nama' => 'required|string|max:255',
         ]);
-
+        $id = Hashids::decode($id)[0];
         $parentPengajuan = ParentPengajuan::findOrFail($id);
         $parentPengajuan->update($request->all());
 
         return redirect()->route('admin.parent-pengajuan.index')->with('success', 'Data berhasil diubah.');
     }
 
-    public function destroy($id)
+    public function destroy($hashId)
     {
-        $parentPengajuan = ParentPengajuan::findOrFail($id);
+        $parentId = Hashids::decode($hashId);
+        $parentPengajuan = ParentPengajuan::where('id', $parentId)->first();
+        
+        if(!$parentPengajuan){
+            return redirect()->back()->with('error', 'Data Parent Tidak ada');
+        }
     
         // Ambil prodi_id dari ParentPengajuan
         $prodiId = $parentPengajuan->prodi_id;
     
         // Periksa apakah ada pengajuan yang terkait dengan ParentPengajuan dan Prodi yang sudah di-approve
-        $approvedPengajuan = Pengajuan::where('parent_pengajuan_id', $id)
+        $approvedPengajuan = Pengajuan::where('parent_pengajuan_id', $parentId)
                                        ->where('prodi_id', $prodiId)
                                        ->where('is_approve', '1') 
                                        ->exists();
@@ -97,7 +110,7 @@ class ParentPengajuanController extends Controller
         }
     
         // Hapus semua pengajuan yang terkait dengan parent_pengajuan_id dan prodi_id ini
-        Pengajuan::where('parent_pengajuan_id', $id)
+        Pengajuan::where('parent_pengajuan_id', $parentId)
                  ->where('prodi_id', $prodiId) // Pastikan pengajuan yang dihapus sesuai dengan prodi_id
                  ->delete();
     
@@ -107,9 +120,22 @@ class ParentPengajuanController extends Controller
         return redirect()->route('admin.parent-pengajuan.index')->with('success', 'Data Pengajuan beserta Pengajuannya berhasil dihapus.');
     }
     
-    // Di dalam ParentPengajuanController.php
     public function view($id)
     {
-        return redirect()->route('pengajuan.index', ['parent_pengajuan_id' => $id]);
+        try {
+            // Dekripsi ID
+            $decryptedId = Hashids::decode($id);
+
+            $request = new Request();
+            $request->merge(['parent_pengajuan_id' => $decryptedId[0]]);
+
+            return app(PengajuanController::class)->index($request);
+
+        } catch (\Exception $e) {
+            Log::error('Gagal mendekripsi ID: ' . $e->getMessage());
+            
+            return redirect()->route('admin.parent-pengajuan.index')->withErrors('ID tidak valid atau telah kadaluarsa');
+        }
     }
+    
 }

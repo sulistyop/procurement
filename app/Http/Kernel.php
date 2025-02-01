@@ -68,5 +68,6 @@ class Kernel extends HttpKernel
 	protected $routeMiddleware = [
 		// Middleware lainnya
 		'admin' => \App\Http\Middleware\AdminMiddleware::class,
+        'encrypt.id' => \App\Http\Middleware\EncryptId::class,
 	];
 }

@@ -88,14 +88,15 @@
                         <td>{{ $item->created_at->format('d M Y') }}</td>
                         <td>
                             <div class="btn-group" role="group">
-                                <a href="{{ route('admin.parent-pengajuan.view', $item->id) }}" class="btn btn-info btn-sm">
+                                <a href="{{ route('admin.parent-pengajuan.view', ['id' => $item->hashId]) }}" class="btn btn-info btn-sm">
                                     <i class="fa fa-eye"></i>
                                 </a>
-                                <a href="{{ route('admin.parent-pengajuan.edit', $item->id) }}" class="btn btn-warning btn-sm ml-1">
+
+                                <a href="{{ route('admin.parent-pengajuan.edit', $item->hashId) }}" class="btn btn-warning btn-sm ml-1">
                                     <i class="fa fa-pencil-alt"></i>
                                 </a>
                                 @if($item->canDelete)
-                                    <form action="{{ route('admin.parent-pengajuan.destroy', $item->id) }}" method="POST" style="display:inline;">
+                                    <form action="{{ route('admin.parent-pengajuan.destroy', $item->hashId) }}" method="POST" style="display:inline;">
                                         @csrf
                                         @method('DELETE')
                                         <button type="submit" class="btn btn-danger btn-sm mx-1" onclick="return confirm('Yakin ingin menghapus?')">

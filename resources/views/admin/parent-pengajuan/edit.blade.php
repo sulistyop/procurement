@@ -4,7 +4,7 @@
     <div class="container mt-5">
         <h1 class="display-4 text-center text-primary mb-4">Edit Pengajuan</h1>
 
-        <form action="{{ route('admin.parent-pengajuan.update', $parentPengajuan->id) }}" method="POST">
+        <form action="{{ route('admin.parent-pengajuan.update', $parentPengajuan->hashId) }}" method="POST">
             @csrf
             @method('PUT')
             
